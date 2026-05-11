@@ -10,7 +10,6 @@ import {
   ExternalLink,
   Info,
   Mail,
-  Menu,
   MapPin,
   Phone,
   Shirt,
@@ -49,12 +48,6 @@ const logo =
 
 const heroLogo =
   'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/686f096a627f396723165ccf.png';
-
-const heroStripLogos = [
-  'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/69c2d04b1a6adaefc963e23e.png',
-  'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/69e7a64d033b8ae4a4a06a41.png',
-  'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/69e7a87eda11eeea68ded6a9.png',
-];
 
 const fortMoriahMap =
   'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/69ea16acb1e59415755d35cc.png';
@@ -354,38 +347,77 @@ function HeroHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const navItems = [
     { label: 'Home', href: '/' },
-    { label: 'Plan Your Shiloh', href: '/journey' },
+    { label: 'Plan', href: '/journey', children: [
+      { label: '2026 Shiloh Season Guide', href: '/journey#journey-season' },
+      { label: 'Shiloh Season VIP Experience', href: '/vip' },
+    ] },
+    { label: 'Shiloh Merch', href: '/merch' },
     { label: "FAQ's", href: '/#about' },
     { label: 'Contact', href: '/#footer' },
   ];
 
   return (
     <header className="absolute inset-x-0 top-0 z-40 flex justify-center px-3">
-      <nav className="relative flex max-w-[calc(100vw-1.5rem)] items-center gap-3 rounded-b-2xl bg-black px-4 py-2 text-white shadow-[0_16px_40px_rgba(0,0,0,0.35)] sm:gap-6 sm:px-6 md:gap-10 md:rounded-b-3xl md:px-8">
-        <a href="/" aria-label="Shiloh home" className="flex shrink-0 items-center gap-3">
-          <img src={heroLogo} alt="Shiloh" className="h-8 w-auto sm:h-9" />
-          <span className="hidden h-7 w-px bg-primary/25 sm:block" />
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.button
+            type="button"
+            aria-label="Close menu"
+            className="fixed inset-0 z-0 bg-black/45 backdrop-blur-md md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25, ease: customEase }}
+            onClick={() => setMenuOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+      <nav className="relative z-20 flex max-w-[calc(100vw-1.5rem)] items-center gap-2 rounded-b-2xl bg-black px-3 py-2 text-white shadow-[0_16px_40px_rgba(0,0,0,0.35)] sm:gap-5 sm:px-6 md:gap-10 md:rounded-b-3xl md:px-8">
+        <a href="/" aria-label="Shiloh home" className="flex shrink-0 items-center gap-2 sm:gap-3">
+          <span className="flex flex-col text-left leading-[0.78] text-[#E1E0CC]">
+            <span className="text-[11px] font-extrabold uppercase tracking-[0.22em] sm:text-xs">Shiloh</span>
+            <span className="font-serif text-[15px] italic tracking-normal sm:text-base">Season 26</span>
+          </span>
+          <span className="h-8 w-px bg-primary/25" aria-hidden="true" />
+          <span className="max-w-[4.7rem] text-[8px] font-semibold uppercase leading-[1.25] tracking-[0.14em] text-primary/60 sm:max-w-[7.5rem] sm:text-[9px] lg:tracking-[0.18em]">
+            31 Aug - 6 Sep
+          </span>
         </a>
-        <div className="hidden items-center gap-6 whitespace-nowrap text-xs text-[rgba(225,224,204,0.8)] md:flex lg:gap-12">
+        <div className="hidden items-center gap-5 whitespace-nowrap text-xs text-[rgba(225,224,204,0.8)] md:flex lg:gap-9">
           {navItems.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              onClick={() => setMenuOpen(false)}
-              className="transition-colors hover:text-[#E1E0CC]"
-            >
-              {item.label}
-            </a>
+            <div key={item.label} className="group relative py-2">
+              <a
+                href={item.href}
+                onClick={() => setMenuOpen(false)}
+                className="transition-colors hover:text-[#E1E0CC]"
+              >
+                {item.label}
+              </a>
+              {'children' in item && item.children ? (
+                <div className="pointer-events-none absolute left-1/2 top-full w-64 -translate-x-1/2 translate-y-2 rounded-2xl border border-white/10 bg-black/90 p-2 opacity-0 shadow-[0_20px_50px_rgba(0,0,0,0.4)] backdrop-blur-xl transition-all duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
+                  {item.children.map((child) => (
+                    <a
+                      key={child.label}
+                      href={child.href}
+                      onClick={() => setMenuOpen(false)}
+                      className="block rounded-xl px-4 py-3 text-[11px] leading-tight text-primary/75 transition-colors hover:bg-white/10 hover:text-primary"
+                    >
+                      {child.label}
+                    </a>
+                  ))}
+                </div>
+              ) : null}
+            </div>
           ))}
         </div>
         <button
           type="button"
           onClick={() => setMenuOpen((current) => !current)}
-          className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[#E1E0CC] transition-colors hover:bg-white/10 md:hidden"
+          className="px-1.5 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#E1E0CC]/80 transition-colors hover:text-[#E1E0CC] md:hidden"
           aria-label="Toggle menu"
           aria-expanded={menuOpen}
         >
-          {menuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          {menuOpen ? 'Close' : 'Menu'}
         </button>
         <a
           href="/vip"
@@ -398,21 +430,44 @@ function HeroHeader() {
             <ArrowRight className="h-4 w-4" />
           </span>
         </a>
-        {menuOpen && (
-          <div className="absolute left-0 right-0 top-full z-50 mt-2 rounded-2xl border border-white/10 bg-black/92 p-3 text-sm text-[#E1E0CC] shadow-[0_20px_50px_rgba(0,0,0,0.35)] backdrop-blur-xl md:hidden">
-            {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                onClick={() => setMenuOpen(false)}
-                className="block rounded-xl px-4 py-3 transition-colors hover:bg-white/10"
-              >
-                {item.label}
-              </a>
-            ))}
-          </div>
-        )}
       </nav>
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            className="fixed inset-x-3 bottom-4 z-10 rounded-[2rem] border border-white/10 bg-black/92 p-3 text-sm text-[#E1E0CC] shadow-[0_20px_60px_rgba(0,0,0,0.45)] backdrop-blur-2xl md:hidden"
+            initial={{ y: 36, opacity: 0, scale: 0.98 }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            exit={{ y: 28, opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.32, ease: customEase }}
+          >
+            {navItems.map((item) => (
+              <div key={item.label}>
+                <a
+                  href={item.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="block rounded-xl px-4 py-3 transition-colors hover:bg-white/10"
+                >
+                  {item.label}
+                </a>
+                {'children' in item && item.children ? (
+                  <div className="ml-3 border-l border-white/10 pl-3">
+                    {item.children.map((child) => (
+                      <a
+                        key={child.label}
+                        href={child.href}
+                        onClick={() => setMenuOpen(false)}
+                        className="block rounded-xl px-4 py-2 text-xs text-primary/65 transition-colors hover:bg-white/10 hover:text-primary"
+                      >
+                        {child.label}
+                      </a>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
@@ -500,12 +555,11 @@ function Hero() {
               transition={{ duration: 0.8, ease: customEase }}
             >
               <span className="mobile-hero-title flex flex-col items-center">
-                <span>SHILOH</span>
-                <span className="font-serif italic normal-case tracking-[0.02em]">Season 2026</span>
+                <span className="font-serif italic normal-case tracking-[0.02em]">It&apos;s my Shiloh</span>
               </span>
             </motion.h1>
 
-            <div className="hero-portrait pointer-events-none relative z-30 mt-6">
+            <div className="hero-portrait pointer-events-none relative z-50 mt-6">
               <motion.div
                 className="w-full"
                 initial={{ y: 28, opacity: 0, scale: 0.97 }}
@@ -555,28 +609,6 @@ function Hero() {
               </a>
             </motion.div>
           </div>
-
-          <motion.div
-            className="hero-marquee relative z-20 overflow-hidden pt-2 opacity-90 md:pt-3"
-            initial={{ y: 18, opacity: 0 }}
-            animate={inView ? { y: 0, opacity: 0.9 } : { y: 18, opacity: 0 }}
-            transition={{ duration: 0.75, delay: 0.55, ease: customEase }}
-          >
-            <div className="marquee-track">
-              {[0, 1].map((groupIndex) => (
-                <div key={groupIndex} className="marquee-group" aria-hidden={groupIndex === 1}>
-                  {Array.from({ length: 5 }, (_, index) => heroStripLogos[index % heroStripLogos.length]).map((src, index) => (
-                    <img
-                      key={`${src}-${groupIndex}-${index}`}
-                      src={src}
-                      alt={`brand-${index + 1}`}
-                      className="h-12 w-auto shrink-0 object-contain opacity-90"
-                    />
-                  ))}
-                </div>
-              ))}
-            </div>
-          </motion.div>
         </div>
       </div>
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-32 bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,#000000_82%)] md:h-40" />
@@ -1619,7 +1651,7 @@ const featureCards = [
     number: '01',
     title: 'Prophetic Retreat',
     date: 'August 31 - September 3',
-    image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/69c2d04b1a6adaefc963e23e.png',
+    image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/69f215eb590487fe57c29406.jpg',
     items: [
       'A focused arrival for prayer, teaching, and preparation.',
       'Guided sessions for spiritual alignment.',
@@ -1631,14 +1663,14 @@ const featureCards = [
     number: '02',
     title: 'Shiloh Confernce.',
     date: 'September 4 - September 6',
-    image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/69e7a64d033b8ae4a4a06a41.png',
+    image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/69f2171efab44d4020a08d69.jpg',
     items: ['AI analysis for each creative session.', 'Creative notes shaped for your team.', 'Tool integrations for every delegate.'],
   },
   {
     number: '03',
     title: 'Birthday Celebration',
     date: 'September 6',
-    image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/69e7a87eda11eeea68ded6a9.png',
+    image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/69f2171e590487fe57c2f87b.jpg',
     items: ['Notification silencing for the whole celebration.', 'Ambient soundscapes throughout the evening.', 'Schedule syncing for guests and hosts.'],
   },
 ];
@@ -1668,8 +1700,8 @@ function FeatureCard({
       initial="hidden"
       animate={inView ? 'visible' : 'hidden'}
     >
-      <div className="flex h-44 items-center justify-center overflow-hidden border-b border-white/5 p-3 sm:h-48 lg:h-40 xl:h-44">
-        <img src={card.image} alt="" className="h-full w-full object-contain" />
+      <div className="flex h-44 items-center justify-center overflow-hidden border-b border-white/5 sm:h-48 lg:h-40 xl:h-44">
+        <img src={card.image} alt="" className="h-full w-full object-cover" />
       </div>
       <div className="flex flex-1 flex-col p-5 sm:p-6">
         <div className="mb-6 flex items-start justify-between gap-4">
@@ -1707,7 +1739,7 @@ function Features() {
         <div className="mx-auto mb-12 max-w-4xl text-center text-lg font-normal leading-tight sm:text-xl md:text-2xl lg:text-3xl">
           <WordsPullUpMultiStyle
             segments={[
-              { text: 'Discover Shiloh', className: 'font-serif italic text-primary' },
+              { text: 'Discover Shiloh Season', className: 'font-serif italic text-primary' },
               { text: '🤫 What happerns in Shiloh Stays in Shiloh', className: 'text-gray-300' },
             ]}
           />
@@ -1890,7 +1922,7 @@ function FloatingSponsorButton({ onClick, visible }: { onClick: () => void; visi
             className="liquid-glass pointer-events-auto rounded-full border border-white/25 bg-[#061923]/90 p-1 text-white shadow-[0_20px_60px_rgba(0,0,0,0.6),0_0_0_1px_rgba(255,255,255,0.08),inset_0_1px_0_rgba(255,255,255,0.18)] backdrop-blur-xl transition-transform duration-300 hover:scale-[1.02] sm:p-1.5"
           >
             <span className="block whitespace-nowrap rounded-full border border-white/10 bg-[#061923] px-6 py-2.5 text-[10px] font-semibold uppercase tracking-[0.28em] shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] sm:px-9 sm:py-3 sm:text-xs sm:tracking-[0.34em] md:px-12 md:text-sm">
-              Sponsor A Bus
+              Bring Someone to Shiloh
             </span>
           </button>
         </motion.div>
@@ -1963,6 +1995,43 @@ function SponsorModal({
   );
 }
 
+function MerchPage() {
+  return (
+    <main className="min-h-screen bg-black text-[#E1E0CC]">
+      <section className="relative min-h-screen overflow-hidden px-4 pt-28 sm:px-6 md:px-10">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <video
+            className="absolute inset-0 h-full w-full object-cover opacity-55"
+            src={heroVideo}
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
+          <div className="noise-overlay absolute inset-0 opacity-40 mix-blend-overlay" />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.42),rgba(0,0,0,0.82)_62%,#000_100%)]" />
+        </div>
+        <HeroHeader />
+        <div className="relative z-10 mx-auto flex min-h-[calc(100svh-7rem)] max-w-4xl flex-col items-center justify-center text-center">
+          <p className="mb-5 text-xs font-semibold uppercase tracking-[0.45em] text-primary/65">Shiloh Season 2026</p>
+          <h1 className="font-serif text-5xl italic leading-none text-primary sm:text-6xl md:text-7xl">
+            Shiloh Merch
+          </h1>
+          <p className="mt-6 max-w-xl text-sm leading-6 text-white/65 sm:text-base">
+            Official Shiloh Season merchandise is being prepared. This page is ready for the collection launch.
+          </p>
+          <div className="mt-8">
+            <PillButton href="/journey">
+              Plan Your Shiloh
+            </PillButton>
+          </div>
+        </div>
+      </section>
+      <Footer />
+    </main>
+  );
+}
+
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [registrationOpen, setRegistrationOpen] = useState(false);
@@ -1972,6 +2041,7 @@ export default function App() {
   const pathname = window.location.pathname;
   const isJourneyPage = pathname === '/journey';
   const isVipPage = pathname === '/vip';
+  const isMerchPage = pathname === '/merch';
 
   useEffect(() => {
     let isMounted = true;
@@ -2051,6 +2121,8 @@ export default function App() {
       <AnimatePresence>{isLoading && <LoadingScreen />}</AnimatePresence>
       {isVipPage ? (
         <VipPage />
+      ) : isMerchPage ? (
+        <MerchPage />
       ) : isJourneyPage ? (
         <JourneyPage startAnimations={!isLoading} />
       ) : (
