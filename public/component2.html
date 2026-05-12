@@ -493,21 +493,21 @@
               <h3 class="c2-card-title">VIP Passes</h3>
               <span class="c2-pass-badge">Premium</span>
             </div>
-            <div class="c2-price"><span class="c2-price-amount" data-price>$5000</span> <span data-price-note>USD</span></div>
+            <div class="c2-price"><span class="c2-price-amount" data-price>$1000</span> <span data-price-note>USD</span></div>
             <div class="c2-toggle" role="tablist" aria-label="Pass type">
-              <span role="tab" tabindex="0" data-pages="ultimate" aria-selected="true" class="active">VIP Ultimate Passes</span>
+              <span role="tab" tabindex="0" data-pages="retreat" aria-selected="true" class="active">Prophetic Retreat</span>
               <span role="tab" tabindex="0" data-pages="shiloh" aria-selected="false">Shiloh VIP</span>
-              <span role="tab" tabindex="0" data-pages="birthday" aria-selected="false">Birthday VIP</span>
-              <span role="tab" tabindex="0" data-pages="retreat" aria-selected="false">Prophetic Retreat</span>
+              <span role="tab" tabindex="0" data-pages="birthday" aria-selected="false">Birthday VVIP</span>
+              <span role="tab" tabindex="0" data-pages="ultimate" aria-selected="false">VIP Ultimate Passes</span>
             </div>
             <ul class="c2-list bordered bordered-top" data-feature-list>
-              <li>Ultimate VIP Access</li>
-              <li>Prophetic Retreat</li>
-              <li>Shiloh Conference</li>
-              <li>Prophet Birthday Celebration</li>
+              <li>Prophetic Retreat access for focused teaching and preparation.</li>
+              <li>Single occupancy needs can be handled through registration pages.</li>
+              <li>Learning sessions at Fort Moriah City with spiritual preparation support.</li>
+              <li>Recommended for delegates arriving early for retreat encounters.</li>
             </ul>
             <br /><br />
-            <button class="c2-btn" type="button" data-package="VIP Ultimate Passes" data-register-label>Register Now</button>
+            <button class="c2-btn" type="button" data-package="Prophetic Retreat" data-register-label>Register Now</button>
             <span class="c2-ticket" aria-hidden="true"></span>
           </article>
         </div>
@@ -549,11 +549,11 @@
             ],
           },
           birthday: {
-            price: '$1000',
-            note: 'USD',
-            label: 'Birthday VIP',
+            price: '£4000',
+            note: 'GBP',
+            label: 'Birthday VVIP',
             features: [
-              'VIP access for the Prophet Birthday Celebration experience.',
+              'Birthday VVIP access for the Prophet Birthday Celebration experience.',
               'Gala seating guidance for a more comfortable celebration evening.',
               'Special arrival support for birthday celebration guests.',
               'Ideal for guests attending to honor the Ra’ah, Prophet Uebert Angel.',
@@ -571,7 +571,7 @@
             ],
           },
         };
-        const state = { pages: 'ultimate' };
+        const state = { pages: 'retreat' };
         const price = document.querySelector('[data-price]');
         const priceNote = document.querySelector('[data-price-note]');
         const tabs = document.querySelectorAll('[data-pages]');

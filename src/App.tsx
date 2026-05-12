@@ -385,7 +385,7 @@ function HeroHeader({ sticky = false }: { sticky?: boolean }) {
   const [mobileSubmenu, setMobileSubmenu] = useState<string | null>(null);
   const navItems = [
     { label: 'Home', href: '/' },
-    { label: 'Plan', href: '/journey', children: [
+    { label: 'Plan', children: [
       { label: '2026 Shiloh Season Guide', href: '/journey' },
       { label: 'Schedule', href: '/schedule' },
       { label: 'Passes', href: '/passes' },
@@ -452,13 +452,24 @@ function HeroHeader({ sticky = false }: { sticky?: boolean }) {
         <div className="hidden items-center gap-5 whitespace-nowrap text-xs text-[rgba(225,224,204,0.8)] md:flex lg:gap-9">
           {navItems.map((item) => (
             <div key={item.label} className="group relative py-2">
-              <a
-                href={item.href}
-                onClick={navigateTo(item.href)}
-                className="transition-colors hover:text-[#E1E0CC]"
-              >
-                {item.label}
-              </a>
+              {'children' in item && item.children ? (
+                <button
+                  type="button"
+                  className="inline-flex items-center gap-1.5 transition-colors hover:text-[#E1E0CC]"
+                  aria-haspopup="menu"
+                >
+                  {item.label}
+                  <ChevronDown className="h-3 w-3 text-primary/45 transition-transform duration-200 group-hover:rotate-180" />
+                </button>
+              ) : (
+                <a
+                  href={item.href}
+                  onClick={navigateTo(item.href)}
+                  className="transition-colors hover:text-[#E1E0CC]"
+                >
+                  {item.label}
+                </a>
+              )}
               {'children' in item && item.children ? (
                 <div className="pointer-events-none absolute left-1/2 top-full w-64 -translate-x-1/2 translate-y-2 rounded-2xl border border-white/10 bg-black/90 p-2 opacity-0 shadow-[0_20px_50px_rgba(0,0,0,0.4)] backdrop-blur-xl transition-all duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:translate-y-0 group-focus-within:opacity-100">
                   {item.children.map((child) => (
@@ -933,8 +944,15 @@ function FortMoriahMapSection() {
   );
 }
 
-function JourneySupportSection() {
+function JourneySupportSection({
+  theme = 'light',
+  showAside = true,
+}: {
+  theme?: 'light' | 'dark';
+  showAside?: boolean;
+} = {}) {
   const [openIndex, setOpenIndex] = useState(0);
+  const isDark = theme === 'dark';
   const faqItems = [
     {
       title: 'Entry Requirements to Zimbabwe',
@@ -1122,25 +1140,28 @@ function JourneySupportSection() {
   ];
 
   return (
-    <section id="journey-support" className="bg-white px-4 py-16 text-black sm:px-6 md:py-24">
+    <section
+      id="journey-support"
+      className={`${isDark ? 'bg-black text-[#E1E0CC]' : 'bg-white text-black'} px-4 py-16 sm:px-6 md:py-24`}
+    >
       <div className="mx-auto max-w-7xl">
         <div className="mb-14 grid gap-8 md:mb-20 md:grid-cols-[0.9fr_1.1fr] md:items-start">
           <div>
-            <p className="mb-4 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.45em] text-black/40">
+            <p className={`mb-4 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.45em] ${isDark ? 'text-primary/45' : 'text-black/40'}`}>
               <ShieldCheck className="h-4 w-4" />
               Guidance
             </p>
-            <h2 className="journey-section-heading text-4xl leading-[0.9] tracking-[-0.045em] text-black sm:text-5xl md:text-6xl">
+            <h2 className={`journey-section-heading text-4xl leading-[0.9] tracking-[-0.045em] sm:text-5xl md:text-6xl ${isDark ? 'text-primary' : 'text-black'}`}>
               Experience
-              <span className="block text-black/25">Support</span>
+              <span className={`block ${isDark ? 'text-primary/30' : 'text-black/25'}`}>Support</span>
             </h2>
           </div>
-          <p className="max-w-2xl text-left text-sm font-light uppercase leading-loose tracking-[0.32em] text-black/45 md:ml-auto md:text-right md:text-base">
+          <p className={`max-w-2xl text-left text-sm font-light uppercase leading-loose tracking-[0.32em] md:ml-auto md:text-right md:text-base ${isDark ? 'text-primary/45' : 'text-black/45'}`}>
             Essential logistics for travel, finance, and security during your visit.
           </p>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-[1.35fr_0.65fr] lg:items-start">
+        <div className={`grid gap-8 lg:items-start ${showAside ? 'lg:grid-cols-[1.35fr_0.65fr]' : ''}`}>
           <div className="space-y-4">
             {faqItems.map((item, index) => {
               const Icon = item.icon;
@@ -1190,35 +1211,37 @@ function JourneySupportSection() {
             })}
           </div>
 
-          <aside className="rounded-[2rem] bg-black p-7 text-white shadow-[0_30px_90px_rgba(0,0,0,0.18)] sm:p-9 lg:sticky lg:top-28">
-            <div className="mb-10 flex items-center gap-4">
-              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/[0.08] text-white/55">
-                <Phone className="h-5 w-5" />
-              </span>
-              <p className="text-xs font-bold uppercase tracking-[0.45em] text-white/80">Hotlines</p>
-            </div>
-            <div className="space-y-8">
-              {hotlines.map((hotline) => (
-                <div key={hotline.country}>
-                  <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.35em] text-white/35">
-                    <span className="mr-3">{hotline.flag}</span>
-                    {hotline.country}
-                  </p>
-                  <a href={`tel:${hotline.phone.replace(/\s/g, '')}`} className="journey-card-title text-xl leading-none text-white">
-                    {hotline.phone}
-                  </a>
-                </div>
-              ))}
-            </div>
-            <div className="my-10 h-px bg-white/12" />
-            <div>
-              <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.35em] text-white/35">Concierge</p>
-              <a href="mailto:support@goodnewsworld.com" className="flex items-center gap-3 text-base text-white/80 transition-colors hover:text-white">
-                <Mail className="h-5 w-5 text-white/35" />
-                support@goodnewsworld.com
-              </a>
-            </div>
-          </aside>
+          {showAside ? (
+            <aside className="rounded-[2rem] bg-black p-7 text-white shadow-[0_30px_90px_rgba(0,0,0,0.18)] sm:p-9 lg:sticky lg:top-28">
+              <div className="mb-10 flex items-center gap-4">
+                <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/[0.08] text-white/55">
+                  <Phone className="h-5 w-5" />
+                </span>
+                <p className="text-xs font-bold uppercase tracking-[0.45em] text-white/80">Hotlines</p>
+              </div>
+              <div className="space-y-8">
+                {hotlines.map((hotline) => (
+                  <div key={hotline.country}>
+                    <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.35em] text-white/35">
+                      <span className="mr-3">{hotline.flag}</span>
+                      {hotline.country}
+                    </p>
+                    <a href={`tel:${hotline.phone.replace(/\s/g, '')}`} className="journey-card-title text-xl leading-none text-white">
+                      {hotline.phone}
+                    </a>
+                  </div>
+                ))}
+              </div>
+              <div className="my-10 h-px bg-white/12" />
+              <div>
+                <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.35em] text-white/35">Concierge</p>
+                <a href="mailto:support@goodnewsworld.com" className="flex items-center gap-3 text-base text-white/80 transition-colors hover:text-white">
+                  <Mail className="h-5 w-5 text-white/35" />
+                  support@goodnewsworld.com
+                </a>
+              </div>
+            </aside>
+          ) : null}
         </div>
       </div>
     </section>
@@ -1454,18 +1477,18 @@ function VipCompareSection() {
 
 const vipPassOptions = [
   {
-    label: 'VIP Ultimate Passes',
-    date: '31 Aug - 6 Sep',
-    price: '$5000 USD',
-    tag: 'Full Season',
+    label: 'Prophetic Retreat',
+    date: '31 Aug - 3 Sep',
+    price: '$1000 USD',
+    tag: 'Retreat',
     href: 'https://programs.uebertangel.org/product/2026/',
     summary:
-      'A complete hosted experience for delegates who want premium access across every defining Shiloh Season moment.',
+      'A retreat pass shaped for focused teaching, spiritual preparation, and hosted retreat support.',
     features: [
-      'Premium VIP access for Prophetic Retreat, Shiloh Conference, Sunday Service, and the Ra’ah birthday celebration.',
-      'Reserved seating guidance and dedicated arrival support across the full Shiloh Season programme.',
-      'Priority movement between key venues so every major service, teaching moment, and celebration is easier to attend.',
-      'A single pass designed for guests who want the most complete Shiloh 2026 experience.',
+      'Prophetic Retreat access from 31 August to 3 September.',
+      'Single occupancy needs and registration support for delegates preparing for the retreat.',
+      'Teaching moments, spiritual alignment, and guided preparation at Fort Moriah City.',
+      'A dedicated pass for retreat guests who want clarity before arrival.',
     ],
   },
   {
@@ -1499,18 +1522,18 @@ const vipPassOptions = [
     ],
   },
   {
-    label: 'Prophetic Retreat',
-    date: '31 Aug - 3 Sep',
-    price: '$1000 USD',
-    tag: 'Retreat',
+    label: 'VIP Ultimate Passes',
+    date: '31 Aug - 6 Sep',
+    price: '$5000 USD',
+    tag: 'Full Season',
     href: 'https://programs.uebertangel.org/product/2026/',
     summary:
-      'A retreat pass shaped for focused teaching, spiritual preparation, and hosted retreat support.',
+      'A complete hosted experience for delegates who want premium access across every defining Shiloh Season moment.',
     features: [
-      'Prophetic Retreat access from 31 August to 3 September.',
-      'Single occupancy needs and registration support for delegates preparing for the retreat.',
-      'Teaching moments, spiritual alignment, and guided preparation at Fort Moriah City.',
-      'A dedicated pass for retreat guests who want clarity before arrival.',
+      'Premium VIP access for Prophetic Retreat, Shiloh Conference, Sunday Service, and the Ra’ah birthday celebration.',
+      'Reserved seating guidance and dedicated arrival support across the full Shiloh Season programme.',
+      'Priority movement between key venues so every major service, teaching moment, and celebration is easier to attend.',
+      'A single pass designed for guests who want the most complete Shiloh 2026 experience.',
     ],
   },
 ];
@@ -1671,7 +1694,7 @@ function ContactPage() {
           </a>
         </div>
       </section>
-      <JourneySupportSection />
+      <JourneySupportSection theme="dark" showAside={false} />
       <Footer />
     </main>
   );
@@ -2497,6 +2520,7 @@ function PassesPage() {
         title="Shiloh Passes"
         className="block h-[calc(100svh-5rem)] w-full border-0"
       />
+      <Footer />
     </main>
   );
 }
