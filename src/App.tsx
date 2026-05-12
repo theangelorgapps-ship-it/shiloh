@@ -459,18 +459,20 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
           />
         )}
       </AnimatePresence>
-      <nav className="relative z-20 flex w-full max-w-[calc(100vw-1.5rem)] items-center justify-between gap-2 rounded-b-2xl bg-black px-2.5 py-2 text-white shadow-[0_16px_40px_rgba(0,0,0,0.35)] sm:gap-4 sm:px-5 md:w-[min(1120px,calc(100vw-3rem))] md:gap-7 md:rounded-b-3xl md:px-7 xl:w-[min(1180px,calc(100vw-4rem))] xl:px-8">
-        <a href="/" aria-label="Shiloh home" className="flex shrink-0 items-center gap-2 sm:gap-3">
+      <nav className="relative z-20 flex w-full max-w-[calc(100vw-0.75rem)] items-center justify-between gap-1 rounded-b-2xl bg-black px-2 py-2 text-white shadow-[0_16px_40px_rgba(0,0,0,0.35)] sm:max-w-[calc(100vw-1.5rem)] sm:gap-4 sm:px-5 md:w-[min(1120px,calc(100vw-3rem))] md:gap-7 md:rounded-b-3xl md:px-7 xl:w-[min(1180px,calc(100vw-4rem))] xl:px-8">
+        <a href="/" aria-label="Shiloh home" className="order-1 flex shrink-0 items-center gap-1.5 sm:gap-3">
           <span className="flex flex-col text-left leading-[0.78] text-[#E1E0CC]">
-            <span className="text-[11px] font-extrabold uppercase tracking-[0.22em] sm:text-xs">Shiloh</span>
-            <span className="font-serif text-[15px] italic tracking-normal sm:text-base">Season 26</span>
+            <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] sm:text-xs sm:tracking-[0.22em]">Shiloh</span>
+            <span className="font-serif text-[14px] italic tracking-normal sm:text-base">Season 26</span>
           </span>
-          <span className="h-8 w-px bg-primary/25" aria-hidden="true" />
-          <span className="max-w-[4.8rem] text-[7px] font-semibold uppercase leading-[1.25] tracking-[0.12em] text-primary/60 min-[420px]:text-[8px] sm:max-w-[7.5rem] sm:text-[9px] lg:tracking-[0.18em]">
-            31 Aug - 6 Sep
+          <span className="h-7 w-px bg-primary/25 sm:h-8" aria-hidden="true" />
+          <span className="flex max-w-[2.8rem] flex-col text-[6.5px] font-semibold uppercase leading-[1.2] tracking-[0.1em] text-primary/60 min-[420px]:text-[8px] sm:max-w-none sm:flex-row sm:gap-1 sm:text-[9px] lg:tracking-[0.18em]">
+            <span>31 Aug</span>
+            <span className="hidden sm:inline">-</span>
+            <span>6 Sep</span>
           </span>
         </a>
-        <div className="hidden items-center gap-5 whitespace-nowrap text-xs text-[rgba(225,224,204,0.8)] md:flex lg:gap-7 xl:gap-8">
+        <div className="order-2 hidden items-center gap-4 whitespace-nowrap text-xs text-[rgba(225,224,204,0.8)] md:flex lg:gap-6 xl:gap-8">
           {navItems.map((item) => (
             <div key={item.label} className="group relative py-2">
               {'children' in item && item.children ? (
@@ -527,6 +529,37 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
             </div>
           ))}
         </div>
+        <div className="order-2 flex min-w-0 shrink items-center justify-center gap-0.5 sm:gap-2 md:order-3 md:shrink-0">
+          <button
+            type="button"
+            onClick={openSponsorModal}
+            className="group inline-flex items-center gap-0.5 rounded-full border border-white/20 bg-white/10 py-1 pl-2 pr-1 text-[10px] font-medium text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 hover:bg-white/15 sm:gap-2 sm:pl-3 md:hover:gap-3"
+          >
+            <span>Bring</span>
+            <span className="hidden min-[430px]:inline">Someone</span>
+            <span className="hidden xl:inline">&nbsp;to Shiloh</span>
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-black transition-transform duration-300 group-hover:scale-110 sm:h-8 sm:w-8">
+              <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
+            </span>
+          </button>
+          <button
+            type="button"
+            data-registration-type="conference"
+            className="group inline-flex items-center gap-0.5 rounded-full border border-white/25 bg-white/10 py-1 pl-2 pr-1 text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 hover:bg-white/15 sm:gap-2 sm:pl-3 md:hover:gap-3"
+          >
+            <span className="flex flex-col items-start leading-none">
+              <span className="text-[6px] font-semibold uppercase tracking-[0.12em] text-primary/60 min-[420px]:text-[7px] sm:text-[9px]">
+                Let Us Know
+              </span>
+              <span className="mt-0.5 text-[9px] font-medium min-[420px]:text-[11px] sm:text-xs lg:text-sm">
+                You&apos;re Coming
+              </span>
+            </span>
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#E1E0CC] text-black transition-transform duration-300 group-hover:scale-110 sm:h-8 sm:w-8">
+              <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
+            </span>
+          </button>
+        </div>
         <button
           type="button"
           onClick={() => {
@@ -538,29 +571,12 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
               return !current;
             });
           }}
-          className="shrink-0 rounded-full bg-white/5 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#E1E0CC]/80 transition-all duration-300 hover:bg-white/10 hover:text-[#E1E0CC] md:hidden"
+          className="order-3 shrink-0 rounded-full bg-white/5 px-2 py-2 text-[9px] font-semibold uppercase tracking-[0.14em] text-[#E1E0CC]/80 transition-all duration-300 hover:bg-white/10 hover:text-[#E1E0CC] min-[420px]:px-3 min-[420px]:text-[10px] min-[420px]:tracking-[0.18em] md:hidden"
           aria-label="Toggle menu"
           aria-expanded={menuOpen}
         >
           {menuOpen ? 'Close' : 'Menu'}
         </button>
-        <div className="flex shrink-0 items-center gap-2">
-          <button
-            type="button"
-            data-registration-type="conference"
-            className="group inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 py-1 pl-3 pr-1 text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 hover:bg-white/15 sm:pl-4 md:hover:gap-3"
-          >
-            <span className="flex flex-col items-start leading-none">
-              <span className="text-[8px] font-semibold uppercase tracking-[0.16em] text-primary/60 sm:text-[9px]">
-                Let Us Know
-              </span>
-              <span className="mt-0.5 text-[11px] font-medium sm:text-xs lg:text-sm">You&apos;re Coming</span>
-            </span>
-            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#E1E0CC] text-black transition-transform duration-300 group-hover:scale-110 sm:h-8 sm:w-8">
-              <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-            </span>
-          </button>
-        </div>
       </nav>
       <AnimatePresence>
         {menuOpen && (
