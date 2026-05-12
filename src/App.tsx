@@ -1981,7 +1981,7 @@ function FeatureCard({
       transition: { duration: 0.8, delay: index * 0.15, ease: cardEase },
     },
   };
-  const isRetreatArtwork = card.title === 'Prophetic Retreat';
+  const imagePosition = card.title === 'Prophetic Retreat' ? 'object-[50%_44%]' : 'object-center';
 
   return (
     <motion.article
@@ -1990,21 +1990,11 @@ function FeatureCard({
       initial="hidden"
       animate={inView ? 'visible' : 'hidden'}
     >
-      <div className="relative flex h-48 items-center justify-center overflow-hidden border-b border-white/5">
-        {isRetreatArtwork ? (
-          <img
-            src={card.image}
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full scale-110 object-cover object-center opacity-45 blur-md"
-          />
-        ) : null}
+      <div className="flex h-48 shrink-0 items-center justify-center overflow-hidden border-b border-white/5 lg:h-44">
         <img
           src={card.image}
           alt=""
-          className={`h-full w-full ${
-            isRetreatArtwork ? 'relative z-10 object-contain object-center' : 'object-cover object-center'
-          }`}
+          className={`h-full w-full object-cover ${imagePosition}`}
         />
       </div>
       <div className="flex flex-1 flex-col p-5 sm:p-6">
