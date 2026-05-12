@@ -465,8 +465,8 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
             <span className="text-[11px] font-extrabold uppercase tracking-[0.22em] sm:text-xs">Shiloh</span>
             <span className="font-serif text-[15px] italic tracking-normal sm:text-base">Season 26</span>
           </span>
-          <span className="hidden h-8 w-px bg-primary/25 sm:block" aria-hidden="true" />
-          <span className="hidden max-w-[7.5rem] text-[9px] font-semibold uppercase leading-[1.25] tracking-[0.14em] text-primary/60 sm:block lg:tracking-[0.18em]">
+          <span className="h-8 w-px bg-primary/25" aria-hidden="true" />
+          <span className="max-w-[4.8rem] text-[7px] font-semibold uppercase leading-[1.25] tracking-[0.12em] text-primary/60 min-[420px]:text-[8px] sm:max-w-[7.5rem] sm:text-[9px] lg:tracking-[0.18em]">
             31 Aug - 6 Sep
           </span>
         </a>
@@ -538,27 +538,17 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
               return !current;
             });
           }}
-          className="group flex h-9 w-9 shrink-0 flex-col items-center justify-center gap-1.5 rounded-full border border-white/15 bg-white/5 text-[#E1E0CC]/80 transition-all duration-300 hover:border-white/30 hover:bg-white/10 hover:text-[#E1E0CC] md:hidden"
+          className="shrink-0 rounded-full border border-white/15 bg-white/5 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#E1E0CC]/80 transition-all duration-300 hover:border-white/30 hover:bg-white/10 hover:text-[#E1E0CC] md:hidden"
           aria-label="Toggle menu"
           aria-expanded={menuOpen}
         >
-          <span
-            className={`h-px w-4 rounded-full bg-current transition-transform duration-300 ${
-              menuOpen ? 'translate-y-[3px] rotate-45' : ''
-            }`}
-          />
-          <span className={`h-px w-4 rounded-full bg-current transition-opacity duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
-          <span
-            className={`h-px w-4 rounded-full bg-current transition-transform duration-300 ${
-              menuOpen ? '-translate-y-[3px] -rotate-45' : ''
-            }`}
-          />
+          {menuOpen ? 'Close' : 'Menu'}
         </button>
         <div className="flex shrink-0 items-center gap-2">
           <button
             type="button"
             onClick={openSponsorModal}
-            className="inline-flex rounded-full border border-white/15 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#E1E0CC]/85 transition-all duration-300 hover:border-white/30 hover:bg-white/10 hover:text-[#E1E0CC] sm:px-4 sm:text-[11px] lg:tracking-[0.12em]"
+            className="hidden rounded-full border border-white/15 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#E1E0CC]/85 transition-all duration-300 hover:border-white/30 hover:bg-white/10 hover:text-[#E1E0CC] sm:inline-flex sm:px-4 sm:text-[11px] lg:tracking-[0.12em]"
           >
             <span>Bring</span>
             <span className="hidden sm:inline">&nbsp;Someone</span>
