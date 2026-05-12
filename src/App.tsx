@@ -459,18 +459,18 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
           />
         )}
       </AnimatePresence>
-      <nav className="relative z-20 flex w-full max-w-[calc(100vw-1.5rem)] items-center justify-between gap-2 rounded-b-2xl bg-black px-3 py-2 text-white shadow-[0_16px_40px_rgba(0,0,0,0.35)] sm:gap-5 sm:px-6 md:w-[min(1120px,calc(100vw-3rem))] md:gap-8 md:rounded-b-3xl md:px-8 xl:w-[min(1180px,calc(100vw-4rem))]">
+      <nav className="relative z-20 flex w-full max-w-[calc(100vw-1.5rem)] items-center justify-between gap-2 rounded-b-2xl bg-black px-2.5 py-2 text-white shadow-[0_16px_40px_rgba(0,0,0,0.35)] sm:gap-4 sm:px-5 md:w-[min(1120px,calc(100vw-3rem))] md:gap-7 md:rounded-b-3xl md:px-7 xl:w-[min(1180px,calc(100vw-4rem))] xl:px-8">
         <a href="/" aria-label="Shiloh home" className="flex shrink-0 items-center gap-2 sm:gap-3">
           <span className="flex flex-col text-left leading-[0.78] text-[#E1E0CC]">
             <span className="text-[11px] font-extrabold uppercase tracking-[0.22em] sm:text-xs">Shiloh</span>
             <span className="font-serif text-[15px] italic tracking-normal sm:text-base">Season 26</span>
           </span>
-          <span className="h-8 w-px bg-primary/25" aria-hidden="true" />
-          <span className="max-w-[4.7rem] text-[8px] font-semibold uppercase leading-[1.25] tracking-[0.14em] text-primary/60 sm:max-w-[7.5rem] sm:text-[9px] lg:tracking-[0.18em]">
+          <span className="hidden h-8 w-px bg-primary/25 sm:block" aria-hidden="true" />
+          <span className="hidden max-w-[7.5rem] text-[9px] font-semibold uppercase leading-[1.25] tracking-[0.14em] text-primary/60 sm:block lg:tracking-[0.18em]">
             31 Aug - 6 Sep
           </span>
         </a>
-        <div className="hidden items-center gap-5 whitespace-nowrap text-xs text-[rgba(225,224,204,0.8)] md:flex lg:gap-8">
+        <div className="hidden items-center gap-5 whitespace-nowrap text-xs text-[rgba(225,224,204,0.8)] md:flex lg:gap-7 xl:gap-8">
           {navItems.map((item) => (
             <div key={item.label} className="group relative py-2">
               {'children' in item && item.children ? (
@@ -538,29 +538,41 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
               return !current;
             });
           }}
-          className="px-1.5 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#E1E0CC]/80 transition-colors hover:text-[#E1E0CC] md:hidden"
+          className="group flex h-9 w-9 shrink-0 flex-col items-center justify-center gap-1.5 rounded-full border border-white/15 bg-white/5 text-[#E1E0CC]/80 transition-all duration-300 hover:border-white/30 hover:bg-white/10 hover:text-[#E1E0CC] md:hidden"
           aria-label="Toggle menu"
           aria-expanded={menuOpen}
         >
-          {menuOpen ? 'Close' : 'Menu'}
+          <span
+            className={`h-px w-4 rounded-full bg-current transition-transform duration-300 ${
+              menuOpen ? 'translate-y-[3px] rotate-45' : ''
+            }`}
+          />
+          <span className={`h-px w-4 rounded-full bg-current transition-opacity duration-300 ${menuOpen ? 'opacity-0' : ''}`} />
+          <span
+            className={`h-px w-4 rounded-full bg-current transition-transform duration-300 ${
+              menuOpen ? '-translate-y-[3px] -rotate-45' : ''
+            }`}
+          />
         </button>
         <div className="flex shrink-0 items-center gap-2">
           <button
             type="button"
             onClick={openSponsorModal}
-            className="hidden rounded-full border border-white/15 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#E1E0CC]/85 transition-all duration-300 hover:border-white/30 hover:bg-white/10 hover:text-[#E1E0CC] lg:inline-flex"
+            className="inline-flex rounded-full border border-white/15 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#E1E0CC]/85 transition-all duration-300 hover:border-white/30 hover:bg-white/10 hover:text-[#E1E0CC] sm:px-4 sm:text-[11px] lg:tracking-[0.12em]"
           >
-            Bring Someone to Shiloh
+            <span>Bring</span>
+            <span className="hidden sm:inline">&nbsp;Someone</span>
+            <span className="hidden xl:inline">&nbsp;to Shiloh</span>
           </button>
           <button
             type="button"
             data-registration-type="conference"
-            className="group inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 py-1 pl-4 pr-1 text-xs text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 hover:gap-3 hover:bg-white/15 sm:text-sm"
+            className="group inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 py-1 pl-3 pr-1 text-xs text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 hover:bg-white/15 sm:gap-2 sm:pl-4 sm:text-sm md:hover:gap-3"
           >
             <span>Register</span>
             <span className="hidden xl:inline">Now</span>
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E1E0CC] text-black transition-transform duration-300 group-hover:scale-110">
-              <ArrowRight className="h-4 w-4" />
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#E1E0CC] text-black transition-transform duration-300 group-hover:scale-110 sm:h-8 sm:w-8">
+              <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </span>
           </button>
         </div>
