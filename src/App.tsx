@@ -388,7 +388,7 @@ type HeaderNavItem =
       href?: never;
       action?: never;
     }
-  | { label: string; action: 'sow'; href?: never; children?: never };
+  | { label: string; action: 'sow' | 'sponsor'; href?: never; children?: never };
 
 function HeroHeader({ sticky = true }: { sticky?: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -404,7 +404,6 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
     ] },
     { label: '2026 Shop', href: '/merch' },
     { label: 'Giving', action: 'sow' },
-    { label: 'Contact', href: '/contact' },
   ];
 
   const closeMenu = () => {
@@ -460,7 +459,7 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
           />
         )}
       </AnimatePresence>
-      <nav className="relative z-20 flex max-w-[calc(100vw-1.5rem)] items-center gap-2 rounded-b-2xl bg-black px-3 py-2 text-white shadow-[0_16px_40px_rgba(0,0,0,0.35)] sm:gap-5 sm:px-6 md:gap-10 md:rounded-b-3xl md:px-8">
+      <nav className="relative z-20 flex w-full max-w-[calc(100vw-1.5rem)] items-center justify-between gap-2 rounded-b-2xl bg-black px-3 py-2 text-white shadow-[0_16px_40px_rgba(0,0,0,0.35)] sm:gap-5 sm:px-6 md:w-[min(1120px,calc(100vw-3rem))] md:gap-8 md:rounded-b-3xl md:px-8 xl:w-[min(1180px,calc(100vw-4rem))]">
         <a href="/" aria-label="Shiloh home" className="flex shrink-0 items-center gap-2 sm:gap-3">
           <span className="flex flex-col text-left leading-[0.78] text-[#E1E0CC]">
             <span className="text-[11px] font-extrabold uppercase tracking-[0.22em] sm:text-xs">Shiloh</span>
@@ -471,7 +470,7 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
             31 Aug - 6 Sep
           </span>
         </a>
-        <div className="hidden items-center gap-5 whitespace-nowrap text-xs text-[rgba(225,224,204,0.8)] md:flex lg:gap-9">
+        <div className="hidden items-center gap-5 whitespace-nowrap text-xs text-[rgba(225,224,204,0.8)] md:flex lg:gap-8">
           {navItems.map((item) => (
             <div key={item.label} className="group relative py-2">
               {'children' in item && item.children ? (
@@ -483,23 +482,23 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
                   {item.label}
                   <ChevronDown className="h-3 w-3 text-primary/45 transition-transform duration-200 group-hover:rotate-180" />
                 </button>
-              ) : item.action === 'sow' ? (
+              ) : item.action === 'sow' || item.action === 'sponsor' ? (
                 <button
                   type="button"
-                  onClick={openSowModal}
+                  onClick={item.action === 'sow' ? openSowModal : openSponsorModal}
                   className="transition-colors hover:text-[#E1E0CC]"
                 >
                   {item.label}
                 </button>
-              ) : (
+              ) : 'href' in item ? (
                 <a
                   href={item.href}
-                  onClick={navigateTo(item.href)}
+                  onClick={navigateTo(item.href!)}
                   className="transition-colors hover:text-[#E1E0CC]"
                 >
                   {item.label}
                 </a>
-              )}
+              ) : null}
               {'children' in item && item.children ? (
                 <div className="pointer-events-none absolute left-1/2 top-full w-64 -translate-x-1/2 translate-y-2 rounded-2xl border border-white/10 bg-black/90 p-2 opacity-0 shadow-[0_20px_50px_rgba(0,0,0,0.4)] backdrop-blur-xl transition-all duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:translate-y-0 group-focus-within:opacity-100">
                   {item.children.map((child) => (
@@ -545,17 +544,26 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
         >
           {menuOpen ? 'Close' : 'Menu'}
         </button>
-        <a
-          href="/vip"
-          onClick={navigateTo('/vip')}
-          className="group inline-flex shrink-0 items-center gap-2 rounded-full border border-white/25 bg-white/10 py-1 pl-4 pr-1 text-xs text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 hover:gap-3 hover:bg-white/15 sm:text-sm"
-        >
-          <span>VIP</span>
-          <span className="hidden sm:inline">Experience</span>
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E1E0CC] text-black transition-transform duration-300 group-hover:scale-110">
-            <ArrowRight className="h-4 w-4" />
-          </span>
-        </a>
+        <div className="flex shrink-0 items-center gap-2">
+          <button
+            type="button"
+            onClick={openSponsorModal}
+            className="hidden rounded-full border border-white/15 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#E1E0CC]/85 transition-all duration-300 hover:border-white/30 hover:bg-white/10 hover:text-[#E1E0CC] lg:inline-flex"
+          >
+            Bring Someone to Shiloh
+          </button>
+          <button
+            type="button"
+            data-registration-type="conference"
+            className="group inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 py-1 pl-4 pr-1 text-xs text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 hover:gap-3 hover:bg-white/15 sm:text-sm"
+          >
+            <span>Register</span>
+            <span className="hidden xl:inline">Now</span>
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-[#E1E0CC] text-black transition-transform duration-300 group-hover:scale-110">
+              <ArrowRight className="h-4 w-4" />
+            </span>
+          </button>
+        </div>
       </nav>
       <AnimatePresence>
         {menuOpen && (
@@ -617,23 +625,23 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
                       )}
                     </AnimatePresence>
                   </>
-                ) : item.action === 'sow' ? (
+                ) : item.action === 'sow' || item.action === 'sponsor' ? (
                   <button
                     type="button"
-                    onClick={openSowModal}
+                    onClick={item.action === 'sow' ? openSowModal : openSponsorModal}
                     className="block w-full rounded-xl px-4 py-3 text-left transition-colors hover:bg-white/10"
                   >
                     {item.label}
                   </button>
-                ) : (
+                ) : 'href' in item ? (
                   <a
                     href={item.href}
-                    onClick={navigateTo(item.href)}
+                    onClick={navigateTo(item.href!)}
                     className="block rounded-xl px-4 py-3 transition-colors hover:bg-white/10"
                   >
                     {item.label}
                   </a>
-                )}
+                ) : null}
               </div>
             ))}
           </motion.div>
