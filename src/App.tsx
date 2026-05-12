@@ -398,12 +398,12 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
     { label: 'Plan', children: [
       { label: '2026 Shiloh Season Guide', href: '/journey' },
       { label: 'Events Schedule', href: '/schedule' },
-      { label: 'Bring Someone To Shiloh', action: 'sponsor' },
       { label: 'Parking and Shuttle', href: '/passes' },
       { label: 'Shiloh Season VIP Experience', href: '/vip' },
     ] },
-    { label: '2026 Shop', href: '/merch' },
+    { label: 'Bring Someone', action: 'sponsor' },
     { label: 'Giving', action: 'sow' },
+    { label: '2026 Shop', href: '/merch' },
   ];
 
   const closeMenu = () => {
@@ -547,20 +547,11 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
         <div className="flex shrink-0 items-center gap-2">
           <button
             type="button"
-            onClick={openSponsorModal}
-            className="hidden rounded-full border border-white/15 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-[#E1E0CC]/85 transition-all duration-300 hover:border-white/30 hover:bg-white/10 hover:text-[#E1E0CC] sm:inline-flex sm:px-4 sm:text-[11px] lg:tracking-[0.12em]"
-          >
-            <span>Bring</span>
-            <span className="hidden sm:inline">&nbsp;Someone</span>
-            <span className="hidden xl:inline">&nbsp;to Shiloh</span>
-          </button>
-          <button
-            type="button"
             data-registration-type="conference"
-            className="group inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 py-1 pl-3 pr-1 text-xs text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 hover:bg-white/15 sm:gap-2 sm:pl-4 sm:text-sm md:hover:gap-3"
+            className="group inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 py-1 pl-3 pr-1 text-[11px] text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 hover:bg-white/15 sm:gap-2 sm:pl-4 sm:text-xs md:hover:gap-3 lg:text-sm"
           >
-            <span>Register</span>
-            <span className="hidden xl:inline">Now</span>
+            <span>Let Us Know</span>
+            <span className="hidden xl:inline">&nbsp;You&apos;re Coming</span>
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#E1E0CC] text-black transition-transform duration-300 group-hover:scale-110 sm:h-8 sm:w-8">
               <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </span>
