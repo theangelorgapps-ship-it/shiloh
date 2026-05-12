@@ -1953,6 +1953,7 @@ function FeatureCard({
       transition: { duration: 0.8, delay: index * 0.15, ease: cardEase },
     },
   };
+  const shouldContainImage = card.title === 'Prophetic Retreat';
 
   return (
     <motion.article
@@ -1961,8 +1962,16 @@ function FeatureCard({
       initial="hidden"
       animate={inView ? 'visible' : 'hidden'}
     >
-      <div className="flex h-48 items-center justify-center overflow-hidden border-b border-white/5">
-        <img src={card.image} alt="" className="h-full w-full object-cover" />
+      <div
+        className={`flex h-44 items-center justify-center overflow-hidden border-b border-white/5 sm:h-48 ${
+          shouldContainImage ? 'bg-[#d8ebf6]' : ''
+        }`}
+      >
+        <img
+          src={card.image}
+          alt=""
+          className={`h-full w-full ${shouldContainImage ? 'object-contain object-center' : 'object-cover'}`}
+        />
       </div>
       <div className="flex flex-1 flex-col p-5 sm:p-6">
         <div className="mb-6 flex items-start justify-between gap-4">
