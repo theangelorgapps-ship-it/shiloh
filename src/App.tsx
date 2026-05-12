@@ -401,7 +401,7 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
       { label: 'Parking and Shuttle', href: '/passes' },
       { label: 'Shiloh Season VIP Experience', href: '/vip' },
     ] },
-    { label: 'Bring Someone', action: 'sponsor' },
+    { label: 'Bring Someone to Shiloh', action: 'sponsor' },
     { label: 'Giving', action: 'sow' },
     { label: '2026 Shop', href: '/merch' },
   ];
@@ -548,10 +548,14 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
           <button
             type="button"
             data-registration-type="conference"
-            className="group inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 py-1 pl-3 pr-1 text-[11px] text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 hover:bg-white/15 sm:gap-2 sm:pl-4 sm:text-xs md:hover:gap-3 lg:text-sm"
+            className="group inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 py-1 pl-3 pr-1 text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 hover:bg-white/15 sm:pl-4 md:hover:gap-3"
           >
-            <span>Let Us Know</span>
-            <span className="hidden xl:inline">&nbsp;You&apos;re Coming</span>
+            <span className="flex flex-col items-start leading-none">
+              <span className="text-[8px] font-semibold uppercase tracking-[0.16em] text-primary/60 sm:text-[9px]">
+                Let Us Know
+              </span>
+              <span className="mt-0.5 text-[11px] font-medium sm:text-xs lg:text-sm">You&apos;re Coming</span>
+            </span>
             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#E1E0CC] text-black transition-transform duration-300 group-hover:scale-110 sm:h-8 sm:w-8">
               <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             </span>
