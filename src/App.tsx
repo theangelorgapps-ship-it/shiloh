@@ -382,7 +382,12 @@ function AnimatedLetter({
 
 type HeaderNavItem =
   | { label: string; href: string; children?: never; action?: never }
-  | { label: string; children: { label: string; href: string }[]; href?: never; action?: never }
+  | {
+      label: string;
+      children: Array<{ label: string; href: string; action?: never } | { label: string; action: 'sponsor'; href?: never }>;
+      href?: never;
+      action?: never;
+    }
   | { label: string; action: 'sow'; href?: never; children?: never };
 
 function HeroHeader({ sticky = true }: { sticky?: boolean }) {
@@ -392,12 +397,13 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
     { label: 'Home', href: '/' },
     { label: 'Plan', children: [
       { label: '2026 Shiloh Season Guide', href: '/journey' },
-      { label: 'Schedule', href: '/schedule' },
-      { label: 'Passes', href: '/passes' },
+      { label: 'Events Schedule', href: '/schedule' },
+      { label: 'Bring Someone To Shiloh', action: 'sponsor' },
+      { label: 'Parking and Shuttle', href: '/passes' },
       { label: 'Shiloh Season VIP Experience', href: '/vip' },
     ] },
-    { label: 'Shiloh Merch', href: '/merch' },
-    { label: 'Sow', action: 'sow' },
+    { label: '2026 Shop', href: '/merch' },
+    { label: 'Giving', action: 'sow' },
     { label: 'Contact', href: '/contact' },
   ];
 
@@ -431,6 +437,11 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
   const openSowModal = () => {
     closeMenu();
     window.dispatchEvent(new CustomEvent('open-sow-modal'));
+  };
+
+  const openSponsorModal = () => {
+    closeMenu();
+    window.dispatchEvent(new CustomEvent('open-sponsor-modal'));
   };
 
   return (
@@ -492,14 +503,25 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
               {'children' in item && item.children ? (
                 <div className="pointer-events-none absolute left-1/2 top-full w-64 -translate-x-1/2 translate-y-2 rounded-2xl border border-white/10 bg-black/90 p-2 opacity-0 shadow-[0_20px_50px_rgba(0,0,0,0.4)] backdrop-blur-xl transition-all duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:translate-y-0 group-focus-within:opacity-100">
                   {item.children.map((child) => (
-                    <a
-                      key={child.label}
-                      href={child.href}
-                      onClick={navigateTo(child.href)}
-                      className="block rounded-xl px-4 py-3 text-[11px] leading-tight text-primary/75 transition-colors hover:bg-white/10 hover:text-primary"
-                    >
-                      {child.label}
-                    </a>
+                    'action' in child && child.action === 'sponsor' ? (
+                      <button
+                        key={child.label}
+                        type="button"
+                        onClick={openSponsorModal}
+                        className="block w-full rounded-xl px-4 py-3 text-left text-[11px] leading-tight text-primary/75 transition-colors hover:bg-white/10 hover:text-primary"
+                      >
+                        {child.label}
+                      </button>
+                    ) : (
+                      <a
+                        key={child.label}
+                        href={child.href}
+                        onClick={navigateTo(child.href)}
+                        className="block rounded-xl px-4 py-3 text-[11px] leading-tight text-primary/75 transition-colors hover:bg-white/10 hover:text-primary"
+                      >
+                        {child.label}
+                      </a>
+                    )
                   ))}
                 </div>
               ) : null}
@@ -571,14 +593,25 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
                           transition={{ duration: 0.22, ease: customEase }}
                         >
                           {item.children.map((child) => (
-                            <a
-                              key={child.label}
-                              href={child.href}
-                              onClick={navigateTo(child.href)}
-                              className="block rounded-xl px-4 py-2 text-xs text-primary/65 transition-colors hover:bg-white/10 hover:text-primary"
-                            >
-                              {child.label}
-                            </a>
+                            'action' in child && child.action === 'sponsor' ? (
+                              <button
+                                key={child.label}
+                                type="button"
+                                onClick={openSponsorModal}
+                                className="block w-full rounded-xl px-4 py-2 text-left text-xs text-primary/65 transition-colors hover:bg-white/10 hover:text-primary"
+                              >
+                                {child.label}
+                              </button>
+                            ) : (
+                              <a
+                                key={child.label}
+                                href={child.href}
+                                onClick={navigateTo(child.href)}
+                                className="block rounded-xl px-4 py-2 text-xs text-primary/65 transition-colors hover:bg-white/10 hover:text-primary"
+                              >
+                                {child.label}
+                              </a>
+                            )
                           ))}
                         </motion.div>
                       )}
@@ -693,7 +726,7 @@ function Hero() {
               transition={{ duration: 0.8, ease: customEase }}
             >
               <span className="mobile-hero-title flex flex-col items-center">
-                <span className="font-serif italic normal-case tracking-[0.02em]">It&apos;s my Shiloh</span>
+                <span className="font-serif italic normal-case tracking-[0.02em]">It&apos;s My Shiloh Season</span>
               </span>
             </motion.h1>
 
@@ -722,7 +755,7 @@ function Hero() {
             >
               <p className="text-sm leading-[1.45] text-white/88 sm:text-base">
                 We are thrilled to officially announce that Shiloh is set to take place from August 31st -
-                September 6th at Fort Moriah City & Harare Hippodrome!
+                September 6th at Fort Moriah City and The Harare Hippodrome!
               </p>
             </motion.div>
 
@@ -732,12 +765,6 @@ function Hero() {
               animate={inView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
               transition={{ duration: 0.75, delay: 0.45, ease: customEase }}
             >
-              <p className="max-w-md text-left text-sm leading-[1.5] text-white/90 md:text-right">
-                What Happens In Shiloh,
-                <br />
-                Stays in Shiloh🤫
-              </p>
-              <PillButton href="#features">VIP Experience</PillButton>
               <a
                 href="#about"
                 className="hero-discover text-[10px] uppercase tracking-[0.5em] text-white/80 transition-colors hover:text-white"
@@ -745,6 +772,7 @@ function Hero() {
               >
                 Discover
               </a>
+              <PillButton href="#features">VIP Experience</PillButton>
             </motion.div>
           </div>
         </div>
@@ -1953,8 +1981,6 @@ function FeatureCard({
       transition: { duration: 0.8, delay: index * 0.15, ease: cardEase },
     },
   };
-  const shouldContainImage = card.title === 'Prophetic Retreat';
-
   return (
     <motion.article
       className="flex h-full min-h-[420px] flex-col overflow-hidden rounded-lg bg-[#212121] md:min-h-0"
@@ -1962,15 +1988,11 @@ function FeatureCard({
       initial="hidden"
       animate={inView ? 'visible' : 'hidden'}
     >
-      <div
-        className={`flex h-44 items-center justify-center overflow-hidden border-b border-white/5 sm:h-48 ${
-          shouldContainImage ? 'bg-[#d8ebf6]' : ''
-        }`}
-      >
+      <div className="flex h-48 items-center justify-center overflow-hidden border-b border-white/5">
         <img
           src={card.image}
           alt=""
-          className={`h-full w-full ${shouldContainImage ? 'object-contain object-center' : 'object-cover'}`}
+          className="h-full w-full object-cover object-center"
         />
       </div>
       <div className="flex flex-1 flex-col p-5 sm:p-6">
@@ -2135,8 +2157,7 @@ function RegistrationModal({
   onClose: () => void;
   type: 'conference' | 'birthday';
 }) {
-  const registrationTitle =
-    type === 'birthday' ? "The Ra'ah Prophet Uebert Angel Birthday Celebration" : 'Shiloh Conference';
+  const registrationTitle = "Let Us Know You're Coming";
   const registrationUrl =
     type === 'birthday'
       ? 'https://programs.uebertangel.org/product/birthday/'
@@ -2355,7 +2376,7 @@ function DonorboxWidget({ campaign }: { campaign: string }) {
   return (
     <div
       key={campaign}
-      className="min-h-[620px] w-full overflow-hidden rounded-2xl bg-white"
+      className="mx-auto flex min-h-[620px] w-full max-w-2xl justify-center overflow-hidden rounded-2xl bg-white"
       dangerouslySetInnerHTML={{
         __html: `<dbox-widget campaign="${campaign}" type="donation_form" enable-auto-scroll="true"></dbox-widget>`,
       }}
@@ -2405,7 +2426,7 @@ function SowModal({
             <div className="shrink-0 px-5 pb-4 pt-5 sm:px-7">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-black/40">Sow</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-black/40">Giving</p>
                   <h2 className="journey-card-title mt-1 text-3xl leading-none text-black sm:text-4xl">
                     Shiloh Giving
                   </h2>
@@ -2452,6 +2473,7 @@ function MerchPage() {
       description: 'Soft event tee placeholder for the Shiloh Season 2026 collection preview.',
       accent: 'from-[#E1E0CC] to-[#746C4F]',
       icon: Shirt,
+      image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a037b6882125b987483840d.jpeg',
     },
     {
       name: 'Shiloh Cap',
@@ -2459,6 +2481,7 @@ function MerchPage() {
       description: 'Embroidered cap concept with temporary details for merch planning.',
       accent: 'from-[#D8A945] to-[#4B3314]',
       icon: Sparkle,
+      image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a037b6882125b987483840c.jpeg',
     },
     {
       name: 'Conference Tote',
@@ -2498,7 +2521,7 @@ function MerchPage() {
               Shiloh Season 2026
             </p>
             <h1 className="font-serif text-5xl italic leading-none text-primary sm:text-6xl md:text-7xl">
-              Shiloh Merch
+              2026 Shop
             </h1>
             <p className="mt-6 max-w-2xl text-sm leading-6 text-white/65 sm:text-base">
               Temporary product previews for the upcoming Shiloh Season store. These dummy items help review the page
@@ -2515,10 +2538,14 @@ function MerchPage() {
                   key={product.name}
                   className="group flex min-h-[23rem] flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur-md transition-transform duration-300 hover:-translate-y-1"
                 >
-                  <div className={`flex min-h-44 items-center justify-center bg-gradient-to-br ${product.accent}`}>
-                    <div className="flex h-20 w-20 items-center justify-center rounded-full border border-white/30 bg-black/20 text-white backdrop-blur-sm transition-transform duration-300 group-hover:scale-105">
-                      <Icon className="h-9 w-9" strokeWidth={1.5} />
-                    </div>
+                  <div className={`flex min-h-44 items-center justify-center overflow-hidden bg-gradient-to-br ${product.accent}`}>
+                    {'image' in product && product.image ? (
+                      <img src={product.image} alt="" className="h-full min-h-44 w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                    ) : (
+                      <div className="flex h-20 w-20 items-center justify-center rounded-full border border-white/30 bg-black/20 text-white backdrop-blur-sm transition-transform duration-300 group-hover:scale-105">
+                        <Icon className="h-9 w-9" strokeWidth={1.5} />
+                      </div>
+                    )}
                   </div>
                   <div className="flex flex-1 flex-col p-5">
                     <div className="mb-4 flex items-start justify-between gap-4">
@@ -2539,6 +2566,96 @@ function MerchPage() {
                 </article>
               );
             })}
+          </div>
+        </div>
+      </section>
+      <Footer />
+    </main>
+  );
+}
+
+function PartnersPage() {
+  const partnerProducts = [
+    {
+      name: 'Partner Heritage Tee',
+      price: '$45',
+      detail: 'Limited partner tee with royal Shiloh Season finishing.',
+      image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a037b6882125b987483840d.jpeg',
+    },
+    {
+      name: 'Partner Signature Cap',
+      price: '$32',
+      detail: 'Exclusive cap preview reserved for partner pickup.',
+      image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a037b6882125b987483840c.jpeg',
+    },
+    {
+      name: 'Royal Partner Tote',
+      price: '$38',
+      detail: 'A refined tote concept for notes, essentials, and daily movement.',
+      image: null,
+    },
+    {
+      name: 'Partner Evening Hoodie',
+      price: '$78',
+      detail: 'Premium hoodie placeholder for cool evenings at Shiloh Season.',
+      image: null,
+    },
+  ];
+
+  return (
+    <main className="min-h-screen bg-[#070604] text-[#E1E0CC]">
+      <HeroHeader />
+      <section className="relative overflow-hidden px-4 pb-20 pt-32 sm:px-6 md:px-10">
+        <div className="pointer-events-none absolute inset-0">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(216,169,69,0.2),transparent_36%),linear-gradient(180deg,#11100b_0%,#070604_60%,#000_100%)]" />
+          <div className="absolute inset-x-0 top-0 h-px bg-[#d8a945]/35" />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-7xl">
+          <div className="mx-auto max-w-4xl text-center">
+            <p className="mb-5 text-xs font-semibold uppercase tracking-[0.45em] text-[#d8a945]/70">
+              Partner Exclusives
+            </p>
+            <h1 className="font-serif text-5xl italic leading-none text-primary sm:text-6xl md:text-7xl">
+              Partners Shop
+            </h1>
+            <p className="mx-auto mt-7 max-w-3xl text-sm leading-7 text-primary/68 sm:text-base">
+              Partners, access exclusive items and enjoy free on-site pickup. No waiting in line. Order by August 6 and
+              pick up at the GoodNews Shop, Harare Hippodrome. Merchandise is available while supplies last. Terms apply.
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {partnerProducts.map((product) => (
+              <article
+                key={product.name}
+                className="group overflow-hidden rounded-2xl border border-[#d8a945]/20 bg-white/[0.055] shadow-[0_24px_90px_rgba(0,0,0,0.32)] backdrop-blur-md transition-transform duration-300 hover:-translate-y-1"
+              >
+                <div className="flex aspect-[4/3] items-center justify-center overflow-hidden bg-[linear-gradient(135deg,rgba(216,169,69,0.28),rgba(255,255,255,0.06))]">
+                  {product.image ? (
+                    <img src={product.image} alt="" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  ) : (
+                    <Sparkle className="h-12 w-12 text-[#d8a945]" strokeWidth={1.5} />
+                  )}
+                </div>
+                <div className="p-5">
+                  <div className="mb-4 flex items-start justify-between gap-4">
+                    <h2 className="text-xl leading-tight text-primary">{product.name}</h2>
+                    <span className="rounded-full border border-[#d8a945]/25 px-3 py-1 text-xs text-[#f1d98d]">
+                      {product.price}
+                    </span>
+                  </div>
+                  <p className="text-sm leading-6 text-primary/58">{product.detail}</p>
+                  <button
+                    type="button"
+                    disabled
+                    className="mt-8 rounded-full border border-[#d8a945]/25 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.22em] text-[#f1d98d]/70"
+                  >
+                    Preview Only
+                  </button>
+                </div>
+              </article>
+            ))}
           </div>
         </div>
       </section>
@@ -2600,6 +2717,7 @@ function SchedulePage() {
     ['31 Aug - 3 Sep', 'Prophetic Retreat', 'Fort Moriah City'],
     ['4 Sep - 5 Sep', 'Shiloh Conference', 'Fort Moriah City'],
     ['6 September', 'Sunday Service', 'Harare Hippodrome'],
+    ['6 September', 'Baptism', 'Fort Moriah City'],
     ['6 Sep 7:00 PM', "The Ra'ah Prophet Uebert Angel Birthday Celebration", 'Harare Hippodrome'],
   ];
 
@@ -2679,6 +2797,7 @@ export default function App() {
   const isJourneyPage = pathname === '/journey';
   const isVipPage = pathname === '/vip';
   const isMerchPage = pathname === '/merch';
+  const isPartnersPage = pathname === '/partners';
   const isSchedulePage = pathname === '/schedule';
   const isPassesPage = pathname === '/passes';
   const isContactPage = pathname === '/contact';
@@ -2695,6 +2814,13 @@ export default function App() {
 
     window.addEventListener('open-sow-modal', openSowModal);
     return () => window.removeEventListener('open-sow-modal', openSowModal);
+  }, []);
+
+  useEffect(() => {
+    const openSponsorModal = () => setSponsorOpen(true);
+
+    window.addEventListener('open-sponsor-modal', openSponsorModal);
+    return () => window.removeEventListener('open-sponsor-modal', openSponsorModal);
   }, []);
 
   useEffect(() => {
@@ -2793,6 +2919,8 @@ export default function App() {
         <VipPage />
       ) : isMerchPage ? (
         <MerchPage />
+      ) : isPartnersPage ? (
+        <PartnersPage />
       ) : isSchedulePage ? (
         <SchedulePage />
       ) : isPassesPage ? (
