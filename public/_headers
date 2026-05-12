@@ -1,10 +1,10 @@
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://crm.goodnewsworld.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://assets.cdn.filesafe.space https://pub-f170a2592d2c4a1485466404c36807be.r2.dev; media-src 'self' https://d8j0ntlcm91z4.cloudfront.net; frame-src 'self' https://forms.zohopublic.eu https://crm.goodnewsworld.com https://programs.uebertangel.org; connect-src 'self' https://forms.zohopublic.eu https://crm.goodnewsworld.com; base-uri 'self'; form-action 'self' https://forms.zohopublic.eu https://crm.goodnewsworld.com https://programs.uebertangel.org; frame-ancestors 'none'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://crm.goodnewsworld.com https://donorbox.org https://*.donorbox.org; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://donorbox.org https://*.donorbox.org; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://assets.cdn.filesafe.space https://pub-f170a2592d2c4a1485466404c36807be.r2.dev https://donorbox.org https://*.donorbox.org; media-src 'self' https://d8j0ntlcm91z4.cloudfront.net; frame-src 'self' https://forms.zohopublic.eu https://crm.goodnewsworld.com https://programs.uebertangel.org https://donorbox.org https://*.donorbox.org; connect-src 'self' https://forms.zohopublic.eu https://crm.goodnewsworld.com https://donorbox.org https://*.donorbox.org; base-uri 'self'; form-action 'self' https://forms.zohopublic.eu https://crm.goodnewsworld.com https://programs.uebertangel.org https://donorbox.org https://*.donorbox.org; frame-ancestors 'self'; upgrade-insecure-requests
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
-  X-Frame-Options: DENY
+  X-Frame-Options: SAMEORIGIN
 
 /assets/*
   Cache-Control: public, max-age=31536000, immutable

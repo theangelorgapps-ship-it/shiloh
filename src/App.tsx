@@ -380,10 +380,15 @@ function AnimatedLetter({
   );
 }
 
-function HeroHeader({ sticky = false }: { sticky?: boolean }) {
+type HeaderNavItem =
+  | { label: string; href: string; children?: never; action?: never }
+  | { label: string; children: { label: string; href: string }[]; href?: never; action?: never }
+  | { label: string; action: 'sow'; href?: never; children?: never };
+
+function HeroHeader({ sticky = true }: { sticky?: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileSubmenu, setMobileSubmenu] = useState<string | null>(null);
-  const navItems = [
+  const navItems: HeaderNavItem[] = [
     { label: 'Home', href: '/' },
     { label: 'Plan', children: [
       { label: '2026 Shiloh Season Guide', href: '/journey' },
@@ -392,6 +397,7 @@ function HeroHeader({ sticky = false }: { sticky?: boolean }) {
       { label: 'Shiloh Season VIP Experience', href: '/vip' },
     ] },
     { label: 'Shiloh Merch', href: '/merch' },
+    { label: 'Sow', action: 'sow' },
     { label: 'Contact', href: '/contact' },
   ];
 
@@ -422,8 +428,13 @@ function HeroHeader({ sticky = false }: { sticky?: boolean }) {
     window.setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 0);
   };
 
+  const openSowModal = () => {
+    closeMenu();
+    window.dispatchEvent(new CustomEvent('open-sow-modal'));
+  };
+
   return (
-    <header className={`${sticky ? 'sticky' : 'absolute'} inset-x-0 top-0 z-40 flex justify-center px-3`}>
+    <header className={`${sticky ? 'fixed' : 'absolute'} inset-x-0 top-0 z-40 flex justify-center px-3`}>
       <AnimatePresence>
         {menuOpen && (
           <motion.button
@@ -460,6 +471,14 @@ function HeroHeader({ sticky = false }: { sticky?: boolean }) {
                 >
                   {item.label}
                   <ChevronDown className="h-3 w-3 text-primary/45 transition-transform duration-200 group-hover:rotate-180" />
+                </button>
+              ) : item.action === 'sow' ? (
+                <button
+                  type="button"
+                  onClick={openSowModal}
+                  className="transition-colors hover:text-[#E1E0CC]"
+                >
+                  {item.label}
                 </button>
               ) : (
                 <a
@@ -565,6 +584,14 @@ function HeroHeader({ sticky = false }: { sticky?: boolean }) {
                       )}
                     </AnimatePresence>
                   </>
+                ) : item.action === 'sow' ? (
+                  <button
+                    type="button"
+                    onClick={openSowModal}
+                    className="block w-full rounded-xl px-4 py-3 text-left transition-colors hover:bg-white/10"
+                  >
+                    {item.label}
+                  </button>
                 ) : (
                   <a
                     href={item.href}
@@ -2302,6 +2329,112 @@ function SponsorModal({
   );
 }
 
+function DonorboxWidget({ campaign }: { campaign: string }) {
+  useEffect(() => {
+    if (document.querySelector('script[data-donorbox-widget="true"]')) {
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.type = 'module';
+    script.src = 'https://donorbox.org/widgets.js';
+    script.async = true;
+    script.dataset.donorboxWidget = 'true';
+    document.body.appendChild(script);
+  }, []);
+
+  return (
+    <div
+      key={campaign}
+      className="min-h-[620px] w-full overflow-hidden rounded-2xl bg-white"
+      dangerouslySetInnerHTML={{
+        __html: `<dbox-widget campaign="${campaign}" type="donation_form" enable-auto-scroll="true"></dbox-widget>`,
+      }}
+    />
+  );
+}
+
+function SowModal({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
+  const [activeSeed, setActiveSeed] = useState<'shiloh' | 'birthday'>('shiloh');
+  const seedOptions = [
+    {
+      id: 'shiloh' as const,
+      label: 'Shiloh Seed',
+      campaign: 'birthday-seed-raah-2026',
+    },
+    {
+      id: 'birthday' as const,
+      label: "The Ra'ah Birthday Seed",
+      campaign: 'birthday-seed-raah-2026',
+    },
+  ];
+  const activeOption = seedOptions.find((option) => option.id === activeSeed) ?? seedOptions[0];
+
+  useEffect(() => {
+    if (open) {
+      setActiveSeed('shiloh');
+    }
+  }, [open]);
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <motion.div className="fixed inset-0 z-[130] flex items-end justify-center bg-black/70 p-3 backdrop-blur-sm sm:p-5">
+          <motion.div
+            className="relative flex max-h-[94svh] w-full max-w-5xl flex-col overflow-hidden rounded-t-[2rem] bg-[#f3f0e7] text-black shadow-[0_-24px_100px_rgba(0,0,0,0.45)] sm:rounded-[2rem]"
+            initial={{ y: '105%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '105%' }}
+            transition={{ duration: 0.42, ease: customEase }}
+          >
+            <div className="shrink-0 px-5 pb-4 pt-5 sm:px-7">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-black/40">Sow</p>
+                  <h2 className="journey-card-title mt-1 text-3xl leading-none text-black sm:text-4xl">
+                    Shiloh Giving
+                  </h2>
+                </div>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-black text-white transition-transform hover:scale-105"
+                  aria-label="Close sow form"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+              <div className="mt-5 grid gap-2 rounded-full bg-black/5 p-1 text-xs font-semibold uppercase tracking-[0.16em] text-black/50 sm:inline-grid sm:grid-cols-2">
+                {seedOptions.map((option) => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    onClick={() => setActiveSeed(option.id)}
+                    className={`rounded-full px-4 py-2 transition-colors ${
+                      activeSeed === option.id ? 'bg-black text-white' : 'hover:text-black'
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="min-h-0 flex-1 overflow-y-auto px-3 pb-4 sm:px-5">
+              <DonorboxWidget campaign={activeOption.campaign} />
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 function MerchPage() {
   const products = [
     {
@@ -2530,6 +2663,7 @@ export default function App() {
   const [registrationOpen, setRegistrationOpen] = useState(false);
   const [registrationType, setRegistrationType] = useState<'conference' | 'birthday'>('conference');
   const [sponsorOpen, setSponsorOpen] = useState(false);
+  const [sowOpen, setSowOpen] = useState(false);
   const [sponsorVisible, setSponsorVisible] = useState(false);
   const [celebrating, setCelebrating] = useState(false);
   const [pathname, setPathname] = useState(window.location.pathname);
@@ -2545,6 +2679,13 @@ export default function App() {
 
     window.addEventListener('popstate', updatePathname);
     return () => window.removeEventListener('popstate', updatePathname);
+  }, []);
+
+  useEffect(() => {
+    const openSowModal = () => setSowOpen(true);
+
+    window.addEventListener('open-sow-modal', openSowModal);
+    return () => window.removeEventListener('open-sow-modal', openSowModal);
   }, []);
 
   useEffect(() => {
@@ -2624,8 +2765,8 @@ export default function App() {
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      if (!registrationOpen && !sponsorOpen) return;
-      if (!/forms\.zohopublic\.eu|crm\.goodnewsworld\.com/.test(event.origin)) return;
+      if (!registrationOpen && !sponsorOpen && !sowOpen) return;
+      if (!/forms\.zohopublic\.eu|crm\.goodnewsworld\.com|donorbox\.org/.test(event.origin)) return;
       const data = typeof event.data === 'string' ? event.data : JSON.stringify(event.data ?? {});
       if (/thank\s*you|success(?:ful)?|submitted|submission\s*complete|formSubmitted/i.test(data)) {
         triggerCelebration();
@@ -2634,7 +2775,7 @@ export default function App() {
 
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
-  }, [registrationOpen, sponsorOpen]);
+  }, [registrationOpen, sponsorOpen, sowOpen]);
 
   return (
     <>
@@ -2662,6 +2803,7 @@ export default function App() {
       <FloatingSponsorButton onClick={() => setSponsorOpen(true)} visible={!isLoading && sponsorVisible} />
       <RegistrationModal open={registrationOpen} onClose={() => setRegistrationOpen(false)} type={registrationType} />
       <SponsorModal open={sponsorOpen} onClose={() => setSponsorOpen(false)} />
+      <SowModal open={sowOpen} onClose={() => setSowOpen(false)} />
       <CelebrationBurst active={celebrating} />
     </>
   );
