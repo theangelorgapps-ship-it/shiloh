@@ -735,8 +735,10 @@ function Hero() {
               animate={inView ? { y: 0, opacity: 1 } : { y: 24, opacity: 0 }}
               transition={{ duration: 0.8, ease: customEase }}
             >
-              <span className="mobile-hero-title flex flex-col items-center">
-                <span className="font-serif italic normal-case tracking-[0.02em]">It&apos;s My Shiloh Season</span>
+              <span className="hero-title-wide font-serif italic normal-case tracking-[0.02em]">It&apos;s My Shiloh Season</span>
+              <span className="mobile-hero-title flex flex-col items-center lg:hidden">
+                <span className="font-serif italic normal-case tracking-[0.02em]">It&apos;s My</span>
+                <span className="font-serif italic normal-case tracking-[0.02em]">Shiloh Season</span>
               </span>
             </motion.h1>
 

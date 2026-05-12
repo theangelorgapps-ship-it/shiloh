@@ -155,14 +155,19 @@ nav::-webkit-scrollbar {
   top: -5.5svh;
 }
 
+.hero-title-wide {
+  display: none;
+}
+
 .hero-portrait {
   width: min(96vw, 34rem);
 }
 
 @media (min-width: 768px) {
   .hero-display {
-    font-size: clamp(3.15rem, 6vw, 5.9rem);
+    font-size: clamp(3.1rem, 7.2vw, 5.15rem);
     line-height: 0.9;
+    top: -13svh;
   }
 
   .hero-centerpiece {
@@ -181,6 +186,14 @@ nav::-webkit-scrollbar {
 }
 
 @media (min-width: 1024px) {
+  .hero-title-wide {
+    display: inline;
+  }
+
+  .mobile-hero-title {
+    display: none;
+  }
+
   .hero-display {
     font-size: clamp(4rem, 7.3vw, 7.4rem);
     top: -12svh;
@@ -201,7 +214,8 @@ nav::-webkit-scrollbar {
 
 @media (min-width: 768px) and (max-height: 760px) {
   .hero-display {
-    font-size: clamp(2.8rem, 5.8vw, 5.7rem);
+    font-size: clamp(2.9rem, 6.4vw, 4.9rem);
+    top: -14svh;
   }
 
   .hero-centerpiece {
