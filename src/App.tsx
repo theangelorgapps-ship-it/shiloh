@@ -538,7 +538,7 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
               return !current;
             });
           }}
-          className="shrink-0 rounded-full border border-white/15 bg-white/5 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#E1E0CC]/80 transition-all duration-300 hover:border-white/30 hover:bg-white/10 hover:text-[#E1E0CC] md:hidden"
+          className="shrink-0 rounded-full bg-white/5 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#E1E0CC]/80 transition-all duration-300 hover:bg-white/10 hover:text-[#E1E0CC] md:hidden"
           aria-label="Toggle menu"
           aria-expanded={menuOpen}
         >
