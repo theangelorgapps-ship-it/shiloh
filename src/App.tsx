@@ -401,7 +401,6 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
       { label: 'Parking and Shuttle', href: '/passes' },
       { label: 'Shiloh Season VIP Experience', href: '/vip' },
     ] },
-    { label: 'Bring Someone to Shiloh', action: 'sponsor' },
     { label: 'Giving', action: 'sow' },
     { label: '2026 Shop', href: '/merch' },
   ];
@@ -535,9 +534,12 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
             onClick={openSponsorModal}
             className="group inline-flex items-center gap-0.5 rounded-full border border-white/20 bg-white/10 py-1 pl-2 pr-1 text-[10px] font-medium text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 hover:bg-white/15 sm:gap-2 sm:pl-3 md:hover:gap-3"
           >
-            <span>Bring</span>
-            <span className="hidden min-[430px]:inline">Someone</span>
-            <span className="hidden xl:inline">&nbsp;to Shiloh</span>
+            <span className="flex flex-col items-start leading-none">
+              <span className="text-[6px] font-semibold uppercase tracking-[0.12em] text-primary/60 min-[420px]:text-[7px] sm:text-[9px]">
+                Bring Someone
+              </span>
+              <span className="mt-0.5 text-[9px] font-medium min-[420px]:text-[11px] sm:text-xs lg:text-sm">To Shiloh</span>
+            </span>
             <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-black transition-transform duration-300 group-hover:scale-110 sm:h-8 sm:w-8">
               <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
             </span>
