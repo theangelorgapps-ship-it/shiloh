@@ -580,10 +580,10 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            className="fixed inset-x-3 bottom-4 z-10 rounded-[2rem] border border-white/10 bg-black/92 p-3 text-sm text-[#E1E0CC] shadow-[0_20px_60px_rgba(0,0,0,0.45)] backdrop-blur-2xl md:hidden"
-            initial={{ y: 36, opacity: 0, scale: 0.98 }}
+            className="fixed inset-x-3 top-[4.75rem] z-10 max-h-[calc(100vh-5.5rem)] overflow-y-auto rounded-[2rem] border border-white/10 bg-black/92 p-3 text-sm text-[#E1E0CC] shadow-[0_20px_60px_rgba(0,0,0,0.45)] backdrop-blur-2xl md:hidden"
+            initial={{ y: -24, opacity: 0, scale: 0.98 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
-            exit={{ y: 28, opacity: 0, scale: 0.98 }}
+            exit={{ y: -18, opacity: 0, scale: 0.98 }}
             transition={{ duration: 0.32, ease: customEase }}
           >
             {navItems.map((item) => (
