@@ -11,7 +11,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' https://crm.goodnewsworld.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://assets.cdn.filesafe.space; media-src 'self' https://d8j0ntlcm91z4.cloudfront.net; frame-src https://forms.zohopublic.eu https://crm.goodnewsworld.com; connect-src 'self' https://forms.zohopublic.eu https://crm.goodnewsworld.com; base-uri 'self'; form-action 'self' https://forms.zohopublic.eu https://crm.goodnewsworld.com; frame-ancestors 'none'; upgrade-insecure-requests"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://crm.goodnewsworld.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://assets.cdn.filesafe.space https://pub-f170a2592d2c4a1485466404c36807be.r2.dev; media-src 'self' https://d8j0ntlcm91z4.cloudfront.net; frame-src 'self' https://forms.zohopublic.eu https://crm.goodnewsworld.com https://programs.uebertangel.org; connect-src 'self' https://forms.zohopublic.eu https://crm.goodnewsworld.com; base-uri 'self'; form-action 'self' https://forms.zohopublic.eu https://crm.goodnewsworld.com https://programs.uebertangel.org; frame-ancestors 'none'; upgrade-insecure-requests"
         },
         {
           "key": "Strict-Transport-Security",

@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Passes</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f0efed;
+        padding: 48px 20px;
+        font-family: 'Almarai', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .c2-container {
+        max-width: 800px;
+        width: 100%;
+      }
+
+      .c2-eyebrow {
+        text-align: center;
+        font-size: 0.75rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #888;
+        margin-bottom: 14px;
+        animation: c2-fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+
+      .c2-title {
+        font-family: 'Instrument Serif', Georgia, serif;
+        font-size: 2.8rem;
+        text-align: center;
+        color: #2a2a2a;
+        font-weight: 400;
+        letter-spacing: -0.01em;
+        margin-bottom: 36px;
+        animation: c2-fadeUp 0.8s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+
+      .c2-title em {
+        color: #5a5a5a;
+        font-style: italic;
+      }
+
+      .c2-grid-wrapper {
+        background: #e8e7e5;
+        border-radius: 20px;
+        padding: 16px;
+        margin-bottom: 20px;
+        animation: c2-fadeUp 0.9s 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+
+      .c2-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+      }
+
+      .c2-card,
+      .c2-bottom-card {
+        background: linear-gradient(180deg, #ffffff 0%, #fbfaf8 100%);
+        border-radius: 16px;
+        padding: 24px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        display: flex;
+        flex-direction: column;
+        transition:
+          transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+          box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .c2-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+      }
+
+      .c2-card-heading {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 4px;
+      }
+
+      .c2-pass-badge {
+        border: 1px solid #dedbd4;
+        border-radius: 999px;
+        padding: 6px 10px;
+        font-size: 0.66rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #8b8476;
+        background: #f7f4ee;
+        white-space: nowrap;
+      }
+
+      .c2-card::before,
+      .c2-card::after,
+      .c2-dot-bl,
+      .c2-dot-br {
+        content: '';
+        position: absolute;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #d0d0d0;
+        pointer-events: none;
+      }
+
+      .c2-card::before {
+        top: 12px;
+        left: 12px;
+      }
+
+      .c2-card::after {
+        top: 12px;
+        right: 12px;
+      }
+
+      .c2-dot-bl {
+        left: 12px;
+        bottom: 12px;
+      }
+
+      .c2-dot-br {
+        right: 12px;
+        bottom: 12px;
+      }
+
+      .c2-card-title {
+        font-size: 1.3rem;
+        font-weight: 500;
+        margin-bottom: 8px;
+        color: #2a2a2a;
+        letter-spacing: -0.01em;
+      }
+
+      .c2-price {
+        font-family: 'Instrument Serif', Georgia, serif;
+        font-size: 3.2rem;
+        letter-spacing: -0.02em;
+        font-weight: 400;
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #e5e5e5;
+        min-height: 76px;
+      }
+
+      .c2-price span:not(.c2-price-amount) {
+        font-family: 'Almarai', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 0.85rem;
+        color: #999;
+        font-weight: 300;
+        letter-spacing: 0;
+      }
+
+      .c2-price-amount {
+        transition:
+          opacity 0.25s,
+          transform 0.25s;
+      }
+
+      .c2-price-amount.c2-flip {
+        opacity: 0;
+        transform: translateY(-6px);
+      }
+
+      .c2-list {
+        list-style: none;
+        font-size: 0.85rem;
+        color: #555;
+        margin-bottom: 16px;
+        padding-bottom: 16px;
+      }
+
+      .c2-list.bordered {
+        border-bottom: 1px solid #e5e5e5;
+      }
+
+      .c2-list.bordered-top {
+        border-top: 1px solid #e5e5e5;
+        padding-top: 20px;
+      }
+
+      .c2-list li {
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .c2-list li::before {
+        content: '❖';
+        color: #c0c0c0;
+        font-size: 0.9rem;
+      }
+
+      .c2-desc {
+        font-size: 0.85rem;
+        color: #666;
+        line-height: 1.6;
+        max-width: 210px;
+        margin-bottom: auto;
+      }
+
+      .c2-ticket {
+        display: none;
+      }
+
+      .c2-ticket::before {
+        content: 'PASS';
+        position: absolute;
+        inset: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px dashed rgba(42, 42, 42, 0.35);
+        border-radius: 12px;
+        color: rgba(42, 42, 42, 0.58);
+        font-family: 'Almarai', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.22em;
+      }
+
+      .c2-btn {
+        border: 0;
+        cursor: pointer;
+        background: #000;
+        color: #fff;
+        padding: 11px 26px;
+        border-radius: 30px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        font-family: inherit;
+        margin-top: 32px;
+        width: fit-content;
+        z-index: 2;
+        position: relative;
+        transition:
+          transform 0.2s,
+          background 0.2s,
+          box-shadow 0.2s;
+      }
+
+      .c2-btn:hover {
+        transform: translateY(-1px);
+        background: #1a1a1a;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+      }
+
+      .c2-btn:active {
+        transform: translateY(0);
+      }
+
+      .c2-btn:focus-visible {
+        outline: 2px solid #2a2a2a;
+        outline-offset: 3px;
+      }
+
+      .c2-tree {
+        display: none;
+      }
+
+      .c2-card:hover .c2-tree {
+        transform: translateY(-3px) rotate(-1.5deg);
+      }
+
+      .c2-toggle {
+        display: flex;
+        flex-wrap: wrap;
+        background: #f0f0f0;
+        border-radius: 20px;
+        padding: 4px;
+        margin-bottom: 15px;
+        font-size: 0.75rem;
+        user-select: none;
+        gap: 4px;
+      }
+
+      .c2-toggle span {
+        flex: 1 1 calc(50% - 4px);
+        text-align: center;
+        padding: 5px 14px;
+        border-radius: 16px;
+        color: #666;
+        cursor: pointer;
+        transition:
+          background 0.25s,
+          color 0.25s,
+          box-shadow 0.25s;
+      }
+
+      .c2-toggle span.active {
+        background: #fff;
+        color: #1a1a1a;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      }
+
+      .c2-framer {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 0.8rem;
+        color: #555;
+        margin-bottom: 30px;
+        cursor: pointer;
+        user-select: none;
+        width: fit-content;
+      }
+
+      .c2-switch {
+        width: 34px;
+        height: 20px;
+        background: #e5e5e5;
+        border-radius: 10px;
+        position: relative;
+        transition: background 0.25s;
+      }
+
+      .c2-switch::after {
+        content: '';
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        left: 2px;
+        top: 2px;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+        transition: left 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      .c2-framer.on .c2-switch {
+        background: #2a2a2a;
+      }
+
+      .c2-framer.on .c2-switch::after {
+        left: 16px;
+      }
+
+      .c2-bottom-card {
+        background: #e8e7e5;
+        padding: 32px;
+        min-height: 220px;
+        animation: c2-fadeUp 1s 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+
+      .c2-bottom-card .c2-dot-bl,
+      .c2-bottom-card .c2-dot-br {
+        display: none;
+      }
+
+      .c2-bottom-card .c2-btn {
+        margin-top: 60px;
+      }
+
+      .c2-bottom-desc {
+        font-size: 0.85rem;
+        color: #666;
+        line-height: 1.6;
+        max-width: 600px;
+        margin-bottom: -20px;
+        z-index: 2;
+        position: relative;
+      }
+
+      .c2-landscape {
+        display: none;
+      }
+
+      @keyframes c2-fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(18px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 32px 16px;
+        }
+
+        .c2-title {
+          font-size: 2.1rem;
+          margin-bottom: 28px;
+        }
+
+        .c2-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .c2-tree {
+          width: 96px;
+          right: 12px;
+          opacity: 0.85;
+        }
+
+        .c2-desc,
+        .c2-bottom-desc {
+          max-width: none;
+        }
+
+        .c2-landscape {
+          width: 240px;
+          opacity: 0.85;
+        }
+
+        .c2-bottom-card {
+          padding: 28px 24px;
+        }
+
+        .c2-bottom-card .c2-btn {
+          margin-top: 40px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .c2-title {
+          font-size: 1.8rem;
+        }
+
+        .c2-price {
+          font-size: 2.6rem;
+        }
+
+        .c2-landscape {
+          width: 180px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="c2-container">
+      <p class="c2-eyebrow">What Happens in Shiloh, Stays in Shiloh!</p>
+      <h2 class="c2-title">Shilloh 2026 Passes</h2>
+
+      <section class="c2-grid-wrapper">
+        <div class="c2-grid">
+          <article class="c2-card">
+            <div class="c2-dot-bl"></div>
+            <div class="c2-dot-br"></div>
+            <div class="c2-card-heading">
+              <h3 class="c2-card-title">Shuttle Pass</h3>
+              <span class="c2-pass-badge">Transport</span>
+            </div>
+            <div class="c2-price">$20 <span>USD</span></div>
+            <ul class="c2-list bordered">
+              <li>Valid transport support for all three Fort Moriah conference days.</li>
+              <li>Daily shuttle movement from Harare Hippodrome to Fort Moriah City.</li>
+              <li>Return shuttle coordination after scheduled sessions and gatherings.</li>
+              <li>Removes the stress of arranging daily transport during Shiloh Season.</li>
+            </ul>
+            <button class="c2-btn" type="button" data-package="Shuttle Pass">Register Now</button>
+            <span class="c2-ticket" aria-hidden="true"></span>
+          </article>
+
+          <article class="c2-card" data-card="web">
+            <div class="c2-dot-bl"></div>
+            <div class="c2-dot-br"></div>
+            <div class="c2-card-heading">
+              <h3 class="c2-card-title">VIP Passes</h3>
+              <span class="c2-pass-badge">Premium</span>
+            </div>
+            <div class="c2-price"><span class="c2-price-amount" data-price>$5000</span> <span data-price-note>USD</span></div>
+            <div class="c2-toggle" role="tablist" aria-label="Pass type">
+              <span role="tab" tabindex="0" data-pages="ultimate" aria-selected="true" class="active">VIP Ultimate Passes</span>
+              <span role="tab" tabindex="0" data-pages="shiloh" aria-selected="false">Shiloh VIP</span>
+              <span role="tab" tabindex="0" data-pages="birthday" aria-selected="false">Birthday VIP</span>
+              <span role="tab" tabindex="0" data-pages="retreat" aria-selected="false">Prophetic Retreat</span>
+            </div>
+            <ul class="c2-list bordered bordered-top" data-feature-list>
+              <li>Ultimate VIP Access</li>
+              <li>Prophetic Retreat</li>
+              <li>Shiloh Conference</li>
+              <li>Prophet Birthday Celebration</li>
+            </ul>
+            <br /><br />
+            <button class="c2-btn" type="button" data-package="VIP Ultimate Passes" data-register-label>Register Now</button>
+            <span class="c2-ticket" aria-hidden="true"></span>
+          </article>
+        </div>
+      </section>
+
+      <section class="c2-bottom-card">
+        <h3 class="c2-card-title">Parking Passes</h3>
+        <p class="c2-bottom-desc">
+          Parking for the entire duration of the conference.<br />Still to be confirmed.
+        </p>
+        <button class="c2-btn" type="button" data-package="Parking Passes">Register Now</button>
+        <span class="c2-ticket" aria-hidden="true"></span>
+      </section>
+    </main>
+
+    <script>
+      (() => {
+        const PASSES = {
+          ultimate: {
+            price: '$5000',
+            note: 'USD',
+            label: 'VIP Ultimate Passes',
+            features: [
+              'Full VIP access across Prophetic Retreat, Shiloh Conference, and the Prophet Birthday Celebration.',
+              'Premium seating support and hosted movement through key Shiloh Season moments.',
+              'Dedicated arrival guidance for Fort Moriah City and celebration access points.',
+              'Designed for guests who want the most complete Shiloh Season experience.',
+            ],
+          },
+          shiloh: {
+            price: '$1000',
+            note: 'USD',
+            label: 'Shiloh VIP',
+            features: [
+              'VIP access for Shiloh Conference sessions at Fort Moriah City.',
+              'Priority seating guidance for main conference gatherings.',
+              'Hosted arrival assistance for smoother check-in and access.',
+              'Best for delegates focused on the core Shiloh Conference experience.',
+            ],
+          },
+          birthday: {
+            price: '$1000',
+            note: 'USD',
+            label: 'Birthday VIP',
+            features: [
+              'VIP access for the Prophet Birthday Celebration experience.',
+              'Gala seating guidance for a more comfortable celebration evening.',
+              'Special arrival support for birthday celebration guests.',
+              'Ideal for guests attending to honor the Ra’ah, Prophet Uebert Angel.',
+            ],
+          },
+          retreat: {
+            price: '$1000',
+            note: 'USD',
+            label: 'Prophetic Retreat',
+            features: [
+              'Prophetic Retreat access for focused teaching and preparation.',
+              'Single occupancy needs can be handled through registration pages.',
+              'Learning sessions at Fort Moriah City with spiritual preparation support.',
+              'Recommended for delegates arriving early for retreat encounters.',
+            ],
+          },
+        };
+        const state = { pages: 'ultimate' };
+        const price = document.querySelector('[data-price]');
+        const priceNote = document.querySelector('[data-price-note]');
+        const tabs = document.querySelectorAll('[data-pages]');
+        const featureList = document.querySelector('[data-feature-list]');
+
+        function render() {
+          const pass = PASSES[state.pages];
+          const formatted = pass.price;
+          priceNote.textContent = pass.note;
+          featureList.innerHTML = pass.features.map((feature) => `<li>${feature}</li>`).join('');
+          document.querySelector('[data-register-label]').dataset.package = pass.label;
+          if (price.textContent === formatted) return;
+
+          price.classList.add('c2-flip');
+          setTimeout(() => {
+            price.textContent = formatted;
+            price.classList.remove('c2-flip');
+          }, 160);
+        }
+
+        function selectPages(value) {
+          if (state.pages === value) return;
+          state.pages = value;
+          tabs.forEach((tab) => {
+            const selected = tab.dataset.pages === value;
+            tab.classList.toggle('active', selected);
+            tab.setAttribute('aria-selected', String(selected));
+          });
+          render();
+        }
+
+        tabs.forEach((tab) => {
+          tab.addEventListener('click', () => selectPages(tab.dataset.pages));
+          tab.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              selectPages(tab.dataset.pages);
+            }
+            if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+              event.preventDefault();
+              const currentIndex = Array.from(tabs).findIndex((item) => item.dataset.pages === state.pages);
+              const nextIndex =
+                event.key === 'ArrowLeft'
+                  ? Math.max(currentIndex - 1, 0)
+                  : Math.min(currentIndex + 1, tabs.length - 1);
+              const next = tabs[nextIndex];
+              selectPages(next.dataset.pages);
+              next.focus();
+            }
+          });
+        });
+
+        document.querySelectorAll('.c2-btn').forEach((button) => {
+          button.addEventListener('click', () => {
+            let label = button.dataset.package;
+            if (label === 'VIP Passes') {
+              label += ` - ${PASSES[state.pages].label}`;
+            }
+            console.log('[c2] contact requested:', label);
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

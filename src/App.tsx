@@ -2,18 +2,31 @@ import {
   ArrowLeft,
   ArrowRight,
   ArrowUpRight,
+  Aperture,
+  Box,
+  Brush,
   Building2,
+  Camera,
   Car,
   Check,
   ChevronDown,
+  Chrome,
   CreditCard,
   ExternalLink,
+  Figma,
+  Framer,
   Info,
+  Layers,
   Mail,
   MapPin,
+  Palette,
+  PenTool,
   Phone,
   Shirt,
   ShieldCheck,
+  Sparkle,
+  Type as TypeIcon,
+  Wand2,
   X,
 } from 'lucide-react';
 import {
@@ -25,7 +38,8 @@ import {
   type MotionValue,
   type Variants,
 } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
+import type { LucideIcon } from 'lucide-react';
 import shilohPortrait from './assets/shiloh-portrait.png';
 
 const primaryText = '#E1E0CC';
@@ -129,7 +143,13 @@ const journeyEvents = [
     image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/69f21a466630fc6c0b48cb90.jpg',
     description:
       'Learn from highly esteemed Prophet Uebert Angel in the sacred atmosphere of Mount Moriah City. Deepen your understanding and spiritual journey where signs and wonders manifest.',
-    buttons: ['Register Now'],
+    buttons: [
+      {
+        label: 'Register Now',
+        href: 'https://programs.uebertangel.org/product/2026/',
+        external: true,
+      },
+    ],
   },
   {
     tab: 'Shiloh Conference',
@@ -138,7 +158,18 @@ const journeyEvents = [
     image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/69f2171efab44d4020a08d69.jpg',
     description:
       "Shiloh Conference is here!\nJoin us from 4th - 6th September at Fort Moriah City, Zimbabwe.\nThis is more than a conference; it is a powerful encounter to ignite your faith, renew your purpose, and deepen your walk with God. Mark your calendar.\n\nWe can't wait to see you!",
-    buttons: ['Register', 'VIP Experience'],
+    buttons: [
+      {
+        label: 'Register',
+        href: 'https://programs.uebertangel.org/product/2026/',
+        external: true,
+      },
+      {
+        label: 'VIP Experience',
+        href: '/vip',
+        external: false,
+      },
+    ],
   },
   {
     tab: "The Ra'ah's Birthday Celebration",
@@ -147,7 +178,13 @@ const journeyEvents = [
     image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/69f2171e590487fe57c2f87b.jpg',
     description:
       'Join us for an unforgettable evening of joy, thanksgiving, and honor as we celebrate the extraordinary life and ministry of our Prophet. Stay tuned for more details on this special event.',
-    buttons: ['Register Now'],
+    buttons: [
+      {
+        label: 'Register Now',
+        href: 'https://programs.uebertangel.org/product/birthday/',
+        external: true,
+      },
+    ],
   },
 ];
 
@@ -343,21 +380,50 @@ function AnimatedLetter({
   );
 }
 
-function HeroHeader() {
+function HeroHeader({ sticky = false }: { sticky?: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileSubmenu, setMobileSubmenu] = useState<string | null>(null);
   const navItems = [
     { label: 'Home', href: '/' },
     { label: 'Plan', href: '/journey', children: [
-      { label: '2026 Shiloh Season Guide', href: '/journey#journey-season' },
+      { label: '2026 Shiloh Season Guide', href: '/journey' },
+      { label: 'Schedule', href: '/schedule' },
+      { label: 'Passes', href: '/passes' },
       { label: 'Shiloh Season VIP Experience', href: '/vip' },
     ] },
     { label: 'Shiloh Merch', href: '/merch' },
-    { label: "FAQ's", href: '/#about' },
-    { label: 'Contact', href: '/#footer' },
+    { label: 'Contact', href: '/contact' },
   ];
 
+  const closeMenu = () => {
+    setMenuOpen(false);
+    setMobileSubmenu(null);
+  };
+
+  const navigateTo = (href: string) => (event: ReactMouseEvent<HTMLAnchorElement>) => {
+    closeMenu();
+
+    if (!href.startsWith('/')) {
+      return;
+    }
+
+    event.preventDefault();
+    window.history.pushState({}, '', href);
+    window.dispatchEvent(new PopStateEvent('popstate'));
+
+    const targetHash = href.split('#')[1];
+    if (targetHash) {
+      window.setTimeout(() => {
+        document.getElementById(targetHash)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 0);
+      return;
+    }
+
+    window.setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 0);
+  };
+
   return (
-    <header className="absolute inset-x-0 top-0 z-40 flex justify-center px-3">
+    <header className={`${sticky ? 'sticky' : 'absolute'} inset-x-0 top-0 z-40 flex justify-center px-3`}>
       <AnimatePresence>
         {menuOpen && (
           <motion.button
@@ -388,18 +454,18 @@ function HeroHeader() {
             <div key={item.label} className="group relative py-2">
               <a
                 href={item.href}
-                onClick={() => setMenuOpen(false)}
+                onClick={navigateTo(item.href)}
                 className="transition-colors hover:text-[#E1E0CC]"
               >
                 {item.label}
               </a>
               {'children' in item && item.children ? (
-                <div className="pointer-events-none absolute left-1/2 top-full w-64 -translate-x-1/2 translate-y-2 rounded-2xl border border-white/10 bg-black/90 p-2 opacity-0 shadow-[0_20px_50px_rgba(0,0,0,0.4)] backdrop-blur-xl transition-all duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
+                <div className="pointer-events-none absolute left-1/2 top-full w-64 -translate-x-1/2 translate-y-2 rounded-2xl border border-white/10 bg-black/90 p-2 opacity-0 shadow-[0_20px_50px_rgba(0,0,0,0.4)] backdrop-blur-xl transition-all duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:translate-y-0 group-focus-within:opacity-100">
                   {item.children.map((child) => (
                     <a
                       key={child.label}
                       href={child.href}
-                      onClick={() => setMenuOpen(false)}
+                      onClick={navigateTo(child.href)}
                       className="block rounded-xl px-4 py-3 text-[11px] leading-tight text-primary/75 transition-colors hover:bg-white/10 hover:text-primary"
                     >
                       {child.label}
@@ -412,7 +478,15 @@ function HeroHeader() {
         </div>
         <button
           type="button"
-          onClick={() => setMenuOpen((current) => !current)}
+          onClick={() => {
+            setMenuOpen((current) => {
+              if (current) {
+                setMobileSubmenu(null);
+              }
+
+              return !current;
+            });
+          }}
           className="px-1.5 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-[#E1E0CC]/80 transition-colors hover:text-[#E1E0CC] md:hidden"
           aria-label="Toggle menu"
           aria-expanded={menuOpen}
@@ -421,7 +495,7 @@ function HeroHeader() {
         </button>
         <a
           href="/vip"
-          onClick={() => setMenuOpen(false)}
+          onClick={navigateTo('/vip')}
           className="group inline-flex shrink-0 items-center gap-2 rounded-full border border-white/25 bg-white/10 py-1 pl-4 pr-1 text-xs text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 hover:gap-3 hover:bg-white/15 sm:text-sm"
         >
           <span>VIP</span>
@@ -442,27 +516,53 @@ function HeroHeader() {
           >
             {navItems.map((item) => (
               <div key={item.label}>
-                <a
-                  href={item.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="block rounded-xl px-4 py-3 transition-colors hover:bg-white/10"
-                >
-                  {item.label}
-                </a>
                 {'children' in item && item.children ? (
-                  <div className="ml-3 border-l border-white/10 pl-3">
-                    {item.children.map((child) => (
-                      <a
-                        key={child.label}
-                        href={child.href}
-                        onClick={() => setMenuOpen(false)}
-                        className="block rounded-xl px-4 py-2 text-xs text-primary/65 transition-colors hover:bg-white/10 hover:text-primary"
-                      >
-                        {child.label}
-                      </a>
-                    ))}
-                  </div>
-                ) : null}
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => setMobileSubmenu((current) => (current === item.label ? null : item.label))}
+                      className="flex w-full items-center justify-between rounded-xl px-4 py-3 text-left transition-colors hover:bg-white/10"
+                      aria-expanded={mobileSubmenu === item.label}
+                    >
+                      <span>{item.label}</span>
+                      <ChevronDown
+                        className={`h-4 w-4 transition-transform duration-200 ${
+                          mobileSubmenu === item.label ? 'rotate-180' : ''
+                        }`}
+                      />
+                    </button>
+                    <AnimatePresence initial={false}>
+                      {mobileSubmenu === item.label && (
+                        <motion.div
+                          className="ml-3 border-l border-white/10 pl-3"
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.22, ease: customEase }}
+                        >
+                          {item.children.map((child) => (
+                            <a
+                              key={child.label}
+                              href={child.href}
+                              onClick={navigateTo(child.href)}
+                              className="block rounded-xl px-4 py-2 text-xs text-primary/65 transition-colors hover:bg-white/10 hover:text-primary"
+                            >
+                              {child.label}
+                            </a>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </>
+                ) : (
+                  <a
+                    href={item.href}
+                    onClick={navigateTo(item.href)}
+                    className="block rounded-xl px-4 py-3 transition-colors hover:bg-white/10"
+                  >
+                    {item.label}
+                  </a>
+                )}
               </div>
             ))}
           </motion.div>
@@ -639,7 +739,7 @@ function JourneyCarouselSection() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-10 flex items-end justify-between gap-5 md:mb-16">
           <div>
-            <p className="mb-3 text-xs uppercase tracking-[0.45em] text-black/40">Plan Your Journey</p>
+            <p className="mb-3 text-xs uppercase tracking-[0.45em] text-black/40">2026 Planning Information</p>
             <h2 className="journey-section-heading text-3xl leading-none tracking-[-0.035em] text-black sm:text-4xl md:text-5xl">
               Shiloh Season
             </h2>
@@ -700,15 +800,16 @@ function JourneyCarouselSection() {
             <div className="mt-10 flex flex-wrap gap-3">
               {activeEvent.buttons.map((button, index) => (
                 <a
-                  key={button}
-                  href="#"
+                  key={button.label}
+                  href={button.href}
+                  data-direct-registration={button.external ? 'true' : undefined}
                   className={`rounded-full px-7 py-3 text-xs font-bold uppercase tracking-[0.28em] transition-transform hover:-translate-y-0.5 ${
                     index === 0
                       ? 'bg-black text-white shadow-[0_18px_40px_rgba(0,0,0,0.14)]'
                       : 'border border-black/10 bg-white text-black'
                   }`}
                 >
-                  {button}
+                  {button.label}
                 </a>
               ))}
             </div>
@@ -1128,8 +1229,7 @@ function JourneyFooter() {
   const footerLinks = [
     { label: 'Home', href: '/' },
     { label: 'Plan Your Shiloh', href: '/journey' },
-    { label: "FAQ's", href: '#journey-support' },
-    { label: 'Contact', href: '#journey-support' },
+    { label: 'Contact', href: '/contact' },
   ];
 
   return (
@@ -1352,125 +1452,228 @@ function VipCompareSection() {
   );
 }
 
-function FeatureLiquidButton({ children }: { children: string }) {
-  return (
-    <button
-      type="button"
-      className="liquid-glass rounded-xl px-5 py-2.5 text-sm text-white/90 transition-transform duration-300 hover:scale-[1.02]"
-    >
-      {children}
-    </button>
-  );
-}
-
-function CardVideo({ src }: { src: string }) {
-  return (
-    <video
-      className="absolute inset-0 h-full w-full object-cover"
-      src={src}
-      autoPlay
-      muted
-      loop
-      playsInline
-      preload="auto"
-    />
-  );
-}
+const vipPassOptions = [
+  {
+    label: 'VIP Ultimate Passes',
+    date: '31 Aug - 6 Sep',
+    price: '$5000 USD',
+    tag: 'Full Season',
+    href: 'https://programs.uebertangel.org/product/2026/',
+    summary:
+      'A complete hosted experience for delegates who want premium access across every defining Shiloh Season moment.',
+    features: [
+      'Premium VIP access for Prophetic Retreat, Shiloh Conference, Sunday Service, and the Ra’ah birthday celebration.',
+      'Reserved seating guidance and dedicated arrival support across the full Shiloh Season programme.',
+      'Priority movement between key venues so every major service, teaching moment, and celebration is easier to attend.',
+      'A single pass designed for guests who want the most complete Shiloh 2026 experience.',
+    ],
+  },
+  {
+    label: 'Shiloh VIP',
+    date: '4 Sep - 5 Sep',
+    price: '$1000 USD',
+    tag: 'Conference',
+    href: 'https://programs.uebertangel.org/product/2026/',
+    summary:
+      'Premium conference access for guests who want a focused, elevated experience during the central Shiloh gathering.',
+    features: [
+      'VIP access for the Shiloh Conference sessions at Fort Moriah City.',
+      'Reserved seating support for clearer sightlines and a more settled arrival experience.',
+      'Hosted guidance for conference movement, check-in, and guest support during peak gathering moments.',
+      'A refined pass for delegates prioritizing the main conference days.',
+    ],
+  },
+  {
+    label: 'Birthday VVIP',
+    date: '6 Sep 7:00 PM',
+    price: '£4000 GBP',
+    tag: 'Celebration',
+    href: 'https://programs.uebertangel.org/product/birthday/',
+    summary:
+      'VIP access for the royal birthday celebration honoring the Ra’ah, Prophet Uebert Angel.',
+    features: [
+      'Birthday VVIP access for the Prophet birthday celebration.',
+      'Gala arrival guidance, seating support, and a smoother hosted experience for the evening.',
+      'Designed for guests joining the thanksgiving, honor, presentation, and celebration moments.',
+      'A focused pass for the Ra’ah birthday gala experience.',
+    ],
+  },
+  {
+    label: 'Prophetic Retreat',
+    date: '31 Aug - 3 Sep',
+    price: '$1000 USD',
+    tag: 'Retreat',
+    href: 'https://programs.uebertangel.org/product/2026/',
+    summary:
+      'A retreat pass shaped for focused teaching, spiritual preparation, and hosted retreat support.',
+    features: [
+      'Prophetic Retreat access from 31 August to 3 September.',
+      'Single occupancy needs and registration support for delegates preparing for the retreat.',
+      'Teaching moments, spiritual alignment, and guided preparation at Fort Moriah City.',
+      'A dedicated pass for retreat guests who want clarity before arrival.',
+    ],
+  },
+];
 
 function VipFeaturesSection() {
-  const retreatVideo =
-    'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260429_212252_7d25a6d2-cf7f-465c-9bd1-a1496112806e.mp4';
-  const conferenceVideo =
-    'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260428_193507_4286c423-2fd9-4efd-92bd-91a939453fc1.mp4';
-  const birthdayVideo =
-    'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260327_053348_d1b3e997-e822-44eb-9056-718270060d72.mp4';
+  const [activePassIndex, setActivePassIndex] = useState(0);
+  const activePass = vipPassOptions[activePassIndex];
 
   return (
-    <section className="bg-black px-6 py-16 text-white md:px-12 lg:px-20">
+    <section id="vip-passes" className="bg-black px-4 py-20 text-white sm:px-6 md:px-12 lg:px-20">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-10 flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
-          <h2 className="vip-title gold-emboss max-w-3xl text-5xl font-normal leading-[0.86] tracking-[-0.04em] sm:text-6xl md:text-7xl lg:text-8xl">
-            VIP EXPERIENCE&apos;S
-          </h2>
-          <p className="vip-copy max-w-sm text-sm font-light leading-relaxed text-white/60 md:text-right">
-            Designed for clarity, access, comfort, and a closer seat to every defining Shiloh moment.
+        <div className="mb-10 grid gap-6 lg:grid-cols-[0.82fr_1fr] lg:items-end">
+          <div>
+            <p className="vip-copy mb-4 text-xs font-semibold uppercase tracking-[0.45em] text-[#f0c96f]/70">
+              VIP Passes
+            </p>
+            <h2 className="vip-title gold-emboss max-w-3xl text-5xl font-normal leading-[0.86] tracking-[-0.04em] sm:text-6xl md:text-7xl lg:text-8xl">
+              Choose Your
+              <span className="block">Access</span>
+            </h2>
+          </div>
+          <p className="vip-copy max-w-2xl text-sm font-light leading-relaxed text-white/60 lg:ml-auto lg:text-right">
+            Select the VIP pass that matches your Shiloh Season plans. Each option includes dates, clear benefits, and a
+            direct registration path for the experience you are preparing for.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-3 md:grid-rows-2">
-          <article className="feature-card flex min-h-[34rem] flex-col p-7 md:row-span-2 md:min-h-[28rem]">
-            <CardVideo src={retreatVideo} />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.28)_0%,rgba(0,0,0,0.05)_34%,rgba(0,0,0,0.88)_100%)]" />
-            <div className="relative flex justify-between text-sm text-white/60 [text-shadow:0_2px_16px_rgba(0,0,0,0.75)]">
-              <span>01/</span>
-              <span>Found in Curiosity</span>
-            </div>
-            <div className="flex-1" />
-            <div className="relative [text-shadow:0_2px_18px_rgba(0,0,0,0.8)]">
-              <h3 className="text-xl font-medium text-white md:text-2xl">
-                Prophetic Retreat
-                <br />
-                August 31 - Sep 3
-              </h3>
-              <div className="mt-4 h-px w-full bg-white/20" />
-              <p className="mt-4 whitespace-pre-line text-xs leading-relaxed text-white/75">
-                {`Teaching for All Levels - whether you are arriving for the first time or returning with expectation, this retreat deepens your spiritual journey.
+        <div className="overflow-hidden rounded-[2rem] bg-[linear-gradient(145deg,rgba(255,255,255,0.085),rgba(255,255,255,0.025))] p-4 shadow-[0_30px_100px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:p-5 lg:p-7">
+          <div className="grid gap-2 rounded-[1.4rem] bg-black/40 p-2 sm:grid-cols-2 lg:grid-cols-4">
+            {vipPassOptions.map((pass, index) => (
+              <button
+                key={pass.label}
+                type="button"
+                onClick={() => setActivePassIndex(index)}
+                className={`rounded-[1.1rem] px-4 py-4 text-left transition-all duration-300 ${
+                  activePassIndex === index
+                    ? 'bg-[#f0c96f] text-black shadow-[0_12px_34px_rgba(240,201,111,0.24)]'
+                    : 'text-white/66 hover:bg-white/10 hover:text-white'
+                }`}
+              >
+                <span className="block text-[10px] font-bold uppercase tracking-[0.28em] opacity-70">
+                  {pass.date}
+                </span>
+                <span className="mt-2 block text-sm font-semibold sm:text-base">{pass.label}</span>
+              </button>
+            ))}
+          </div>
 
-A rare opportunity for learning sessions with the highly esteemed Prophet Uebert Angel in Mount Moriah City.
-
-A sacred atmosphere where signs, wonders, and prophetic manifestations take place.
-
-Includes registration, food, transport, and single occupancy accommodation.`}
-              </p>
-            </div>
-          </article>
-
-          <article className="feature-card-dark flex min-h-[28rem] flex-col p-7 md:col-span-2 md:min-h-[24rem]">
-            <CardVideo src={conferenceVideo} />
-            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.86)_0%,rgba(0,0,0,0.64)_38%,rgba(0,0,0,0.14)_100%)]" />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.35)_0%,rgba(0,0,0,0.12)_42%,rgba(0,0,0,0.78)_100%)]" />
-            <div className="relative flex justify-between gap-6 [text-shadow:0_2px_16px_rgba(0,0,0,0.75)]">
-              <h3 className="text-xl font-medium text-white md:text-2xl">Shiloh VIP</h3>
-              <span className="text-sm text-white/60">02/</span>
-            </div>
-            <div className="relative mt-8 max-w-xl [text-shadow:0_2px_18px_rgba(0,0,0,0.8)] md:mt-10">
-              <p className="text-sm font-medium uppercase tracking-[0.22em] text-white/70">4-6 September</p>
-              <h4 className="mt-3 text-2xl font-medium text-white">Shiloh Conference</h4>
-              <p className="mt-4 text-sm leading-relaxed text-white/78">
-                As a VIP member, enjoy guaranteed front-row seating, professional hotel-to-venue shuttle service, a
-                private lounge with refreshments, and dedicated assistance throughout your visit.
-              </p>
-              <div className="mt-6">
-                <FeatureLiquidButton>Secure Spot</FeatureLiquidButton>
+          <AnimatePresence mode="wait">
+            <motion.article
+              key={activePass.label}
+              className="mt-5 grid gap-8 rounded-[1.6rem] bg-[linear-gradient(135deg,rgba(255,255,255,0.075),rgba(255,255,255,0.025))] p-6 sm:p-8 lg:grid-cols-[0.72fr_1fr] lg:p-10"
+              initial={{ opacity: 0, y: 18 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.28, ease: customEase }}
+            >
+              <div className="flex flex-col">
+                <p className="mb-4 w-max rounded-full bg-[#d5a238]/12 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.28em] text-[#f0c96f]">
+                  {activePass.tag}
+                </p>
+                <h3 className="vip-title text-4xl leading-none text-white sm:text-5xl">{activePass.label}</h3>
+                <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+                  <div className="rounded-2xl bg-white/[0.055] p-5">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/35">Date</p>
+                    <p className="mt-2 text-2xl text-white">{activePass.date}</p>
+                  </div>
+                  <div className="rounded-2xl bg-[#d5a238]/10 p-5">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#f0c96f]/70">Price</p>
+                    <p className="mt-2 vip-title text-4xl leading-none text-[#f7d98e]">{activePass.price}</p>
+                  </div>
+                </div>
+                <a
+                  href={activePass.href}
+                  data-direct-registration="true"
+                  className="mt-7 inline-flex w-max items-center gap-3 rounded-full bg-[#E1E0CC] px-6 py-3 text-sm font-semibold text-black transition-transform duration-300 hover:-translate-y-0.5"
+                >
+                  Register Now
+                  <ArrowUpRight className="h-4 w-4" />
+                </a>
               </div>
-            </div>
-            <div className="flex-1 min-h-20 md:min-h-28" />
-          </article>
 
-          <article className="feature-card flex min-h-[24rem] flex-col p-7 md:col-span-2">
-            <CardVideo src={birthdayVideo} />
-            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(0,0,0,0.86)_0%,rgba(0,0,0,0.46)_48%,rgba(0,0,0,0.1)_100%)]" />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.36)_0%,rgba(0,0,0,0.1)_42%,rgba(0,0,0,0.82)_100%)]" />
-            <div className="relative flex justify-between gap-4 text-sm text-white/60 [text-shadow:0_2px_16px_rgba(0,0,0,0.75)]">
-              <span>The Ra&apos;ah Birthday Celebration VVIP</span>
-              <span>03/</span>
-            </div>
-            <div className="flex-1" />
-            <div className="relative [text-shadow:0_2px_18px_rgba(0,0,0,0.8)]">
-              <p className="text-sm font-medium uppercase tracking-[0.22em] text-white/70">September 6</p>
-              <h3 className="mt-3 text-xl font-medium text-white md:text-2xl">Ra&apos;ah Birthday Celebration</h3>
-              <p className="mt-4 text-xs leading-relaxed text-white/78">
-                Celebrate the extraordinary life and ministry of our Prophet with an evening of joy, thanksgiving, and
-                honor.
-              </p>
-              <div className="mt-5">
-                <FeatureLiquidButton>Learn More</FeatureLiquidButton>
+              <div className="flex flex-col justify-between gap-8">
+                <p className="vip-copy text-base leading-relaxed text-white/70 sm:text-lg">{activePass.summary}</p>
+                <ul className="grid gap-4">
+                  {activePass.features.map((feature) => (
+                    <li key={feature} className="flex gap-4 rounded-2xl bg-white/[0.04] p-4 text-sm leading-relaxed text-white/72">
+                      <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#f0c96f]/15 text-[#f0c96f]">
+                        <Check className="h-3.5 w-3.5" />
+                      </span>
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
-            </div>
-          </article>
+            </motion.article>
+          </AnimatePresence>
         </div>
       </div>
     </section>
+  );
+}
+
+function ContactPage() {
+  const hotlines = [
+    { flag: '🇺🇸', country: 'USA', phone: '+1 448 877 0344' },
+    { flag: '🇬🇧', country: 'UK', phone: '+44 1244 727242' },
+    { flag: '🇿🇼', country: 'Zimbabwe', phone: '+263 8677 211 645' },
+    { flag: '🇿🇦', country: 'South Africa', phone: '+27 872 654 913' },
+  ];
+
+  return (
+    <main className="min-h-screen bg-black text-[#E1E0CC]">
+      <HeroHeader sticky />
+      <section className="px-4 py-16 sm:px-6 md:px-10 md:py-24">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-12 grid gap-8 lg:grid-cols-[0.85fr_1fr] lg:items-end">
+            <div>
+              <p className="mb-4 text-xs font-semibold uppercase tracking-[0.45em] text-primary/55">Contact</p>
+              <h1 className="font-serif text-5xl italic leading-none text-primary sm:text-6xl md:text-7xl">
+                Shiloh Support
+              </h1>
+            </div>
+            <p className="max-w-2xl text-sm leading-7 text-primary/62 sm:text-base lg:ml-auto lg:text-right">
+              Reach the Shiloh Season support team for registration guidance, travel questions, and guest assistance.
+              The frequently asked questions below are the same planning notes from Plan Your Journey.
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {hotlines.map((hotline) => (
+              <a
+                key={hotline.country}
+                href={`tel:${hotline.phone.replace(/\s/g, '')}`}
+                className="group rounded-[1.5rem] border border-white/10 bg-white/[0.06] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-primary/25 hover:bg-white/[0.09]"
+              >
+                <p className="mb-6 text-[10px] font-bold uppercase tracking-[0.35em] text-primary/35">
+                  <span className="mr-3">{hotline.flag}</span>
+                  {hotline.country}
+                </p>
+                <div className="flex items-center justify-between gap-4">
+                  <span className="text-xl text-primary">{hotline.phone}</span>
+                  <Phone className="h-5 w-5 text-primary/35 transition-colors group-hover:text-primary" />
+                </div>
+              </a>
+            ))}
+          </div>
+
+          <a
+            href="mailto:support@goodnewsworld.com"
+            className="mt-4 flex flex-col gap-4 rounded-[1.5rem] border border-primary/15 bg-primary px-6 py-6 text-black transition-transform duration-300 hover:-translate-y-1 sm:flex-row sm:items-center sm:justify-between"
+          >
+            <span>
+              <span className="block text-[10px] font-bold uppercase tracking-[0.35em] text-black/45">Email</span>
+              <span className="mt-2 block text-xl font-semibold">support@goodnewsworld.com</span>
+            </span>
+            <Mail className="h-6 w-6" />
+          </a>
+        </div>
+      </section>
+      <JourneySupportSection />
+      <Footer />
+    </main>
   );
 }
 
@@ -1653,25 +1856,33 @@ const featureCards = [
     date: 'August 31 - September 3',
     image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/69f215eb590487fe57c29406.jpg',
     items: [
-      'A focused arrival for prayer, teaching, and preparation.',
-      'Guided sessions for spiritual alignment.',
-      'Quiet moments designed for renewal.',
-      'Fellowship across the Shiloh community.',
+      'Teaching for every level, whether you are beginning or already attending as a student.',
+      'Learning sessions with the highly esteemed Prophet Uebert Angel at Mount Moriah City.',
+      'A sacred atmosphere where signs, wonders, and prophetic manifestations take place.',
+      'An extraordinary retreat experience you will not want to miss.',
     ],
   },
   {
     number: '02',
-    title: 'Shiloh Confernce.',
+    title: 'Shiloh Conference',
     date: 'September 4 - September 6',
     image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/69f2171efab44d4020a08d69.jpg',
-    items: ['AI analysis for each creative session.', 'Creative notes shaped for your team.', 'Tool integrations for every delegate.'],
+    items: [
+      'A powerful gathering at Fort Moriah City.',
+      'An encounter where every form of disappointment is averted.',
+      'Every limitation is dealt with and completely eradicated.',
+    ],
   },
   {
     number: '03',
-    title: 'Birthday Celebration',
+    title: "The Ra'ah's Birthday Gala",
     date: 'September 6',
     image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/69f2171e590487fe57c2f87b.jpg',
-    items: ['Notification silencing for the whole celebration.', 'Ambient soundscapes throughout the evening.', 'Schedule syncing for guests and hosts.'],
+    items: [
+      "A royal birthday celebration honoring the Ra'ah, Prophet Uebert Angel.",
+      'A special delegation with dance, thanksgiving, and joyful presentation.',
+      'An elegant gala atmosphere for celebration, honor, and fellowship.',
+    ],
   },
 ];
 
@@ -1700,7 +1911,7 @@ function FeatureCard({
       initial="hidden"
       animate={inView ? 'visible' : 'hidden'}
     >
-      <div className="flex h-44 items-center justify-center overflow-hidden border-b border-white/5 sm:h-48 lg:h-40 xl:h-44">
+      <div className="flex h-48 items-center justify-center overflow-hidden border-b border-white/5">
         <img src={card.image} alt="" className="h-full w-full object-cover" />
       </div>
       <div className="flex flex-1 flex-col p-5 sm:p-6">
@@ -1859,10 +2070,19 @@ function CelebrationBurst({ active }: { active: boolean }) {
 function RegistrationModal({
   open,
   onClose,
+  type,
 }: {
   open: boolean;
   onClose: () => void;
+  type: 'conference' | 'birthday';
 }) {
+  const registrationTitle =
+    type === 'birthday' ? "The Ra'ah Prophet Uebert Angel Birthday Celebration" : 'Shiloh Conference';
+  const registrationUrl =
+    type === 'birthday'
+      ? 'https://programs.uebertangel.org/product/birthday/'
+      : 'https://programs.uebertangel.org/product/2026/';
+
   return (
     <AnimatePresence>
       {open && (
@@ -1877,7 +2097,7 @@ function RegistrationModal({
             <div className="flex items-center justify-between gap-4 border-b border-black/10 px-5 py-4">
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.34em] text-black/45">Registration</p>
-                <h2 className="journey-card-title mt-1 text-2xl text-black">Shiloh Conference</h2>
+                <h2 className="journey-card-title mt-1 text-2xl text-black">{registrationTitle}</h2>
               </div>
               <button
                 type="button"
@@ -1891,9 +2111,9 @@ function RegistrationModal({
             <div className="min-h-0 flex-1 overflow-hidden bg-white p-2">
               <iframe
                 aria-label="Shiloh Conference"
-                title="Shiloh Conference"
+                title={registrationTitle}
                 className="h-[72svh] w-full rounded-2xl border-0"
-                src="https://forms.zohopublic.eu/rikki/form/ShilohConference/formperma/J6C7fbe7BrKqBwpANMaW8npFSckhVhrh5UubLKzyTro"
+                src={registrationUrl}
                 loading="eager"
                 referrerPolicy="strict-origin-when-cross-origin"
               />
@@ -1938,6 +2158,20 @@ function SponsorModal({
   open: boolean;
   onClose: () => void;
 }) {
+  const [activeTab, setActiveTab] = useState<'about' | 'sponsor'>('about');
+  const givingTiers = [
+    { amount: '$25', impact: '1 person' },
+    { amount: '$100', impact: '4 people' },
+    { amount: '$500', impact: '20 people' },
+    { amount: '$2,500', impact: '65 people' },
+  ];
+
+  useEffect(() => {
+    if (open) {
+      setActiveTab('about');
+    }
+  }, [open]);
+
   return (
     <AnimatePresence>
       {open && (
@@ -1954,7 +2188,7 @@ function SponsorModal({
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-[0.35em] text-black/40">Giving</p>
                   <h2 className="journey-card-title mt-1 text-3xl leading-none text-black sm:text-4xl">
-                    Sponor a Bus Campaign
+                    Bring Someone to Shiloh
                   </h2>
                 </div>
                 <button
@@ -1966,27 +2200,77 @@ function SponsorModal({
                   <X className="h-4 w-4" />
                 </button>
               </div>
+              <div className="mt-5 inline-flex rounded-full bg-black/5 p-1 text-xs font-semibold uppercase tracking-[0.2em] text-black/50">
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('about')}
+                  className={`rounded-full px-4 py-2 transition-colors ${
+                    activeTab === 'about' ? 'bg-black text-white' : 'hover:text-black'
+                  }`}
+                >
+                  About
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('sponsor')}
+                  className={`rounded-full px-4 py-2 transition-colors ${
+                    activeTab === 'sponsor' ? 'bg-black text-white' : 'hover:text-black'
+                  }`}
+                >
+                  Sponsor Now
+                </button>
+              </div>
             </div>
             <div className="px-3 pb-4 sm:px-5">
-              <iframe
-                src="https://crm.goodnewsworld.com/widget/form/WBglmsiMfAfsGPSlyekb"
-                className="h-[min(74svh,688px)] w-full rounded-2xl border border-black/10"
-                id="inline-WBglmsiMfAfsGPSlyekb"
-                data-layout="{'id':'INLINE'}"
-                data-trigger-type="alwaysShow"
-                data-trigger-value=""
-                data-activation-type="alwaysActivated"
-                data-activation-value=""
-                data-deactivation-type="neverDeactivate"
-                data-deactivation-value=""
-                data-form-name="Sponsor A Bus"
-                data-height="688"
-                data-layout-iframe-id="inline-WBglmsiMfAfsGPSlyekb"
-                data-form-id="WBglmsiMfAfsGPSlyekb"
-                title="Sponsor A Bus"
-                loading="eager"
-                referrerPolicy="strict-origin-when-cross-origin"
-              />
+              {activeTab === 'about' ? (
+                <div className="rounded-2xl border border-black/10 bg-[#f7f7f2] p-5 text-black shadow-inner sm:p-7">
+                  <p className="max-w-3xl text-base leading-7 text-black/70 sm:text-lg">
+                    Thousands are ready to come to Shiloh, but for many, transport is the only barrier. A single bus
+                    carries 65 people, and every seat is an opportunity to bring someone onto Shiloh grounds who
+                    otherwise would not make it. For $25, you can cover one seat and directly change someone&apos;s
+                    ability to attend.
+                  </p>
+                  <p className="mt-5 max-w-3xl text-base leading-7 text-black/70 sm:text-lg">
+                    This is not just about funding a bus. It is about removing the one obstacle standing between
+                    someone and their deliverance or breakthrough. Sponsor a seat and bring someone to Shiloh.
+                  </p>
+                  <div className="mt-8 grid gap-3 sm:grid-cols-2">
+                    {givingTiers.map((tier) => (
+                      <div key={tier.amount} className="rounded-2xl border border-black/10 bg-white p-4">
+                        <p className="journey-card-title text-3xl leading-none text-black">{tier.amount}</p>
+                        <p className="mt-2 text-sm uppercase tracking-[0.22em] text-black/45">{tier.impact}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('sponsor')}
+                    className="mt-8 rounded-full bg-black px-6 py-3 text-xs font-bold uppercase tracking-[0.26em] text-white transition-transform hover:-translate-y-0.5"
+                  >
+                    Sponsor Now
+                  </button>
+                </div>
+              ) : (
+                <iframe
+                  src="https://crm.goodnewsworld.com/widget/form/WBglmsiMfAfsGPSlyekb"
+                  className="h-[min(74svh,688px)] w-full rounded-2xl border border-black/10"
+                  id="inline-WBglmsiMfAfsGPSlyekb"
+                  data-layout="{'id':'INLINE'}"
+                  data-trigger-type="alwaysShow"
+                  data-trigger-value=""
+                  data-activation-type="alwaysActivated"
+                  data-activation-value=""
+                  data-deactivation-type="neverDeactivate"
+                  data-deactivation-value=""
+                  data-form-name="Sponsor A Bus"
+                  data-height="688"
+                  data-layout-iframe-id="inline-WBglmsiMfAfsGPSlyekb"
+                  data-form-id="WBglmsiMfAfsGPSlyekb"
+                  title="Sponsor A Bus"
+                  loading="eager"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                />
+              )}
             </div>
           </motion.div>
         </motion.div>
@@ -1996,9 +2280,40 @@ function SponsorModal({
 }
 
 function MerchPage() {
+  const products = [
+    {
+      name: 'Shiloh Season Tee',
+      price: '$35',
+      description: 'Soft event tee placeholder for the Shiloh Season 2026 collection preview.',
+      accent: 'from-[#E1E0CC] to-[#746C4F]',
+      icon: Shirt,
+    },
+    {
+      name: 'Shiloh Cap',
+      price: '$24',
+      description: 'Embroidered cap concept with temporary details for merch planning.',
+      accent: 'from-[#D8A945] to-[#4B3314]',
+      icon: Sparkle,
+    },
+    {
+      name: 'Conference Tote',
+      price: '$28',
+      description: 'Everyday tote preview for carrying notes, essentials, and conference materials.',
+      accent: 'from-[#BFD3E8] to-[#263A4A]',
+      icon: CreditCard,
+    },
+    {
+      name: 'Season Hoodie',
+      price: '$68',
+      description: 'Warm hoodie placeholder for late evenings, travel days, and fellowship moments.',
+      accent: 'from-[#F4791B] to-[#1B1110]',
+      icon: Shirt,
+    },
+  ];
+
   return (
     <main className="min-h-screen bg-black text-[#E1E0CC]">
-      <section className="relative min-h-screen overflow-hidden px-4 pt-28 sm:px-6 md:px-10">
+      <section className="relative min-h-screen overflow-hidden px-4 pb-20 pt-28 sm:px-6 md:px-10">
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <video
             className="absolute inset-0 h-full w-full object-cover opacity-55"
@@ -2012,18 +2327,53 @@ function MerchPage() {
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.42),rgba(0,0,0,0.82)_62%,#000_100%)]" />
         </div>
         <HeroHeader />
-        <div className="relative z-10 mx-auto flex min-h-[calc(100svh-7rem)] max-w-4xl flex-col items-center justify-center text-center">
-          <p className="mb-5 text-xs font-semibold uppercase tracking-[0.45em] text-primary/65">Shiloh Season 2026</p>
-          <h1 className="font-serif text-5xl italic leading-none text-primary sm:text-6xl md:text-7xl">
-            Shiloh Merch
-          </h1>
-          <p className="mt-6 max-w-xl text-sm leading-6 text-white/65 sm:text-base">
-            Official Shiloh Season merchandise is being prepared. This page is ready for the collection launch.
-          </p>
-          <div className="mt-8">
-            <PillButton href="/journey">
-              Plan Your Shiloh
-            </PillButton>
+        <div className="relative z-10 mx-auto max-w-7xl">
+          <div className="mb-10 max-w-3xl pt-10 text-left md:pt-16">
+            <p className="mb-5 text-xs font-semibold uppercase tracking-[0.45em] text-primary/65">
+              Shiloh Season 2026
+            </p>
+            <h1 className="font-serif text-5xl italic leading-none text-primary sm:text-6xl md:text-7xl">
+              Shiloh Merch
+            </h1>
+            <p className="mt-6 max-w-2xl text-sm leading-6 text-white/65 sm:text-base">
+              Temporary product previews for the upcoming Shiloh Season store. These dummy items help review the page
+              layout before real merchandise, photos, inventory, and checkout are connected.
+            </p>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {products.map((product) => {
+              const Icon = product.icon;
+
+              return (
+                <article
+                  key={product.name}
+                  className="group flex min-h-[23rem] flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur-md transition-transform duration-300 hover:-translate-y-1"
+                >
+                  <div className={`flex min-h-44 items-center justify-center bg-gradient-to-br ${product.accent}`}>
+                    <div className="flex h-20 w-20 items-center justify-center rounded-full border border-white/30 bg-black/20 text-white backdrop-blur-sm transition-transform duration-300 group-hover:scale-105">
+                      <Icon className="h-9 w-9" strokeWidth={1.5} />
+                    </div>
+                  </div>
+                  <div className="flex flex-1 flex-col p-5">
+                    <div className="mb-4 flex items-start justify-between gap-4">
+                      <h2 className="text-xl leading-tight text-primary">{product.name}</h2>
+                      <span className="rounded-full border border-primary/15 px-3 py-1 text-xs text-primary/80">
+                        {product.price}
+                      </span>
+                    </div>
+                    <p className="text-sm leading-6 text-primary/60">{product.description}</p>
+                    <button
+                      type="button"
+                      disabled
+                      className="mt-auto w-max rounded-full border border-primary/15 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.22em] text-primary/55"
+                    >
+                      Preview Only
+                    </button>
+                  </div>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -2032,16 +2382,154 @@ function MerchPage() {
   );
 }
 
+const scheduleBackgroundVideo =
+  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260506_025849_5f3a84a7-bcc0-4279-8876-675fbe04e106.mp4';
+const scheduleRaisedVideo =
+  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260507_154543_d5b83fc1-9cea-44f3-b5e8-8f325935211a.mp4';
+const scheduleSoftwareVideo =
+  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260507_153148_d7a3e1dd-e5d0-4ce6-8306-00d7522ecc44.mp4';
+
+function ScheduleLabel({ children, align = 'center' }: { children: string; align?: 'center' | 'start' }) {
+  return (
+    <div
+      className={`flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.22em] text-white/70 ${
+        align === 'center' ? 'justify-center' : 'justify-start'
+      }`}
+    >
+      <Sparkle className="h-3 w-3" strokeWidth={1.5} />
+      <span>{children}</span>
+      <Sparkle className="h-3 w-3" strokeWidth={1.5} />
+    </div>
+  );
+}
+
+function ScheduleMarqueeRow({
+  icons,
+  direction,
+}: {
+  icons: LucideIcon[];
+  direction: 'left' | 'right';
+}) {
+  const duplicatedIcons = [...icons, ...icons];
+
+  return (
+    <div className="[mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
+      <div
+        className={`flex w-max gap-3 ${direction === 'left' ? 'animate-marquee-left' : 'animate-marquee-right'}`}
+      >
+        {duplicatedIcons.map((Icon, index) => (
+          <span
+            key={`${direction}-${index}`}
+            className="liquid-glass flex h-14 w-14 shrink-0 items-center justify-center rounded-xl text-white/85 md:h-16 md:w-16"
+          >
+            <Icon className="h-6 w-6" strokeWidth={1.5} />
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function SchedulePage() {
+  const timeline = [
+    ['31 Aug - 3 Sep', 'Prophetic Retreat', 'Fort Moriah City'],
+    ['4 Sep - 5 Sep', 'Shiloh Conference', 'Fort Moriah City'],
+    ['6 September', 'Sunday Service', 'Harare Hippodrome'],
+    ['6 Sep 7:00 PM', "The Ra'ah Prophet Uebert Angel Birthday Celebration", 'Harare Hippodrome'],
+  ];
+
+  return (
+    <main className="min-h-screen bg-[#0a0a0a] text-white antialiased" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+      <HeroHeader sticky />
+      <section className="px-4 py-8 sm:px-6 md:px-10 md:py-10 lg:px-14">
+        <div className="mx-auto flex max-w-7xl flex-col gap-6">
+          <div className="max-w-3xl pt-4">
+            <h1 className="text-[28px] font-normal leading-[1.15] tracking-tight sm:text-3xl md:text-4xl lg:text-[44px]">
+              Schedule
+            </h1>
+            <p className="mt-4 max-w-3xl text-sm leading-[1.6] text-white/60 md:text-[15px]">
+              Shiloh Season 2026 gathers every moment of encounter into one clear journey. From Prophetic Retreat to
+              the conference, Sunday service, and the Ra&apos;ah birthday celebration, plan your arrival with confidence
+              and prepare for a week of worship, teaching, honor, and transformation.
+            </p>
+          </div>
+
+          <article className="relative min-h-[560px] overflow-hidden rounded-2xl bg-black">
+            <video
+              className="absolute inset-0 h-full w-full object-cover"
+              src={scheduleBackgroundVideo}
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-black/10 to-black/80" />
+            <div className="absolute inset-0 z-10 p-5 md:p-6">
+              <ScheduleLabel>Shiloh Season 2026</ScheduleLabel>
+              <div className="absolute inset-x-5 bottom-5 space-y-4 rounded-2xl bg-black/35 p-4 backdrop-blur-sm sm:p-5 md:inset-x-6 md:bottom-6">
+                {timeline.map(([date, event, location]) => (
+                  <div
+                    key={`${date}-${event}`}
+                    className="grid grid-cols-[1fr_auto] gap-x-3 gap-y-1 border-b border-white/10 pb-4 text-sm text-white/85 last:border-b-0 last:pb-0 sm:grid-cols-[8.5rem_auto_1fr_auto] sm:items-center"
+                  >
+                    <span className="text-white/70">{date}</span>
+                    <Sparkle className="h-3 w-3 text-white/60" strokeWidth={1.5} />
+                    <span className="col-span-2 font-medium sm:col-span-1">{event}</span>
+                    <span className="col-span-2 text-white/55 sm:col-span-1 sm:text-right">{location}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+      <Footer />
+    </main>
+  );
+}
+
+function PassesPage() {
+  return (
+    <main className="min-h-screen bg-[#F0EFED]">
+      <HeroHeader sticky />
+      <iframe
+        src="/component2.html"
+        title="Shiloh Passes"
+        className="block h-[calc(100svh-5rem)] w-full border-0"
+      />
+    </main>
+  );
+}
+
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [registrationOpen, setRegistrationOpen] = useState(false);
+  const [registrationType, setRegistrationType] = useState<'conference' | 'birthday'>('conference');
   const [sponsorOpen, setSponsorOpen] = useState(false);
   const [sponsorVisible, setSponsorVisible] = useState(false);
   const [celebrating, setCelebrating] = useState(false);
-  const pathname = window.location.pathname;
+  const [pathname, setPathname] = useState(window.location.pathname);
   const isJourneyPage = pathname === '/journey';
   const isVipPage = pathname === '/vip';
   const isMerchPage = pathname === '/merch';
+  const isSchedulePage = pathname === '/schedule';
+  const isPassesPage = pathname === '/passes';
+  const isContactPage = pathname === '/contact';
+
+  useEffect(() => {
+    const updatePathname = () => setPathname(window.location.pathname);
+
+    window.addEventListener('popstate', updatePathname);
+    return () => window.removeEventListener('popstate', updatePathname);
+  }, []);
+
+  useEffect(() => {
+    if (window.location.hash) {
+      return;
+    }
+
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, [pathname]);
 
   useEffect(() => {
     let isMounted = true;
@@ -2092,8 +2580,16 @@ export default function App() {
       const target = event.target as HTMLElement | null;
       const actionable = target?.closest('a, button');
       const label = actionable?.textContent?.toLowerCase() ?? '';
+      if (actionable?.getAttribute('data-direct-registration') === 'true') {
+        return;
+      }
       if (label.includes('register')) {
         event.preventDefault();
+        const requestedRegistration = actionable?.getAttribute('data-registration-type');
+        const registrationContext = target?.closest('article, section, div')?.textContent?.toLowerCase() ?? '';
+        setRegistrationType(
+          requestedRegistration === 'birthday' || registrationContext.includes('birthday') ? 'birthday' : 'conference',
+        );
         setRegistrationOpen(true);
       }
     };
@@ -2123,6 +2619,12 @@ export default function App() {
         <VipPage />
       ) : isMerchPage ? (
         <MerchPage />
+      ) : isSchedulePage ? (
+        <SchedulePage />
+      ) : isPassesPage ? (
+        <PassesPage />
+      ) : isContactPage ? (
+        <ContactPage />
       ) : isJourneyPage ? (
         <JourneyPage startAnimations={!isLoading} />
       ) : (
@@ -2134,7 +2636,7 @@ export default function App() {
         </main>
       )}
       <FloatingSponsorButton onClick={() => setSponsorOpen(true)} visible={!isLoading && sponsorVisible} />
-      <RegistrationModal open={registrationOpen} onClose={() => setRegistrationOpen(false)} />
+      <RegistrationModal open={registrationOpen} onClose={() => setRegistrationOpen(false)} type={registrationType} />
       <SponsorModal open={sponsorOpen} onClose={() => setSponsorOpen(false)} />
       <CelebrationBurst active={celebrating} />
     </>
