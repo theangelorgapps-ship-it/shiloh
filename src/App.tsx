@@ -1917,7 +1917,7 @@ function About() {
           viewport={{ once: true }}
           transition={{ duration: 0.55, ease: customEase }}
         >
-          <PillButton href="#features">Register Now</PillButton>
+          <PillButton href="#features">Let Us Know You&apos;re Coming</PillButton>
           <PillButton href="#features" variant="glass">
             VIP Experience
           </PillButton>
@@ -2161,9 +2161,7 @@ function RegistrationModal({
 }) {
   const registrationTitle = "Let Us Know You're Coming";
   const registrationUrl =
-    type === 'birthday'
-      ? 'https://programs.uebertangel.org/product/birthday/'
-      : 'https://programs.uebertangel.org/product/2026/';
+    'https://forms.zohopublic.eu/rikki/form/ShilohConference/formperma/J6C7fbe7BrKqBwpANMaW8npFSckhVhrh5UubLKzyTro';
 
   return (
     <AnimatePresence>
@@ -2885,7 +2883,7 @@ export default function App() {
       if (actionable?.getAttribute('data-direct-registration') === 'true') {
         return;
       }
-      if (label.includes('register')) {
+      if (label.includes('register') || label.includes('let us know')) {
         event.preventDefault();
         const requestedRegistration = actionable?.getAttribute('data-registration-type');
         const registrationContext = target?.closest('article, section, div')?.textContent?.toLowerCase() ?? '';
