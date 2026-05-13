@@ -70,7 +70,7 @@ const mapLocations = [
   {
     title: 'Main Auditorium',
     label: 'Gate A',
-    position: { x: 48, y: 39 },
+    position: { x: 48, y: 40 },
     description: 'Primary gathering point for Shiloh Conference sessions, worship, and keynote ministry.',
     details: [
       'Best arrival point for evening sessions and main conference gatherings.',
@@ -81,7 +81,7 @@ const mapLocations = [
   {
     title: 'Prayer Grounds',
     label: 'Prayer',
-    position: { x: 34, y: 47 },
+    position: { x: 42, y: 38 },
     description: 'A quieter zone for prayer, reflection, and spiritual preparation throughout the week.',
     details: [
       'Recommended for quiet preparation before services begin.',
@@ -92,7 +92,7 @@ const mapLocations = [
   {
     title: 'Registration Hub',
     label: 'Check-in',
-    position: { x: 60, y: 52 },
+    position: { x: 69, y: 26 },
     description: 'Delegate check-in, wristbands, information support, and arrival assistance.',
     details: [
       'Collect wristbands, event guidance, and daily access information here.',
@@ -103,7 +103,7 @@ const mapLocations = [
   {
     title: 'VIP Entrance',
     label: 'VIP',
-    position: { x: 72, y: 42 },
+    position: { x: 78, y: 28 },
     description: 'Dedicated access point for VIP Experience guests and hosted arrivals.',
     details: [
       'Reserved for VIP Experience delegates and hosted guests.',
@@ -114,7 +114,7 @@ const mapLocations = [
   {
     title: 'Fellowship Court',
     label: 'Food',
-    position: { x: 43, y: 64 },
+    position: { x: 72, y: 67 },
     description: 'Refreshments, fellowship, and meeting point between conference moments.',
     details: [
       'A natural gathering zone between major programme moments.',
@@ -125,7 +125,7 @@ const mapLocations = [
   {
     title: 'Parking & Shuttle',
     label: 'Parking',
-    position: { x: 22, y: 70 },
+    position: { x: 22, y: 71 },
     description: 'Parking coordination and transport support for delegates and families.',
     details: [
       'Use this point for vehicle guidance and shuttle coordination.',
@@ -534,14 +534,11 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
             onClick={openSponsorModal}
             className="group inline-flex items-center gap-0.5 rounded-full border border-white/20 bg-white/10 py-1 pl-2 pr-1 text-[10px] font-medium text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 hover:bg-white/15 sm:gap-2 sm:pl-3 md:hover:gap-3"
           >
-            <span className="flex flex-col items-start leading-none">
+            <span className="flex flex-col items-center text-center leading-none">
               <span className="text-[6px] font-semibold uppercase tracking-[0.12em] text-primary/60 min-[420px]:text-[7px] sm:text-[9px]">
                 Bring Someone
               </span>
               <span className="mt-0.5 text-[9px] font-medium min-[420px]:text-[11px] sm:text-xs lg:text-sm">To Shiloh</span>
-            </span>
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white text-black transition-transform duration-300 group-hover:scale-110 sm:h-8 sm:w-8">
-              <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
             </span>
           </button>
           <button
@@ -1863,7 +1860,7 @@ function JourneyPage({ startAnimations }: { startAnimations: boolean }) {
           </motion.div>
 
           <h1 className="journey-heading mt-6 max-w-4xl text-5xl leading-[0.9] tracking-[-3px] text-[hsl(var(--heading))] md:text-6xl lg:text-[4.7rem]">
-            <BlurText key={startAnimations ? 'journey-ready' : 'journey-wait'} text="Plan You Journey" start={startAnimations} />
+            <BlurText key={startAnimations ? 'journey-ready' : 'journey-wait'} text="Plan Your Journey" start={startAnimations} />
           </h1>
 
           <motion.div
