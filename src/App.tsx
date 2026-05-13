@@ -2323,7 +2323,7 @@ function SponsorModal({
                 </button>
               </div>
             </div>
-            <div className="px-3 pb-4 sm:px-5">
+            <div className="min-h-0 flex-1 overflow-y-auto px-3 pb-4 sm:px-5">
               {activeTab === 'about' ? (
                 <div className="rounded-2xl border border-black/10 bg-[#f7f7f2] p-5 text-black shadow-inner sm:p-7">
                   <p className="max-w-3xl text-base leading-7 text-black/70 sm:text-lg">
@@ -2355,7 +2355,7 @@ function SponsorModal({
               ) : (
                 <iframe
                   src="https://crm.goodnewsworld.com/widget/form/WBglmsiMfAfsGPSlyekb"
-                  className="h-[min(74svh,688px)] w-full rounded-2xl border border-black/10"
+                  className="h-[min(74svh,688px)] min-h-[560px] w-full rounded-2xl border border-black/10"
                   id="inline-WBglmsiMfAfsGPSlyekb"
                   data-layout="{'id':'INLINE'}"
                   data-trigger-type="alwaysShow"
