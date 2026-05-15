@@ -491,16 +491,16 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
           />
         )}
       </AnimatePresence>
-      <nav className="relative z-20 flex w-full max-w-[calc(100vw-0.75rem)] items-center justify-between gap-1 rounded-b-2xl bg-black px-2 py-2 text-white shadow-[0_16px_40px_rgba(0,0,0,0.35)] sm:max-w-[calc(100vw-1.5rem)] sm:gap-4 sm:px-5 md:w-[min(1160px,calc(100vw-3rem))] md:gap-7 md:rounded-b-3xl md:px-7 xl:w-[min(1240px,calc(100vw-4rem))] xl:px-8">
-        <a href="/" aria-label="Shiloh home" className="order-1 flex shrink-0 items-center gap-1.5 sm:gap-3">
+      <nav className="relative z-20 grid w-full max-w-none grid-cols-[1fr_auto] items-center gap-x-5 gap-y-5 rounded-b-[1.75rem] bg-black px-6 py-5 text-[#E1E0CC] shadow-[0_16px_40px_rgba(0,0,0,0.35)] md:flex md:w-[min(1160px,calc(100vw-3rem))] md:max-w-[calc(100vw-1.5rem)] md:justify-between md:gap-7 md:rounded-b-3xl md:px-7 md:py-2 md:text-white xl:w-[min(1240px,calc(100vw-4rem))] xl:px-8">
+        <a href="/" aria-label="Shiloh home" className="order-1 col-span-2 flex shrink-0 items-center gap-4 md:col-span-1 md:gap-3">
           <span className="flex flex-col text-left leading-[0.78] text-[#E1E0CC]">
-            <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] sm:text-xs sm:tracking-[0.22em]">Shiloh</span>
-            <span className="font-serif text-[14px] italic tracking-normal sm:text-base">Season 26</span>
+            <span className="text-[18px] font-extrabold uppercase tracking-[0.2em] md:text-xs md:tracking-[0.22em]">Shiloh</span>
+            <span className="font-serif text-[19px] italic tracking-normal md:text-base">Season 26</span>
           </span>
-          <span className="h-7 w-px bg-primary/25 sm:h-8" aria-hidden="true" />
-          <span className="flex max-w-[2.8rem] flex-col text-[6.5px] font-semibold uppercase leading-[1.2] tracking-[0.1em] text-primary/60 min-[420px]:text-[8px] sm:max-w-none sm:flex-row sm:gap-1 sm:text-[9px] lg:tracking-[0.18em]">
+          <span className="h-12 w-px bg-primary/25 md:h-8" aria-hidden="true" />
+          <span className="flex flex-col text-[18px] font-medium uppercase leading-[1.18] tracking-[0.08em] text-primary/60 md:max-w-none md:flex-row md:gap-1 md:text-[9px] md:font-semibold md:tracking-[0.18em]">
             <span>31 Aug</span>
-            <span className="hidden sm:inline">-</span>
+            <span className="hidden md:inline">-</span>
             <span>6 Sep</span>
           </span>
         </a>
@@ -561,11 +561,11 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
             </div>
           ))}
         </div>
-        <div className="order-2 flex min-w-0 shrink items-center justify-center gap-0.5 sm:gap-2 md:order-3 md:shrink-0">
+        <div className="order-2 flex min-w-0 shrink items-center justify-start gap-0.5 md:order-3 md:justify-center md:gap-2 md:shrink-0">
           <button
             type="button"
             onClick={openSponsorModal}
-            className="group inline-flex min-h-[2.35rem] min-w-[5.8rem] items-center justify-center rounded-full border border-white/20 bg-white/10 px-2 text-[10px] font-medium text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 hover:bg-white/15 min-[420px]:min-w-[7.2rem] sm:min-h-[3rem] sm:min-w-[9.3rem] sm:px-4"
+            className="group hidden min-h-[2.35rem] min-w-[5.8rem] items-center justify-center rounded-full border border-white/20 bg-white/10 px-2 text-[10px] font-medium text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 hover:bg-white/15 md:inline-flex md:min-h-[3rem] md:min-w-[9.3rem] md:px-4"
           >
             <span className="flex flex-col items-center text-center leading-none">
               <span className="text-[6px] font-semibold uppercase tracking-[0.12em] text-primary/60 min-[420px]:text-[7px] sm:text-[9px]">
@@ -577,17 +577,17 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
           <button
             type="button"
             data-registration-type="conference"
-            className="group inline-flex items-center gap-0.5 rounded-full border border-white/25 bg-white/10 py-1 pl-2 pr-1 text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 hover:bg-white/15 sm:gap-2 sm:pl-3 md:hover:gap-3"
+            className="group inline-flex min-h-[3.9rem] items-center rounded-sm bg-[#E1E0CC] px-7 text-black shadow-[0_8px_20px_rgba(225,224,204,0.16)] transition-all duration-300 hover:bg-white md:min-h-0 md:gap-2 md:rounded-full md:border md:border-white/25 md:bg-white/10 md:py-1 md:pl-3 md:pr-1 md:text-[#E1E0CC] md:shadow-none md:backdrop-blur-xl md:hover:bg-white/15 md:hover:gap-3"
           >
             <span className="flex flex-col items-start leading-none">
-              <span className="text-[6px] font-semibold uppercase tracking-[0.12em] text-primary/60 min-[420px]:text-[7px] sm:text-[9px]">
+              <span className="hidden text-[9px] font-semibold uppercase tracking-[0.12em] text-primary/60 md:block">
                 Let Us Know
               </span>
-              <span className="mt-0.5 text-[9px] font-medium min-[420px]:text-[11px] sm:text-xs lg:text-sm">
+              <span className="text-[22px] font-semibold leading-none md:mt-0.5 md:text-xs md:font-medium lg:text-sm">
                 You&apos;re Coming
               </span>
             </span>
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#E1E0CC] text-black transition-transform duration-300 group-hover:scale-110 sm:h-8 sm:w-8">
+            <span className="hidden h-8 w-8 items-center justify-center rounded-full bg-[#E1E0CC] text-black transition-transform duration-300 group-hover:scale-110 md:flex">
               <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
             </span>
           </button>
@@ -603,11 +603,13 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
               return !current;
             });
           }}
-          className="order-3 shrink-0 rounded-full bg-white/5 px-2 py-2 text-[9px] font-semibold uppercase tracking-[0.14em] text-[#E1E0CC]/80 transition-all duration-300 hover:bg-white/10 hover:text-[#E1E0CC] min-[420px]:px-3 min-[420px]:text-[10px] min-[420px]:tracking-[0.18em] md:hidden"
+          className="order-3 flex h-16 w-16 shrink-0 flex-col items-center justify-center gap-2 rounded-full text-[#E1E0CC] transition-transform duration-300 hover:scale-105 md:hidden"
           aria-label="Toggle menu"
           aria-expanded={menuOpen}
         >
-          {menuOpen ? 'Close' : 'Menu'}
+          <span className={`block h-1 w-9 rounded-full bg-current transition-transform duration-300 ${menuOpen ? 'translate-y-3 rotate-45' : ''}`} />
+          <span className={`block h-1 w-9 rounded-full bg-current transition-opacity duration-300 ${menuOpen ? 'opacity-0' : 'opacity-100'}`} />
+          <span className={`block h-1 w-9 rounded-full bg-current transition-transform duration-300 ${menuOpen ? '-translate-y-3 -rotate-45' : ''}`} />
         </button>
       </nav>
       <AnimatePresence>
