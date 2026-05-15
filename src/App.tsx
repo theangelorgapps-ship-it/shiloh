@@ -492,13 +492,13 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
         )}
       </AnimatePresence>
       <nav className="relative z-20 grid w-full max-w-none grid-cols-[1fr_auto] items-center gap-x-5 gap-y-5 rounded-b-[1.75rem] bg-black px-6 py-5 text-[#E1E0CC] shadow-[0_16px_40px_rgba(0,0,0,0.35)] md:flex md:w-[min(1160px,calc(100vw-3rem))] md:max-w-[calc(100vw-1.5rem)] md:justify-between md:gap-7 md:rounded-b-3xl md:px-7 md:py-2 md:text-white xl:w-[min(1240px,calc(100vw-4rem))] xl:px-8">
-        <a href="/" aria-label="Shiloh home" className="order-1 col-span-2 flex shrink-0 items-center gap-4 md:col-span-1 md:gap-3">
+        <a href="/" aria-label="Shiloh home" className="order-1 flex min-w-0 shrink-0 items-center gap-3 md:col-span-1 md:gap-3">
           <span className="flex flex-col text-left leading-[0.78] text-[#E1E0CC]">
             <span className="text-[18px] font-extrabold uppercase tracking-[0.2em] md:text-xs md:tracking-[0.22em]">Shiloh</span>
             <span className="font-serif text-[19px] italic tracking-normal md:text-base">Season 26</span>
           </span>
-          <span className="h-12 w-px bg-primary/25 md:h-8" aria-hidden="true" />
-          <span className="flex flex-col text-[18px] font-medium uppercase leading-[1.18] tracking-[0.08em] text-primary/60 md:max-w-none md:flex-row md:gap-1 md:text-[9px] md:font-semibold md:tracking-[0.18em]">
+          <span className="h-11 w-px bg-primary/25 md:h-8" aria-hidden="true" />
+          <span className="flex flex-col text-[15px] font-medium uppercase leading-[1.18] tracking-[0.08em] text-primary/60 min-[390px]:text-[17px] md:max-w-none md:flex-row md:gap-1 md:text-[9px] md:font-semibold md:tracking-[0.18em]">
             <span>31 Aug</span>
             <span className="hidden md:inline">-</span>
             <span>6 Sep</span>
@@ -561,29 +561,29 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
             </div>
           ))}
         </div>
-        <div className="order-2 flex min-w-0 shrink items-center justify-start gap-0.5 md:order-3 md:justify-center md:gap-2 md:shrink-0">
+        <div className="order-4 col-span-2 grid min-w-0 grid-cols-2 gap-2 md:order-3 md:col-span-1 md:flex md:shrink-0 md:items-center md:justify-center md:gap-2">
           <button
             type="button"
             onClick={openSponsorModal}
-            className="group hidden min-h-[2.35rem] min-w-[5.8rem] items-center justify-center rounded-full border border-white/20 bg-white/10 px-2 text-[10px] font-medium text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 hover:bg-white/15 md:inline-flex md:min-h-[3rem] md:min-w-[9.3rem] md:px-4"
+            className="group inline-flex min-h-[3.75rem] min-w-0 items-center justify-center rounded-sm border border-white/15 bg-white/10 px-3 text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 hover:bg-white/15 md:min-h-[3rem] md:min-w-[9.3rem] md:rounded-full md:border-white/20 md:px-4"
           >
             <span className="flex flex-col items-center text-center leading-none">
-              <span className="text-[6px] font-semibold uppercase tracking-[0.12em] text-primary/60 min-[420px]:text-[7px] sm:text-[9px]">
+              <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-primary/60 md:text-[9px]">
                 Bring Someone
               </span>
-              <span className="mt-0.5 text-[9px] font-medium min-[420px]:text-[11px] sm:text-xs lg:text-sm">To Shiloh</span>
+              <span className="mt-1 text-[17px] font-semibold md:mt-0.5 md:text-xs md:font-medium lg:text-sm">To Shiloh</span>
             </span>
           </button>
           <button
             type="button"
             data-registration-type="conference"
-            className="group inline-flex min-h-[3.9rem] items-center rounded-sm bg-[#E1E0CC] px-7 text-black shadow-[0_8px_20px_rgba(225,224,204,0.16)] transition-all duration-300 hover:bg-white md:min-h-0 md:gap-2 md:rounded-full md:border md:border-white/25 md:bg-white/10 md:py-1 md:pl-3 md:pr-1 md:text-[#E1E0CC] md:shadow-none md:backdrop-blur-xl md:hover:bg-white/15 md:hover:gap-3"
+            className="group inline-flex min-h-[3.75rem] min-w-0 items-center justify-center rounded-sm bg-[#E1E0CC] px-3 text-black shadow-[0_8px_20px_rgba(225,224,204,0.16)] transition-all duration-300 hover:bg-white md:min-h-0 md:gap-2 md:rounded-full md:border md:border-white/25 md:bg-white/10 md:py-1 md:pl-3 md:pr-1 md:text-[#E1E0CC] md:shadow-none md:backdrop-blur-xl md:hover:bg-white/15 md:hover:gap-3"
           >
             <span className="flex flex-col items-start leading-none">
-              <span className="hidden text-[9px] font-semibold uppercase tracking-[0.12em] text-primary/60 md:block">
+              <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-black/55 md:text-[9px] md:text-primary/60">
                 Let Us Know
               </span>
-              <span className="text-[22px] font-semibold leading-none md:mt-0.5 md:text-xs md:font-medium lg:text-sm">
+              <span className="mt-1 text-[17px] font-semibold leading-none md:mt-0.5 md:text-xs md:font-medium lg:text-sm">
                 You&apos;re Coming
               </span>
             </span>
@@ -603,7 +603,7 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
               return !current;
             });
           }}
-          className="order-3 flex h-16 w-16 shrink-0 flex-col items-center justify-center gap-2 rounded-full text-[#E1E0CC] transition-transform duration-300 hover:scale-105 md:hidden"
+          className="order-2 -mr-4 ml-auto flex h-16 w-16 shrink-0 flex-col items-center justify-center gap-2 rounded-full text-[#E1E0CC] transition-transform duration-300 hover:scale-105 md:hidden"
           aria-label="Toggle menu"
           aria-expanded={menuOpen}
         >
@@ -615,7 +615,7 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            className="fixed inset-x-3 top-[4.75rem] z-10 max-h-[calc(100vh-5.5rem)] overflow-y-auto rounded-[2rem] border border-white/10 bg-black/92 p-3 text-base text-[#E1E0CC] shadow-[0_20px_60px_rgba(0,0,0,0.45)] backdrop-blur-2xl md:hidden"
+            className="fixed inset-x-3 top-[11.75rem] z-10 max-h-[calc(100vh-12.5rem)] overflow-y-auto rounded-[2rem] border border-white/10 bg-black/92 p-4 text-[22px] font-medium text-[#E1E0CC] shadow-[0_20px_60px_rgba(0,0,0,0.45)] backdrop-blur-2xl md:hidden"
             initial={{ y: -24, opacity: 0, scale: 0.98 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: -18, opacity: 0, scale: 0.98 }}
@@ -628,7 +628,7 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
                     <button
                       type="button"
                       onClick={() => setMobileSubmenu((current) => (current === item.label ? null : item.label))}
-                      className="flex w-full items-center justify-between rounded-xl px-4 py-3.5 text-left transition-colors hover:bg-white/10"
+                      className="flex w-full items-center justify-between rounded-xl px-5 py-5 text-left transition-colors hover:bg-white/10"
                       aria-expanded={mobileSubmenu === item.label}
                     >
                       <span>{item.label}</span>
@@ -653,7 +653,7 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
                                 key={child.label}
                                 type="button"
                                 onClick={openSponsorModal}
-                                className="block w-full rounded-xl px-4 py-2.5 text-left text-sm text-primary/70 transition-colors hover:bg-white/10 hover:text-primary"
+                                className="block w-full rounded-xl px-5 py-3 text-left text-lg text-primary/70 transition-colors hover:bg-white/10 hover:text-primary"
                               >
                                 {child.label}
                               </button>
@@ -662,7 +662,7 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
                                 key={child.label}
                                 href={child.href}
                                 onClick={navigateTo(child.href)}
-                                className="block rounded-xl px-4 py-2.5 text-sm text-primary/70 transition-colors hover:bg-white/10 hover:text-primary"
+                                className="block rounded-xl px-5 py-3 text-lg text-primary/70 transition-colors hover:bg-white/10 hover:text-primary"
                               >
                                 {child.label}
                               </a>
@@ -676,7 +676,7 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
                   <button
                     type="button"
                     onClick={item.action === 'sow' ? openSowModal : openSponsorModal}
-                    className="block w-full rounded-xl px-4 py-3.5 text-left transition-colors hover:bg-white/10"
+                    className="block w-full rounded-xl px-5 py-5 text-left transition-colors hover:bg-white/10"
                   >
                     {item.label}
                   </button>
@@ -684,7 +684,7 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
                   <a
                     href={item.href}
                     onClick={navigateTo(item.href!)}
-                    className="block rounded-xl px-4 py-3.5 transition-colors hover:bg-white/10"
+                    className="block rounded-xl px-5 py-5 transition-colors hover:bg-white/10"
                   >
                     {item.label}
                   </a>
