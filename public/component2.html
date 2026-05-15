@@ -16,15 +16,18 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: #f0efed;
-        padding: 48px 20px;
+        background:
+          radial-gradient(circle at 22% 0%, rgba(240, 201, 111, 0.1), transparent 28%),
+          radial-gradient(circle at 82% 12%, rgba(255, 255, 255, 0.045), transparent 24%),
+          #000000;
+        padding: 56px 20px;
         font-family: 'Almarai', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
 
       .c2-container {
-        max-width: 800px;
+        max-width: 1100px;
         width: 100%;
       }
 
@@ -33,7 +36,7 @@
         font-size: 0.75rem;
         letter-spacing: 0.18em;
         text-transform: uppercase;
-        color: #888;
+        color: rgba(240, 201, 111, 0.72);
         margin-bottom: 14px;
         animation: c2-fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
       }
@@ -42,40 +45,50 @@
         font-family: 'Instrument Serif', Georgia, serif;
         font-size: 2.8rem;
         text-align: center;
-        color: #2a2a2a;
+        color: #c79a34;
+        background: linear-gradient(180deg, #fff2a8 0%, #d5a238 32%, #8b5b12 62%, #f2cb62 82%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
         font-weight: 400;
         letter-spacing: -0.01em;
         margin-bottom: 36px;
+        text-shadow: 0 12px 24px rgba(98, 62, 9, 0.24);
         animation: c2-fadeUp 0.8s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both;
       }
 
       .c2-title em {
-        color: #5a5a5a;
+        color: #f2cb62;
         font-style: italic;
       }
 
       .c2-grid-wrapper {
-        background: #e8e7e5;
-        border-radius: 20px;
-        padding: 16px;
+        background: linear-gradient(145deg, rgba(18, 18, 18, 0.98), rgba(5, 5, 5, 0.96));
+        border: 1px solid rgba(240, 201, 111, 0.12);
+        border-radius: 32px;
+        padding: 24px;
         margin-bottom: 20px;
+        box-shadow: 0 30px 100px rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         animation: c2-fadeUp 0.9s 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
       }
 
       .c2-grid {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: minmax(260px, 0.74fr) minmax(0, 1.26fr);
         gap: 20px;
       }
 
       .c2-card,
       .c2-bottom-card {
-        background: linear-gradient(180deg, #ffffff 0%, #fbfaf8 100%);
-        border-radius: 16px;
-        padding: 24px;
+        background: linear-gradient(135deg, rgba(22, 22, 22, 0.98), rgba(8, 8, 8, 0.96));
+        border: 1px solid rgba(240, 201, 111, 0.12);
+        border-radius: 26px;
+        padding: 28px;
         position: relative;
         overflow: hidden;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
         display: flex;
         flex-direction: column;
         transition:
@@ -85,7 +98,10 @@
 
       .c2-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+        border-color: rgba(240, 201, 111, 0.28);
+        box-shadow:
+          0 18px 46px rgba(0, 0, 0, 0.3),
+          inset 0 1px 0 rgba(255, 255, 255, 0.12);
       }
 
       .c2-card-heading {
@@ -97,14 +113,14 @@
       }
 
       .c2-pass-badge {
-        border: 1px solid #dedbd4;
+        border: 1px solid rgba(240, 201, 111, 0.25);
         border-radius: 999px;
         padding: 6px 10px;
         font-size: 0.66rem;
         letter-spacing: 0.14em;
         text-transform: uppercase;
-        color: #8b8476;
-        background: #f7f4ee;
+        color: rgba(240, 201, 111, 0.72);
+        background: rgba(213, 162, 56, 0.12);
         white-space: nowrap;
       }
 
@@ -117,7 +133,7 @@
         width: 6px;
         height: 6px;
         border-radius: 50%;
-        background: #d0d0d0;
+        background: rgba(240, 201, 111, 0.38);
         pointer-events: none;
       }
 
@@ -145,8 +161,59 @@
         font-size: 1.3rem;
         font-weight: 500;
         margin-bottom: 8px;
-        color: #2a2a2a;
+        color: #ffffff;
         letter-spacing: -0.01em;
+      }
+
+      .c2-vip-card {
+        background:
+          radial-gradient(circle at 86% 8%, rgba(240, 201, 111, 0.1), transparent 28%),
+          linear-gradient(135deg, rgba(22, 22, 22, 0.98), rgba(8, 8, 8, 0.96));
+      }
+
+      .c2-vip-card .c2-card-title {
+        font-family: 'Instrument Serif', Georgia, serif;
+        font-size: clamp(2.2rem, 5vw, 4.6rem);
+        line-height: 0.88;
+        color: #c79a34;
+        background: linear-gradient(180deg, #fff2a8 0%, #d5a238 34%, #8b5b12 68%, #f2cb62 88%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0;
+      }
+
+      .c2-vip-card .c2-card-heading {
+        align-items: center;
+        margin-bottom: 24px;
+      }
+
+      .c2-vip-shell {
+        display: grid;
+        grid-template-columns: minmax(0, 0.62fr) minmax(0, 1fr);
+        gap: 26px;
+      }
+
+      .c2-vip-meta {
+        display: grid;
+        gap: 14px;
+      }
+
+      .c2-vip-price-card {
+        border-radius: 22px;
+        background: rgba(213, 162, 56, 0.1);
+        border: 1px solid rgba(240, 201, 111, 0.1);
+        padding: 20px;
+      }
+
+      .c2-vip-label {
+        display: block;
+        margin-bottom: 9px;
+        font-size: 0.64rem;
+        font-weight: 700;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        color: rgba(240, 201, 111, 0.7);
       }
 
       .c2-price {
@@ -158,14 +225,21 @@
         align-items: baseline;
         gap: 8px;
         padding-bottom: 12px;
-        border-bottom: 1px solid #e5e5e5;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         min-height: 76px;
+        color: #f7d98e;
+      }
+
+      .c2-vip-card .c2-price {
+        min-height: auto;
+        border-bottom: 0;
+        padding-bottom: 0;
       }
 
       .c2-price span:not(.c2-price-amount) {
         font-family: 'Almarai', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         font-size: 0.85rem;
-        color: #999;
+        color: rgba(255, 255, 255, 0.42);
         font-weight: 300;
         letter-spacing: 0;
       }
@@ -184,17 +258,17 @@
       .c2-list {
         list-style: none;
         font-size: 0.85rem;
-        color: #555;
+        color: rgba(255, 255, 255, 0.72);
         margin-bottom: 16px;
         padding-bottom: 16px;
       }
 
       .c2-list.bordered {
-        border-bottom: 1px solid #e5e5e5;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       }
 
       .c2-list.bordered-top {
-        border-top: 1px solid #e5e5e5;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
         padding-top: 20px;
       }
 
@@ -205,15 +279,58 @@
         gap: 8px;
       }
 
+      .c2-vip-card .c2-list {
+        display: grid;
+        gap: 12px;
+        margin: 0;
+        padding: 0;
+      }
+
+      .c2-vip-card .c2-list.bordered,
+      .c2-vip-card .c2-list.bordered-top {
+        border: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+
+      .c2-vip-card .c2-list li {
+        align-items: flex-start;
+        gap: 12px;
+        margin: 0;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.045);
+        padding: 14px;
+        line-height: 1.45;
+      }
+
+      .c2-vip-card .c2-list li::before {
+        display: flex;
+        width: 22px;
+        height: 22px;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+        border-radius: 999px;
+        background: rgba(240, 201, 111, 0.15);
+        font-size: 0.72rem;
+      }
+
+      .c2-vip-summary {
+        margin: 16px 0 18px;
+        color: rgba(255, 255, 255, 0.68);
+        font-size: 0.94rem;
+        line-height: 1.6;
+      }
+
       .c2-list li::before {
-        content: '❖';
-        color: #c0c0c0;
+        content: '✓';
+        color: #f0c96f;
         font-size: 0.9rem;
       }
 
       .c2-desc {
         font-size: 0.85rem;
-        color: #666;
+        color: rgba(255, 255, 255, 0.68);
         line-height: 1.6;
         max-width: 210px;
         margin-bottom: auto;
@@ -242,8 +359,8 @@
       .c2-btn {
         border: 0;
         cursor: pointer;
-        background: #000;
-        color: #fff;
+        background: #e1e0cc;
+        color: #000;
         padding: 11px 26px;
         border-radius: 30px;
         font-size: 0.85rem;
@@ -261,8 +378,8 @@
 
       .c2-btn:hover {
         transform: translateY(-1px);
-        background: #1a1a1a;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+        background: #f0c96f;
+        box-shadow: 0 12px 30px rgba(240, 201, 111, 0.18);
       }
 
       .c2-btn:active {
@@ -270,7 +387,7 @@
       }
 
       .c2-btn:focus-visible {
-        outline: 2px solid #2a2a2a;
+        outline: 2px solid #f0c96f;
         outline-offset: 3px;
       }
 
@@ -285,7 +402,7 @@
       .c2-toggle {
         display: flex;
         flex-wrap: wrap;
-        background: #f0f0f0;
+        background: rgba(0, 0, 0, 0.28);
         border-radius: 20px;
         padding: 4px;
         margin-bottom: 15px;
@@ -294,12 +411,23 @@
         gap: 4px;
       }
 
+      .c2-vip-card .c2-toggle {
+        margin-bottom: 0;
+        border-radius: 22px;
+        padding: 6px;
+      }
+
+      .c2-vip-card .c2-toggle span {
+        padding: 10px 12px;
+        font-size: 0.78rem;
+      }
+
       .c2-toggle span {
         flex: 1 1 calc(50% - 4px);
         text-align: center;
         padding: 5px 14px;
         border-radius: 16px;
-        color: #666;
+        color: rgba(255, 255, 255, 0.58);
         cursor: pointer;
         transition:
           background 0.25s,
@@ -308,9 +436,9 @@
       }
 
       .c2-toggle span.active {
-        background: #fff;
-        color: #1a1a1a;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        background: #f0c96f;
+        color: #000;
+        box-shadow: 0 10px 26px rgba(240, 201, 111, 0.18);
       }
 
       .c2-framer {
@@ -356,7 +484,8 @@
       }
 
       .c2-bottom-card {
-        background: #e8e7e5;
+        background: linear-gradient(135deg, rgba(22, 22, 22, 0.98), rgba(8, 8, 8, 0.96));
+        border: 1px solid rgba(240, 201, 111, 0.12);
         padding: 32px;
         min-height: 220px;
         animation: c2-fadeUp 1s 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -373,7 +502,7 @@
 
       .c2-bottom-desc {
         font-size: 0.85rem;
-        color: #666;
+        color: rgba(255, 255, 255, 0.68);
         line-height: 1.6;
         max-width: 600px;
         margin-bottom: -20px;
@@ -397,6 +526,43 @@
         }
       }
 
+      @media (max-width: 1100px) {
+        body {
+          align-items: flex-start;
+          padding: 44px 18px;
+        }
+
+        .c2-container {
+          max-width: 760px;
+        }
+
+        .c2-grid-wrapper {
+          padding: 18px;
+        }
+
+        .c2-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .c2-card,
+        .c2-bottom-card {
+          padding: 26px;
+        }
+
+        .c2-vip-shell {
+          grid-template-columns: 1fr;
+          gap: 20px;
+        }
+
+        .c2-vip-card .c2-card-title {
+          font-size: clamp(2.35rem, 9vw, 4rem);
+        }
+
+        .c2-vip-summary {
+          margin-top: 4px;
+        }
+      }
+
       @media (max-width: 768px) {
         body {
           padding: 32px 16px;
@@ -405,10 +571,6 @@
         .c2-title {
           font-size: 2.1rem;
           margin-bottom: 28px;
-        }
-
-        .c2-grid {
-          grid-template-columns: 1fr;
         }
 
         .c2-tree {
@@ -486,28 +648,39 @@
             <span class="c2-ticket" aria-hidden="true"></span>
           </article>
 
-          <article class="c2-card" data-card="web">
+          <article class="c2-card c2-vip-card" data-card="web">
             <div class="c2-dot-bl"></div>
             <div class="c2-dot-br"></div>
             <div class="c2-card-heading">
-              <h3 class="c2-card-title">VIP Passes</h3>
+              <h3 class="c2-card-title">Choose Your Access</h3>
               <span class="c2-pass-badge">Premium</span>
             </div>
-            <div class="c2-price"><span class="c2-price-amount" data-price>$1000</span> <span data-price-note>USD</span></div>
-            <div class="c2-toggle" role="tablist" aria-label="Pass type">
-              <span role="tab" tabindex="0" data-pages="retreat" aria-selected="true" class="active">Prophetic Retreat</span>
-              <span role="tab" tabindex="0" data-pages="shiloh" aria-selected="false">Shiloh VIP</span>
-              <span role="tab" tabindex="0" data-pages="birthday" aria-selected="false">Birthday VVIP</span>
-              <span role="tab" tabindex="0" data-pages="ultimate" aria-selected="false">VIP Ultimate Passes</span>
+            <div class="c2-vip-shell">
+              <div class="c2-vip-meta">
+                <div class="c2-toggle" role="tablist" aria-label="Pass type">
+                  <span role="tab" tabindex="0" data-pages="retreat" aria-selected="true" class="active">Prophetic Retreat</span>
+                  <span role="tab" tabindex="0" data-pages="shiloh" aria-selected="false">Shiloh VIP</span>
+                  <span role="tab" tabindex="0" data-pages="birthday" aria-selected="false">Birthday VVIP</span>
+                  <span role="tab" tabindex="0" data-pages="ultimate" aria-selected="false">VIP Ultimate Passes</span>
+                </div>
+                <div class="c2-vip-price-card">
+                  <span class="c2-vip-label">Price</span>
+                  <div class="c2-price"><span class="c2-price-amount" data-price>£4000</span> <span data-price-note></span></div>
+                </div>
+                <button class="c2-btn" type="button" data-package="Prophetic Retreat" data-register-label>Register Now</button>
+              </div>
+              <div>
+                <p class="c2-vip-summary" data-summary>
+                  A retreat pass shaped for focused teaching, spiritual preparation, and hosted retreat support.
+                </p>
+                <ul class="c2-list bordered bordered-top" data-feature-list>
+                  <li>Prophetic Retreat access from 31 August to 3 September.</li>
+                  <li>Single occupancy needs and registration support for delegates preparing for the retreat.</li>
+                  <li>Teaching moments, spiritual alignment, and guided preparation at Fort Moriah City.</li>
+                  <li>A dedicated pass for retreat guests who want clarity before arrival.</li>
+                </ul>
+              </div>
             </div>
-            <ul class="c2-list bordered bordered-top" data-feature-list>
-              <li>Prophetic Retreat access for focused teaching and preparation.</li>
-              <li>Single occupancy needs can be handled through registration pages.</li>
-              <li>Learning sessions at Fort Moriah City with spiritual preparation support.</li>
-              <li>Recommended for delegates arriving early for retreat encounters.</li>
-            </ul>
-            <br /><br />
-            <button class="c2-btn" type="button" data-package="Prophetic Retreat" data-register-label>Register Now</button>
             <span class="c2-ticket" aria-hidden="true"></span>
           </article>
         </div>
@@ -530,44 +703,62 @@
             price: '$5000',
             note: 'USD',
             label: 'VIP Ultimate Passes',
+            summary:
+              'A complete hosted experience for delegates who want premium access across every defining Shiloh Season moment.',
             features: [
-              'Full VIP access across Prophetic Retreat, Shiloh Conference, and the Prophet Birthday Celebration.',
-              'Premium seating support and hosted movement through key Shiloh Season moments.',
-              'Dedicated arrival guidance for Fort Moriah City and celebration access points.',
-              'Designed for guests who want the most complete Shiloh Season experience.',
+              'Full VIP access to the Prophetic Retreat, Shiloh Conference, Sunday Service, and the Ra’ah Birthday Celebration.',
+              'Reserved seating across major gatherings with priority arrival and hosted entry support.',
+              'Official VIP transport coordination between selected partner hotels and Shiloh venues throughout the season.',
+              'Access to private VIP lounges with complimentary refreshments and hospitality services.',
+              'Dedicated VIP guest assistance for movement, scheduling, check-in, and conference support.',
+              'Premium covered lounge areas and enhanced comfort spaces during conference sessions.',
+              'Access to preferred VIP restroom and hospitality facilities across major venues.',
+              'Priority movement support between high-capacity gathering locations and scheduled events.',
+              'Exclusive VIP accreditation, welcome package, and priority merchandise collection.',
+              'A single premium pass designed for guests wanting the most complete Shiloh Season 26 experience.',
             ],
           },
           shiloh: {
             price: '$1000',
             note: 'USD',
             label: 'Shiloh VIP',
+            summary:
+              'Premium conference access for guests seeking a more focused, elevated experience during the central Shiloh gathering.',
             features: [
-              'VIP access for Shiloh Conference sessions at Fort Moriah City.',
-              'Priority seating guidance for main conference gatherings.',
-              'Hosted arrival assistance for smoother check-in and access.',
-              'Best for delegates focused on the core Shiloh Conference experience.',
+              'VIP access for the Shiloh Conference sessions at Fort Moriah City.',
+              'Reserved VIP seating with improved stage visibility and a more settled arrival experience.',
+              'Official VIP Shuttle Access from selected partner hotels to the conference venue.',
+              'Dedicated VIP check-in and hosted guest support during peak gathering periods.',
+              'Private VIP lounge access with complimentary drinks and light refreshments.',
+              'Premium covered VIP area with enhanced comfort throughout conference sessions.',
+              'Access to preferred VIP facilities and priority movement areas.',
+              'A refined conference experience designed for delegates prioritizing the main Shiloh gathering days.',
             ],
           },
           birthday: {
-            price: '£4000',
-            note: 'GBP',
+            price: '$1000',
+            note: 'USD',
             label: 'Birthday VVIP',
+            summary:
+              'VIP access for the royal birthday celebration honoring the Ra’ah, Prophet Uebert Angel.',
             features: [
-              'Birthday VVIP access for the Prophet Birthday Celebration experience.',
-              'Gala seating guidance for a more comfortable celebration evening.',
-              'Special arrival support for birthday celebration guests.',
-              'Ideal for guests attending to honor the Ra’ah, Prophet Uebert Angel.',
+              'Birthday VVIP access for the Prophet birthday celebration.',
+              'Gala arrival guidance, seating support, and a smoother hosted experience for the evening.',
+              'Designed for guests joining the thanksgiving, honor, presentation, and celebration moments.',
+              'A focused pass for the Ra’ah birthday gala experience.',
             ],
           },
           retreat: {
-            price: '$1000',
-            note: 'USD',
+            price: '£4000',
+            note: '',
             label: 'Prophetic Retreat',
+            summary:
+              'A retreat pass shaped for focused teaching, spiritual preparation, and hosted retreat support.',
             features: [
-              'Prophetic Retreat access for focused teaching and preparation.',
-              'Single occupancy needs can be handled through registration pages.',
-              'Learning sessions at Fort Moriah City with spiritual preparation support.',
-              'Recommended for delegates arriving early for retreat encounters.',
+              'Prophetic Retreat access from 31 August to 3 September.',
+              'Single occupancy needs and registration support for delegates preparing for the retreat.',
+              'Teaching moments, spiritual alignment, and guided preparation at Fort Moriah City.',
+              'A dedicated pass for retreat guests who want clarity before arrival.',
             ],
           },
         };
@@ -576,11 +767,13 @@
         const priceNote = document.querySelector('[data-price-note]');
         const tabs = document.querySelectorAll('[data-pages]');
         const featureList = document.querySelector('[data-feature-list]');
+        const summary = document.querySelector('[data-summary]');
 
         function render() {
           const pass = PASSES[state.pages];
           const formatted = pass.price;
           priceNote.textContent = pass.note;
+          summary.textContent = pass.summary;
           featureList.innerHTML = pass.features.map((feature) => `<li>${feature}</li>`).join('');
           document.querySelector('[data-register-label]').dataset.package = pass.label;
           if (price.textContent === formatted) return;
