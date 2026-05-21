@@ -662,14 +662,21 @@
               <h3 class="c2-card-title">Shuttle Pass</h3>
               <span class="c2-pass-badge">Transport</span>
             </div>
-            <div class="c2-price">$20 <span>USD</span></div>
+            <div class="c2-price">$30 <span>USD</span></div>
             <ul class="c2-list bordered">
               <li>Valid transport support for all three Fort Moriah conference days.</li>
               <li>Daily shuttle movement from Harare Hippodrome to Fort Moriah City.</li>
               <li>Return shuttle coordination after scheduled sessions and gatherings.</li>
               <li>Removes the stress of arranging daily transport during Shiloh Season.</li>
             </ul>
-            <button class="c2-btn" type="button" data-package="Shuttle Pass">Register Now</button>
+            <a
+              class="c2-btn"
+              href="https://programs.uebertangel.org/checkout/?add-to-cart=13607&quantity=1"
+              data-checkout-product="13607"
+              data-quantity="1"
+            >
+              Register Now
+            </a>
             <span class="c2-ticket" aria-hidden="true"></span>
           </article>
 
@@ -714,7 +721,7 @@
       <section class="c2-bottom-card">
         <h3 class="c2-card-title">Parking Passes</h3>
         <p class="c2-bottom-desc">
-          Parking for the entire duration of the conference.<br />Still to be confirmed.
+          Parking for the entire duration of the conference.<br />Coming Soon
         </p>
         <button class="c2-btn" type="button" data-package="Parking Passes">Register Now</button>
         <span class="c2-ticket" aria-hidden="true"></span>
@@ -842,7 +849,12 @@
           });
         });
 
-        document.querySelectorAll('.c2-btn').forEach((button) => {
+        document.querySelectorAll('[data-checkout-product]').forEach((link) => {
+          const quantity = Number(link.dataset.quantity || '1') || 1;
+          link.href = `https://programs.uebertangel.org/checkout/?add-to-cart=${link.dataset.checkoutProduct}&quantity=${quantity}`;
+        });
+
+        document.querySelectorAll('button.c2-btn').forEach((button) => {
           button.addEventListener('click', () => {
             let label = button.dataset.package;
             if (label === 'VIP Passes') {
