@@ -48,9 +48,6 @@ const cardEase = [0.22, 1, 0.36, 1] as const;
 const heroVideo =
   'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260406_094145_4a271a6c-3869-4f1c-8aa7-aeb0cb227994.mp4';
 
-const featureVideo =
-  'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260405_171521_25968ba2-b594-4b32-aab7-f6b69398a6fa.mp4';
-
 const journeyVideo =
   'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260317_100335_dc625816-c3c1-4b00-b93e-4cb301cf5ea5.mp4';
 
@@ -435,7 +432,6 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
       { label: 'Shiloh Season VIP Experience', href: '/vip' },
     ] },
     { label: 'Giving', action: 'sow' },
-    { label: '2026 Shop', href: '/merch' },
   ];
 
   const closeMenu = () => {
@@ -805,14 +801,20 @@ function Hero() {
 
           <div className="hero-support relative z-20 flex flex-col gap-5 md:min-h-[150px]">
             <motion.div
-              className="hero-intro flex max-w-sm flex-col gap-5 md:absolute md:bottom-0 md:left-0"
+              className="hero-intro flex max-w-md flex-col gap-5 md:absolute md:bottom-0 md:left-0 xl:max-w-xl"
               initial={{ y: 20, opacity: 0 }}
               animate={inView ? { y: 0, opacity: 1 } : { y: 20, opacity: 0 }}
               transition={{ duration: 0.75, delay: 0.35, ease: customEase }}
             >
               <p className="text-sm leading-[1.45] text-white/88 sm:text-base">
-                We are thrilled to officially announce that Shiloh is set to take place from August 31st -
-                September 6th at Fort Moriah City and The Harare Hippodrome!
+                We are thrilled to officially announce that Shiloh 2026 is set to take place from August 31st -
+                September 6th at Fort Moriah City and The Harare Hippodrome. Free entry available for all attendees,
+                with free local shuttle transportation on <strong className="font-bold text-white">select routes</strong>.
+                Premium air-conditioned coach transportation options are also available for regional and international
+                attendees.{' '}
+                <a href="/passes" className="font-semibold italic text-white underline decoration-white/35 underline-offset-4">
+                  View parking and shuttle information.
+                </a>
               </p>
             </motion.div>
 
@@ -1177,6 +1179,51 @@ function JourneySupportSection({
       ),
     },
     {
+      title: 'Baptism Information',
+      icon: Sparkle,
+      content: (
+        <div className="space-y-6">
+          <p>
+            Attendees participating in Baptism By The Ra&apos;ah are required to wear the official GoodNews World Baptism
+            Set during the baptism experience.
+          </p>
+          <div>
+            <p className="mb-4">
+              For comfort, modesty, and ease during baptism, attendees are encouraged to wear appropriate clothing
+              underneath the baptism gown, including:
+            </p>
+            <ul className="ml-5 list-disc space-y-2">
+              <li>Black leggings or long athletic bottoms</li>
+              <li>A dark T-shirt or modest top</li>
+              <li>Suitable footwear for outdoor terrain and water areas</li>
+            </ul>
+          </div>
+          <div>
+            <p className="mb-4">The official Baptism Set includes:</p>
+            <ul className="ml-5 list-disc space-y-2">
+              <li>Baptism gown</li>
+              <li>Slippers</li>
+              <li>Baptism towel</li>
+            </ul>
+          </div>
+          <a href="/merch" className="inline-flex items-center gap-2 rounded-full bg-black px-5 py-3 text-xs font-bold uppercase tracking-[0.2em] text-white transition-transform hover:-translate-y-0.5">
+            Purchase Official Baptism Set
+            <ArrowUpRight className="h-4 w-4" />
+          </a>
+        </div>
+      ),
+    },
+    {
+      title: 'Food & Refreshments',
+      icon: Info,
+      content: (
+        <p>
+          Food courts and refreshment vendors will be available throughout Fort Moriah and Harare Hippodrome during the
+          conference for attendee convenience.
+        </p>
+      ),
+    },
+    {
       title: 'Recommended Stay',
       icon: Building2,
       content: (
@@ -1405,65 +1452,6 @@ function JourneySupportSection({
   );
 }
 
-function JourneyFooter() {
-  const footerLinks = [
-    { label: 'Home', href: '/' },
-    { label: 'Plan Your Shiloh', href: '/journey' },
-    { label: 'Contact', href: '/contact' },
-  ];
-
-  return (
-    <footer className="bg-white px-4 pb-4 text-black sm:px-6">
-      <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-black px-5 py-10 text-white sm:px-8 md:px-10 md:py-14">
-        <div className="grid gap-10 md:grid-cols-[1.15fr_0.85fr] md:items-start">
-          <div>
-            <a href="/" className="mb-8 inline-flex items-center gap-4">
-              <img src={logo} alt="Shiloh logo" className="h-12 w-12 rounded-full object-contain" />
-              <span className="text-xs font-bold uppercase tracking-[0.42em] text-white/55">Shiloh Season</span>
-            </a>
-            <h2 className="journey-section-heading max-w-3xl text-4xl leading-[0.9] tracking-[-0.045em] text-white sm:text-5xl md:text-6xl">
-              Plan Your
-              <span className="block text-white/35">Journey</span>
-            </h2>
-          </div>
-
-          <div className="grid gap-8 sm:grid-cols-2">
-            <div>
-              <p className="mb-5 text-[10px] font-bold uppercase tracking-[0.35em] text-white/35">Explore</p>
-              <div className="flex flex-col gap-3 text-sm text-white/70">
-                {footerLinks.map((link) => (
-                  <a key={link.label} href={link.href} className="transition-colors hover:text-white">
-                    {link.label}
-                  </a>
-                ))}
-              </div>
-            </div>
-            <div>
-              <p className="mb-5 text-[10px] font-bold uppercase tracking-[0.35em] text-white/35">Support</p>
-              <div className="flex flex-col gap-3 text-sm text-white/70">
-                <a href="tel:+14488770344" className="transition-colors hover:text-white">
-                  🇺🇸 +1 448 877 0344
-                </a>
-                <a href="mailto:support@goodnewsworld.com" className="transition-colors hover:text-white">
-                  support@goodnewsworld.com
-                </a>
-                <a href="https://shilohseason.com" className="transition-colors hover:text-white">
-                  Shilohseason.com
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="mt-12 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs uppercase tracking-[0.22em] text-white/35 sm:flex-row sm:items-center sm:justify-between">
-          <p>Shiloh 2026</p>
-          <p>Copyrights reserved.</p>
-        </div>
-      </div>
-    </footer>
-  );
-}
-
 function ScrollRevealLine({
   children,
   start,
@@ -1516,8 +1504,13 @@ function VipWhySection() {
           ))}
         </p>
         <div className="mt-20">
-          <PillButton href="#vip-passes">Register Now</PillButton>
+          <PillButton href="#vip-register">Register Now</PillButton>
         </div>
+        <p className="mt-20 max-w-4xl rounded-2xl border border-white/10 bg-white/[0.04] px-5 py-4 text-sm leading-relaxed text-white/58 sm:px-7 sm:text-base">
+          *VIP transport services are exclusively available for guests staying at selected partner hotels listed below.
+          Guests staying at non-partner accommodations will be required to arrange independent transportation to and from
+          conference venues.
+        </p>
       </div>
     </section>
   );
@@ -1583,10 +1576,10 @@ function VipCompareSection() {
   ];
 
   return (
-    <section id="vip-register" className="bg-black px-4 py-20 text-white sm:px-8 md:py-24">
-      <div className="mx-auto max-w-6xl">
+    <section id="vip-register" className="bg-black px-4 py-8 text-white sm:px-8 md:py-14">
+      <div className="mx-auto max-w-5xl">
         <motion.h2
-          className="vip-title gold-emboss mb-12 text-center text-5xl leading-none tracking-[-0.03em] sm:text-6xl md:mb-14 md:text-6xl lg:text-7xl"
+          className="vip-title gold-emboss mb-7 text-center text-4xl leading-none tracking-[-0.03em] sm:text-5xl md:mb-8 md:text-5xl lg:text-6xl"
           initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-120px' }}
@@ -1596,31 +1589,31 @@ function VipCompareSection() {
         </motion.h2>
 
         <motion.div
-          className="hidden overflow-hidden rounded-[1.7rem] border border-white/10 bg-[#151515] shadow-[0_28px_90px_rgba(0,0,0,0.45)] md:block"
+          className="hidden overflow-hidden rounded-[1.25rem] border border-white/10 bg-[#151515] shadow-[0_18px_60px_rgba(0,0,0,0.35)] md:block"
           initial={{ opacity: 0, y: 34, scale: 0.985 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, margin: '-120px' }}
           transition={{ duration: 0.8, delay: 0.1, ease: customEase }}
         >
-          <div className="grid grid-cols-[1fr_0.92fr_1.4fr] bg-[#242424] text-[11px] font-semibold uppercase tracking-[0.3em] text-white/45">
-            <div className="border-r border-white/8 px-7 py-5 lg:px-9">Benefit</div>
-            <div className="border-r border-white/8 px-7 py-5 text-center lg:px-9">General</div>
-            <div className="px-7 py-5 text-center text-white lg:px-9">Shiloh VIP</div>
+          <div className="grid grid-cols-[0.9fr_0.9fr_1.25fr] bg-[#242424] text-[10px] font-semibold uppercase tracking-[0.22em] text-white/45">
+            <div className="border-r border-white/8 px-4 py-3 lg:px-5">Benefit</div>
+            <div className="border-r border-white/8 px-4 py-3 text-center lg:px-5">General</div>
+            <div className="px-4 py-3 text-center text-white lg:px-5">Shiloh VIP</div>
           </div>
           {benefits.map((item) => (
             <div
               key={item.benefit}
-              className="grid min-h-[5.85rem] grid-cols-[1fr_0.92fr_1.4fr] border-t border-white/8 text-base lg:text-lg"
+              className="grid min-h-[3.1rem] grid-cols-[0.9fr_0.9fr_1.25fr] border-t border-white/8 text-sm"
             >
-              <div className="flex items-center border-r border-white/8 px-7 font-medium text-white/90 lg:px-9">
+              <div className="flex items-center border-r border-white/8 px-4 font-medium text-white/90 lg:px-5">
                 {item.benefit}
               </div>
-              <div className="flex items-center justify-center border-r border-white/8 px-7 text-center italic text-white/35 lg:px-9">
+              <div className="flex items-center justify-center border-r border-white/8 px-4 text-center italic text-white/35 lg:px-5">
                 {item.general}
               </div>
-              <div className="flex items-center justify-center gap-4 px-7 font-medium text-white/85 lg:px-9">
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/12 text-white">
-                  <Check className="h-4 w-4" />
+              <div className="flex items-center justify-center gap-2 px-4 font-medium text-white/85 lg:px-5">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/12 text-white">
+                  <Check className="h-3 w-3" />
                 </span>
                 <span>{item.vip}</span>
               </div>
@@ -1628,35 +1621,27 @@ function VipCompareSection() {
           ))}
         </motion.div>
 
-        <div className="grid gap-4 md:hidden">
-          {benefits.map((item, index) => (
-            <motion.article
-              key={item.benefit}
-              className="rounded-3xl border border-white/10 bg-[#151515] p-5 shadow-[0_18px_50px_rgba(0,0,0,0.35)]"
-              initial={{ opacity: 0, y: 22 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.58, delay: index * 0.06, ease: customEase }}
-            >
-              <p className="text-lg font-semibold text-white">{item.benefit}</p>
-              <div className="mt-4 grid gap-3">
-                <div className="rounded-2xl bg-white/[0.04] p-4">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/35">General</p>
-                  <p className="mt-2 italic text-white/50">{item.general}</p>
-                </div>
-                <div className="rounded-2xl border border-[#d5a238]/25 bg-[#d5a238]/10 p-4">
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-[#f2cb62]">Shiloh VIP</p>
-                  <div className="mt-2 flex items-center gap-3 text-white">
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white/12">
-                      <Check className="h-4 w-4" />
-                    </span>
-                    <span className="font-medium">{item.vip}</span>
-                  </div>
-                </div>
+        <motion.div
+          className="flex snap-x gap-3 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden md:hidden"
+          initial={{ opacity: 0, y: 22 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.58, ease: customEase }}
+        >
+          {benefits.map((item) => (
+            <article key={item.benefit} className="min-h-[9rem] w-[72vw] max-w-[19rem] shrink-0 snap-center rounded-2xl border border-white/10 bg-[#151515] p-4 shadow-[0_10px_28px_rgba(0,0,0,0.26)]">
+              <div className="mb-3 flex items-center justify-between gap-2">
+                <p className="text-[13px] font-semibold leading-tight text-white">{item.benefit}</p>
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#f0c96f]/15 text-[#f2cb62]">
+                  <Check className="h-3 w-3" />
+                </span>
               </div>
-            </motion.article>
+              <p className="text-xs font-medium leading-snug text-white/85">{item.vip}</p>
+              <p className="mt-2 text-[10px] uppercase tracking-[0.16em] text-white/32">General</p>
+              <p className="mt-1 text-[11px] italic leading-snug text-white/45">{item.general}</p>
+            </article>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -1686,6 +1671,8 @@ const vipPassOptions = [
     href: 'https://programs.uebertangel.org/product/shiloh-pass/',
     summary:
       'Premium conference access for guests seeking a more focused, elevated experience during the central Shiloh gathering.',
+    note:
+      '*VIP transport services are exclusively available for guests staying at selected partner hotels listed below. Guests staying at non-partner accommodations will be required to arrange independent transportation to and from conference venues.',
     features: [
       'VIP access for the Shiloh Conference sessions at Fort Moriah City.',
       'Reserved VIP seating with improved stage visibility and a more settled arrival experience.',
@@ -1715,7 +1702,7 @@ const vipPassOptions = [
   {
     label: 'VIP Ultimate Passes',
     date: '31 Aug - 6 Sep',
-    price: '$5000 USD',
+    price: '$6999 USD',
     tag: 'Full Season',
     href: 'https://programs.uebertangel.org/product/shiloh-ultimate-pass/',
     summary:
@@ -1740,14 +1727,14 @@ function VipFeaturesSection() {
   const activePass = vipPassOptions[activePassIndex];
 
   return (
-    <section id="vip-passes" className="scroll-mt-28 bg-black px-4 py-20 text-white sm:px-6 md:px-12 lg:px-20">
+    <section id="vip-passes" className="scroll-mt-28 bg-black px-4 py-12 text-white sm:px-6 md:px-12 md:py-14 lg:px-20">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-10 grid gap-6 lg:grid-cols-[0.82fr_1fr] lg:items-end">
+        <div className="mb-6 grid gap-4 lg:grid-cols-[0.82fr_1fr] lg:items-end">
           <div>
             <p className="vip-copy mb-4 text-xs font-semibold uppercase tracking-[0.45em] text-[#f0c96f]/70">
               VIP Passes
             </p>
-            <h2 className="vip-title gold-emboss max-w-3xl text-5xl font-normal leading-[0.86] tracking-[-0.04em] sm:text-6xl md:text-7xl lg:text-8xl">
+            <h2 className="vip-title gold-emboss max-w-3xl text-4xl font-normal leading-[0.86] tracking-[-0.04em] sm:text-5xl md:text-6xl lg:text-7xl">
               Choose Your
               <span className="block">Access</span>
             </h2>
@@ -1758,23 +1745,23 @@ function VipFeaturesSection() {
           </p>
         </div>
 
-        <div className="overflow-hidden rounded-[2rem] bg-[linear-gradient(145deg,rgba(255,255,255,0.085),rgba(255,255,255,0.025))] p-4 shadow-[0_30px_100px_rgba(0,0,0,0.45)] backdrop-blur-xl sm:p-5 lg:p-7">
-          <div className="grid gap-2 rounded-[1.4rem] bg-black/40 p-2 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="overflow-hidden rounded-[1.5rem] bg-[linear-gradient(145deg,rgba(255,255,255,0.085),rgba(255,255,255,0.025))] p-3 shadow-[0_22px_70px_rgba(0,0,0,0.4)] backdrop-blur-xl sm:p-4 lg:p-5">
+          <div className="grid grid-cols-2 gap-2 rounded-[1.1rem] bg-black/40 p-2 lg:grid-cols-4">
             {vipPassOptions.map((pass, index) => (
               <button
                 key={pass.label}
                 type="button"
                 onClick={() => setActivePassIndex(index)}
-                className={`rounded-[1.1rem] px-4 py-4 text-left transition-all duration-300 ${
+                className={`rounded-[0.9rem] px-4 py-3 text-left transition-all duration-300 ${
                   activePassIndex === index
                     ? 'bg-[#f0c96f] text-black shadow-[0_12px_34px_rgba(240,201,111,0.24)]'
                     : 'text-white/66 hover:bg-white/10 hover:text-white'
                 }`}
               >
-                <span className="block text-[10px] font-bold uppercase tracking-[0.28em] opacity-70">
+                <span className="block text-[9px] font-bold uppercase tracking-[0.22em] opacity-70 sm:text-[10px] sm:tracking-[0.28em]">
                   {pass.date}
                 </span>
-                <span className="mt-2 block text-sm font-semibold sm:text-base">{pass.label}</span>
+                <span className="mt-1.5 block text-xs font-semibold sm:text-sm">{pass.label}</span>
               </button>
             ))}
           </div>
@@ -1782,7 +1769,7 @@ function VipFeaturesSection() {
           <AnimatePresence mode="wait">
             <motion.article
               key={activePass.label}
-              className="mt-5 grid gap-8 rounded-[1.6rem] bg-[linear-gradient(135deg,rgba(255,255,255,0.075),rgba(255,255,255,0.025))] p-6 sm:p-8 lg:grid-cols-[0.72fr_1fr] lg:p-10"
+              className="mt-4 grid gap-5 rounded-[1.2rem] bg-[linear-gradient(135deg,rgba(255,255,255,0.075),rgba(255,255,255,0.025))] p-5 sm:p-6 lg:grid-cols-[0.68fr_1fr] lg:p-7"
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
@@ -1792,15 +1779,15 @@ function VipFeaturesSection() {
                 <p className="mb-4 w-max rounded-full bg-[#d5a238]/12 px-4 py-1.5 text-[10px] font-bold uppercase tracking-[0.28em] text-[#f0c96f]">
                   {activePass.tag}
                 </p>
-                <h3 className="vip-title text-4xl leading-none text-white sm:text-5xl">{activePass.label}</h3>
-                <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
-                  <div className="rounded-2xl bg-white/[0.055] p-5">
+                <h3 className="vip-title text-3xl leading-none text-white sm:text-4xl">{activePass.label}</h3>
+                <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                  <div className="rounded-2xl bg-white/[0.055] p-4">
                     <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/35">Date</p>
-                    <p className="mt-2 text-2xl text-white">{activePass.date}</p>
+                    <p className="mt-2 text-xl text-white">{activePass.date}</p>
                   </div>
-                  <div className="rounded-2xl bg-[#d5a238]/10 p-5">
+                  <div className="rounded-2xl bg-[#d5a238]/10 p-4">
                     <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#f0c96f]/70">Price</p>
-                    <p className="mt-2 vip-title text-4xl leading-none text-[#f7d98e]">{activePass.price}</p>
+                    <p className="mt-2 vip-title text-3xl leading-none text-[#f7d98e]">{activePass.price}</p>
                   </div>
                 </div>
                 <a
@@ -1813,13 +1800,20 @@ function VipFeaturesSection() {
                 </a>
               </div>
 
-              <div className="flex flex-col justify-between gap-8">
-                <p className="vip-copy text-base leading-relaxed text-white/70 sm:text-lg">{activePass.summary}</p>
-                <ul className="grid gap-4">
+              <div className="flex flex-col justify-between gap-5">
+                <div className="space-y-3">
+                  <p className="vip-copy text-sm leading-relaxed text-white/70 sm:text-base">{activePass.summary}</p>
+                  {'note' in activePass && activePass.note ? (
+                    <p className="rounded-xl border border-[#f0c96f]/15 bg-[#f0c96f]/10 p-3 text-xs leading-relaxed text-[#f7d98e]/82">
+                      {activePass.note}
+                    </p>
+                  ) : null}
+                </div>
+                <ul className="grid grid-cols-2 gap-2">
                   {activePass.features.map((feature) => (
-                    <li key={feature} className="flex gap-4 rounded-2xl bg-white/[0.04] p-4 text-sm leading-relaxed text-white/72">
-                      <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#f0c96f]/15 text-[#f0c96f]">
-                        <Check className="h-3.5 w-3.5" />
+                    <li key={feature} className="flex gap-2 rounded-xl bg-white/[0.04] p-2 text-[11px] leading-snug text-white/72 sm:gap-3 sm:p-3 sm:text-sm">
+                      <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#f0c96f]/15 text-[#f0c96f]">
+                        <Check className="h-3 w-3" />
                       </span>
                       <span>{feature}</span>
                     </li>
@@ -1930,16 +1924,16 @@ function VipPage() {
                 Proximity to the vision. Every word, every moment, crystal clear.
               </p>
               <div className="flex flex-wrap justify-center gap-4">
-                <PillButton href="#vip-discover">Discover</PillButton>
-                <PillButton href="#vip-passes">Register Now</PillButton>
+                <PillButton href="#vip-register">Compare the Experience</PillButton>
+                <PillButton href="#vip-passes">Choose Your Access</PillButton>
               </div>
             </motion.div>
           </div>
         </div>
       </section>
-      <VipWhySection />
-      <VipCompareSection />
       <VipFeaturesSection />
+      <VipCompareSection />
+      <VipWhySection />
       <Footer />
     </main>
   );
@@ -1949,7 +1943,7 @@ function JourneyPage({ startAnimations }: { startAnimations: boolean }) {
   const actions = [
     { label: 'Shiloh Season 2026', href: '#journey-season' },
     { label: '2026 Maps', href: '#fort-moriah-map' },
-    { label: "2026 Support & FAQ'S", href: '#journey-support' },
+    { label: '2026 Support & FAQs', href: '#journey-support' },
   ];
 
   return (
@@ -2007,7 +2001,7 @@ function JourneyPage({ startAnimations }: { startAnimations: boolean }) {
       <JourneyCarouselSection />
       <FortMoriahMapSection />
       <JourneySupportSection />
-      <JourneyFooter />
+      <Footer />
     </main>
   );
 }
@@ -2059,7 +2053,6 @@ function About() {
           viewport={{ once: true }}
           transition={{ duration: 0.55, ease: customEase }}
         >
-          <PillButton href="#features">Let Us Know You&apos;re Coming</PillButton>
           <PillButton href="#features" variant="glass">
             VIP Experience
           </PillButton>
@@ -2074,7 +2067,7 @@ const featureCards = [
     number: '01',
     title: 'Prophetic Retreat',
     date: 'August 31 - September 3',
-    image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/69f215eb590487fe57c29406.jpg',
+    image: '/discover-images/prophetic-retreat.jpg',
     items: [
       'Teaching for every level, whether you are beginning or already attending as a student.',
       'Learning sessions with the highly esteemed Prophet Uebert Angel at Mount Moriah City.',
@@ -2086,7 +2079,7 @@ const featureCards = [
     number: '02',
     title: 'Shiloh Conference',
     date: 'September 4 - September 6',
-    image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/69f2171efab44d4020a08d69.jpg',
+    image: '/discover-images/shiloh-conference.jpg',
     items: [
       'A powerful gathering at Fort Moriah City.',
       'An encounter where every form of disappointment is averted.',
@@ -2097,11 +2090,22 @@ const featureCards = [
     number: '03',
     title: "The Ra'ah's Birthday Gala",
     date: 'September 6',
-    image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/69f2171e590487fe57c2f87b.jpg',
+    image: '/discover-images/birthday-gala.jpg',
     items: [
       "A royal birthday celebration honoring the Ra'ah, Prophet Uebert Angel.",
       'A special delegation with dance, thanksgiving, and joyful presentation.',
       'An elegant gala atmosphere for celebration, honor, and fellowship.',
+    ],
+  },
+  {
+    number: '04',
+    title: 'Baptism by The Ra’ah',
+    date: 'Date to be Decided',
+    image: '/discover-images/baptism.jpg',
+    items: [
+      'A sacred moment of public faith, renewal, and spiritual transformation during Shiloh Season 26, led by The Ra’ah, Prophet Uebert Angel.',
+      'Guests participating in baptism will be required to wear the official GoodNews World baptism garments for unity, order, and conference presentation purposes.',
+      'Baptism garments are available separately through the Shiloh Shop.',
     ],
   },
 ];
@@ -2123,7 +2127,12 @@ function FeatureCard({
       transition: { duration: 0.8, delay: index * 0.15, ease: cardEase },
     },
   };
-  const imagePosition = card.title === 'Prophetic Retreat' ? 'object-[50%_44%]' : 'object-center';
+  const imagePosition =
+    card.title === 'Prophetic Retreat'
+      ? 'object-[50%_44%]'
+      : card.title === 'Baptism by The Ra’ah'
+        ? 'object-top'
+        : 'object-center';
 
   return (
     <motion.article
@@ -2155,7 +2164,7 @@ function FeatureCard({
             </li>
           ))}
         </ul>
-        <a href="#footer" className="mt-auto inline-flex items-center gap-2 pt-8 text-sm font-medium text-primary">
+        <a href="/schedule" className="mt-auto inline-flex items-center gap-2 pt-8 text-sm font-medium text-primary">
           Learn more
           <ArrowRight className="h-4 w-4 -rotate-45" />
         </a>
@@ -2179,33 +2188,8 @@ function Features() {
           </p>
         </div>
         <div ref={gridRef} className="grid items-stretch gap-3 sm:gap-2 md:auto-rows-fr md:grid-cols-2 md:gap-1 lg:grid-cols-4">
-          <motion.a
-            href="/journey"
-            className="group relative h-full min-h-[620px] overflow-hidden rounded-lg md:min-h-[660px] lg:min-h-[640px]"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={inView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.8, ease: cardEase }}
-          >
-            <video
-              className="absolute inset-0 h-full w-full object-cover"
-              src={featureVideo}
-              autoPlay
-              loop
-              muted
-              playsInline
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 to-black/10" />
-            <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4">
-              <h3 className="text-xl leading-none" style={{ color: primaryText }}>
-                Plan Your Journey
-              </h3>
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-primary/20 bg-black/35 text-primary backdrop-blur-sm transition-transform duration-300 group-hover:scale-110">
-                <ArrowRight className="h-4 w-4" />
-              </span>
-            </div>
-          </motion.a>
           {featureCards.map((card, index) => (
-            <FeatureCard key={card.number} card={card} index={index + 1} inView={inView} />
+            <FeatureCard key={card.number} card={card} index={index} inView={inView} />
           ))}
         </div>
       </div>
@@ -2214,29 +2198,93 @@ function Features() {
 }
 
 function Footer() {
+  const footerLinks = [
+    { label: 'Home', href: '/' },
+    { label: 'Plan', href: '/journey' },
+    { label: 'VIP', href: '/vip' },
+    { label: 'Schedule', href: '/schedule' },
+    { label: 'Passes', href: '/passes' },
+    { label: 'Contact', href: '/contact' },
+  ];
+
+  const hotlines = [
+    { label: 'USA', flag: '🇺🇸', phone: '+1 448 877 0344', href: 'tel:+14488770344' },
+    { label: 'UK', flag: '🇬🇧', phone: '+44 1244 727242', href: 'tel:+441244727242' },
+    { label: 'Zimbabwe', flag: '🇿🇼', phone: '+263 8677 211 645', href: 'tel:+2638677211645' },
+    { label: 'South Africa', flag: '🇿🇦', phone: '+27 872 654 913', href: 'tel:+27872654913' },
+  ];
+
   return (
-    <footer id="footer" className="bg-black px-4 pb-10 pt-6 sm:px-6">
-      <div className="mx-auto max-w-7xl border-t border-primary/15 pt-8 text-primary">
-        <p className="mb-4 text-sm uppercase tracking-[0.3em] text-primary/70">Call Center</p>
-        <div className="grid gap-3 text-sm sm:grid-cols-2 md:grid-cols-4 md:text-base">
-          <a href="tel:+14488770344" className="text-primary/90 transition-colors hover:text-primary">
-            🇺🇸 +1 448 877 0344
-          </a>
-          <a href="tel:+441244727242" className="text-primary/90 transition-colors hover:text-primary">
-            🇬🇧 +44 1244 727242
-          </a>
-          <a href="tel:+2638677211645" className="text-primary/90 transition-colors hover:text-primary">
-            🇿🇼 +263 8677 211 645
-          </a>
-          <a href="tel:+27872654913" className="text-primary/90 transition-colors hover:text-primary">
-            🇿🇦 +27 872 654 913
-          </a>
+    <footer id="footer" className="relative overflow-hidden bg-black px-4 pb-10 pt-16 text-primary sm:px-6 md:pt-20">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_0%,rgba(240,201,111,0.12),transparent_32%),linear-gradient(180deg,rgba(255,255,255,0.035),rgba(0,0,0,0)_34%)]" />
+      <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[1.75rem] border border-primary/12 bg-white/[0.035] p-5 shadow-[0_28px_90px_rgba(0,0,0,0.36)] backdrop-blur-md sm:p-7 md:p-9">
+        <div className="grid gap-10 lg:grid-cols-[1.15fr_1fr_0.9fr] lg:items-start">
+          <div>
+            <a href="/" className="mb-5 inline-flex items-center gap-4">
+              <img src={logo} alt="Shiloh logo" className="h-12 w-12 rounded-full object-contain" />
+              <span>
+                <span className="block text-[11px] font-extrabold uppercase tracking-[0.34em] text-primary">Shiloh</span>
+                <span className="mt-1 block font-serif text-xl italic leading-none text-primary/78">Season 26</span>
+              </span>
+            </a>
+            <p className="max-w-md text-sm leading-6 text-primary/58">
+              Shiloh Season 2026 gathers worship, teaching, honor, and transformation across Fort Moriah City and
+              Harare Hippodrome.
+            </p>
+          </div>
+
+          <div className="grid gap-8 sm:grid-cols-2">
+            <div>
+              <p className="mb-5 text-[10px] font-bold uppercase tracking-[0.34em] text-primary/38">Explore</p>
+              <div className="grid grid-cols-2 gap-x-5 gap-y-3 text-sm text-primary/72">
+                {footerLinks.map((link) => (
+                  <a key={link.label} href={link.href} className="transition-colors hover:text-primary">
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+            <div>
+              <p className="mb-5 text-[10px] font-bold uppercase tracking-[0.34em] text-primary/38">Support</p>
+              <div className="flex flex-col gap-3 text-sm text-primary/72">
+                <a href="mailto:support@goodnewsworld.com" className="inline-flex items-center gap-2 transition-colors hover:text-primary">
+                  <Mail className="h-4 w-4 text-primary/42" />
+                  support@goodnewsworld.com
+                </a>
+                <a href="/contact" className="inline-flex items-center gap-2 transition-colors hover:text-primary">
+                  <Phone className="h-4 w-4 text-primary/42" />
+                  Contact support
+                </a>
+                <a href="https://shilohseason.com" className="transition-colors hover:text-primary">
+                  Shilohseason.com
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="rounded-2xl border border-primary/10 bg-black/40 p-5">
+            <p className="mb-5 text-[10px] font-bold uppercase tracking-[0.34em] text-primary/38">Call Center</p>
+            <div className="grid gap-3 text-sm">
+              {hotlines.map((hotline) => (
+                <a key={hotline.label} href={hotline.href} className="group flex items-center justify-between gap-4 rounded-xl bg-white/[0.045] px-4 py-3 text-primary/76 transition-colors hover:bg-white/[0.08] hover:text-primary">
+                  <span className="inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-primary/35">
+                    <span className="text-sm leading-none tracking-normal" aria-hidden="true">{hotline.flag}</span>
+                    {hotline.label}
+                  </span>
+                  <span className="text-right">{hotline.phone}</span>
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
-        <div className="mt-10 flex flex-col gap-2 border-t border-primary/10 pt-6 text-sm text-primary/60 sm:flex-row sm:items-center sm:justify-between">
-          <a href="https://shilohseason.com" className="text-primary transition-colors hover:text-primary/80">
-            Shilohseason.com
-          </a>
-          <p>Copyrights reserved.</p>
+
+        <div className="mt-10 flex flex-col gap-4 border-t border-primary/10 pt-6 text-xs uppercase tracking-[0.2em] text-primary/42 sm:flex-row sm:items-center sm:justify-between">
+          <p>Shiloh Season 2026</p>
+          <div className="flex flex-wrap gap-4">
+            <a href="/passes" className="transition-colors hover:text-primary">Parking & Shuttle</a>
+            <a href="/schedule" className="transition-colors hover:text-primary">Schedule</a>
+            <span>All rights reserved.</span>
+          </div>
         </div>
       </div>
     </footer>
@@ -2855,7 +2903,8 @@ function ScheduleMarqueeRow({
 function SchedulePage() {
   const timeline = [
     ['31 Aug - 3 Sep', 'Prophetic Retreat', 'Fort Moriah City'],
-    ['4 Sep - 5 Sep, 4:00 PM Onwards', 'Shiloh Conference', 'Fort Moriah City'],
+    ['4 September, 4:00 PM', 'Shiloh Conference', 'Fort Moriah City'],
+    ['5 September, 4:00 PM', 'Shiloh Conference', 'Fort Moriah City'],
     ['6 September, 11 AM CAT', 'Sunday Service', 'Harare Hippodrome'],
     ['TBC', 'Baptism', 'Fort Moriah City'],
     ['6 Sep 7:00 PM', "The Ra'ah Prophet Uebert Angel Birthday Celebration", 'Harare Hippodrome'],
@@ -2864,7 +2913,7 @@ function SchedulePage() {
   return (
     <main className="min-h-screen bg-[#0a0a0a] text-white antialiased" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
       <HeroHeader sticky />
-      <section className="px-4 py-8 sm:px-6 md:px-10 md:py-10 lg:px-14">
+      <section className="px-4 pb-8 pt-28 sm:px-6 md:px-10 md:pb-10 md:pt-32 lg:px-14">
         <div className="mx-auto flex max-w-7xl flex-col gap-6">
           <div className="max-w-3xl pt-4">
             <h1 className="text-[28px] font-normal leading-[1.15] tracking-tight sm:text-3xl md:text-4xl lg:text-[44px]">
@@ -2877,7 +2926,7 @@ function SchedulePage() {
             </p>
           </div>
 
-          <article className="relative min-h-[560px] overflow-hidden rounded-2xl bg-black">
+          <article className="relative overflow-hidden rounded-2xl bg-black">
             <video
               className="absolute inset-0 h-full w-full object-cover"
               src={scheduleBackgroundVideo}
@@ -2887,13 +2936,13 @@ function SchedulePage() {
               playsInline
             />
             <div className="absolute inset-0 bg-gradient-to-b from-black/25 via-black/10 to-black/80" />
-            <div className="absolute inset-0 z-10 p-5 md:p-6">
+            <div className="relative z-10 flex min-h-[560px] flex-col p-5 md:p-6">
               <ScheduleLabel>Shiloh Season 2026</ScheduleLabel>
-              <div className="absolute inset-x-5 bottom-5 space-y-4 rounded-2xl bg-black/35 p-4 backdrop-blur-sm sm:p-5 md:inset-x-6 md:bottom-6">
+              <div className="mt-auto space-y-4 rounded-2xl bg-black/35 p-4 backdrop-blur-sm sm:p-5">
                 {timeline.map(([date, event, location]) => (
                   <div
                     key={`${date}-${event}`}
-                    className="grid grid-cols-[1fr_auto] gap-x-3 gap-y-1 border-b border-white/10 pb-4 text-sm text-white/85 last:border-b-0 last:pb-0 sm:grid-cols-[8.5rem_auto_1fr_auto] sm:items-center"
+                    className="grid grid-cols-[1fr_auto] gap-x-3 gap-y-1 border-b border-white/10 pb-4 text-sm text-white/85 last:border-b-0 last:pb-0 sm:grid-cols-[9.5rem_auto_1fr_auto] sm:items-center"
                   >
                     <span className="text-white/70">{date}</span>
                     <Sparkle className="h-3 w-3 text-white/60" strokeWidth={1.5} />
@@ -2917,13 +2966,45 @@ function SchedulePage() {
 }
 
 function PassesPage() {
+  const [frameHeight, setFrameHeight] = useState(1200);
+  const frameRef = useRef<HTMLIFrameElement>(null);
+
+  const syncFrameHeight = () => {
+    const frame = frameRef.current;
+    const documentElement = frame?.contentDocument?.documentElement;
+    const body = frame?.contentDocument?.body;
+
+    if (!documentElement || !body) {
+      return;
+    }
+
+    setFrameHeight(Math.max(documentElement.scrollHeight, body.scrollHeight));
+  };
+
+  const handleFrameLoad = () => {
+    syncFrameHeight();
+
+    const frameDocument = frameRef.current?.contentDocument;
+    if (!frameDocument?.body) {
+      return;
+    }
+
+    const observer = new ResizeObserver(syncFrameHeight);
+    observer.observe(frameDocument.body);
+    frameDocument.defaultView?.addEventListener('resize', syncFrameHeight);
+  };
+
   return (
-    <main className="min-h-screen bg-black">
+    <main className="min-h-screen bg-black pt-44 md:pt-28">
       <HeroHeader sticky />
       <iframe
+        ref={frameRef}
         src="/component2.html?v=dark-passes-vip-content"
         title="Shiloh Passes"
-        className="block h-[calc(100svh-5rem)] w-full border-0"
+        scrolling="no"
+        onLoad={handleFrameLoad}
+        style={{ height: `${frameHeight}px` }}
+        className="block w-full border-0"
       />
       <Footer />
     </main>

@@ -13,64 +13,67 @@
 
       body {
         min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         background:
-          radial-gradient(circle at 22% 0%, rgba(240, 201, 111, 0.1), transparent 28%),
-          radial-gradient(circle at 82% 12%, rgba(255, 255, 255, 0.045), transparent 24%),
+          radial-gradient(circle at 16% 0%, rgba(240, 201, 111, 0.16), transparent 30%),
+          radial-gradient(circle at 86% 12%, rgba(255, 255, 255, 0.08), transparent 24%),
+          linear-gradient(180deg, rgba(225, 224, 204, 0.05), transparent 34%),
           #000000;
-        padding: 56px 20px;
+        padding: 78px 20px 88px;
         font-family: 'Almarai', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
       }
 
       .c2-container {
-        max-width: 1100px;
+        max-width: 1180px;
         width: 100%;
+        margin: 0 auto;
+      }
+
+      .c2-hero {
+        display: grid;
+        grid-template-columns: minmax(0, 0.95fr) minmax(280px, 0.65fr);
+        gap: 32px;
+        align-items: end;
+        margin-bottom: 28px;
       }
 
       .c2-eyebrow {
-        text-align: center;
         font-size: 0.75rem;
-        letter-spacing: 0.18em;
+        letter-spacing: 0.24em;
         text-transform: uppercase;
         color: rgba(240, 201, 111, 0.72);
-        margin-bottom: 14px;
+        margin-bottom: 18px;
         animation: c2-fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
       }
 
       .c2-title {
         font-family: 'Instrument Serif', Georgia, serif;
-        font-size: 2.8rem;
-        text-align: center;
-        color: #c79a34;
-        background: linear-gradient(180deg, #fff2a8 0%, #d5a238 32%, #8b5b12 62%, #f2cb62 82%);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
+        font-size: clamp(3.2rem, 8vw, 7rem);
+        line-height: 0.88;
+        color: #ffffff;
         font-weight: 400;
-        letter-spacing: -0.01em;
-        margin-bottom: 36px;
-        text-shadow: 0 12px 24px rgba(98, 62, 9, 0.24);
+        letter-spacing: 0;
+        text-shadow: 0 16px 36px rgba(0, 0, 0, 0.38);
         animation: c2-fadeUp 0.8s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both;
       }
 
-      .c2-title em {
-        color: #f2cb62;
-        font-style: italic;
+      .c2-hero-copy {
+        color: rgba(225, 224, 204, 0.68);
+        font-size: 0.95rem;
+        line-height: 1.75;
+        max-width: 430px;
+        margin-left: auto;
+        animation: c2-fadeUp 0.85s 0.15s cubic-bezier(0.16, 1, 0.3, 1) both;
       }
 
       .c2-grid-wrapper {
-        background: linear-gradient(145deg, rgba(18, 18, 18, 0.98), rgba(5, 5, 5, 0.96));
-        border: 1px solid rgba(240, 201, 111, 0.12);
-        border-radius: 32px;
-        padding: 24px;
+        background: rgba(255, 255, 255, 0.035);
+        border: 1px solid rgba(240, 201, 111, 0.14);
+        border-radius: 28px;
+        padding: 16px;
         margin-bottom: 20px;
-        box-shadow: 0 30px 100px rgba(0, 0, 0, 0.45);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        box-shadow: 0 30px 100px rgba(0, 0, 0, 0.34);
         animation: c2-fadeUp 0.9s 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
       }
 
@@ -82,10 +85,12 @@
 
       .c2-card,
       .c2-bottom-card {
-        background: linear-gradient(135deg, rgba(22, 22, 22, 0.98), rgba(8, 8, 8, 0.96));
+        background:
+          radial-gradient(circle at 88% 8%, rgba(240, 201, 111, 0.09), transparent 28%),
+          linear-gradient(145deg, rgba(22, 22, 22, 0.98), rgba(8, 8, 8, 0.98));
         border: 1px solid rgba(240, 201, 111, 0.12);
-        border-radius: 26px;
-        padding: 28px;
+        border-radius: 22px;
+        padding: 30px;
         position: relative;
         overflow: hidden;
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
@@ -158,11 +163,12 @@
       }
 
       .c2-card-title {
-        font-size: 1.3rem;
+        font-size: 1.55rem;
+        line-height: 1.05;
         font-weight: 500;
-        margin-bottom: 8px;
+        margin-bottom: 10px;
         color: #ffffff;
-        letter-spacing: -0.01em;
+        letter-spacing: 0;
       }
 
       .c2-vip-card {
@@ -190,7 +196,7 @@
 
       .c2-vip-shell {
         display: grid;
-        grid-template-columns: minmax(0, 0.62fr) minmax(0, 1fr);
+        grid-template-columns: minmax(240px, 0.62fr) minmax(0, 1fr);
         gap: 26px;
       }
 
@@ -257,10 +263,11 @@
 
       .c2-list {
         list-style: none;
-        font-size: 0.85rem;
+        font-size: 0.9rem;
         color: rgba(255, 255, 255, 0.72);
         margin-bottom: 16px;
         padding-bottom: 16px;
+        line-height: 1.5;
       }
 
       .c2-list.bordered {
@@ -361,10 +368,12 @@
         cursor: pointer;
         background: #e1e0cc;
         color: #000;
-        padding: 11px 26px;
+        padding: 13px 24px;
         border-radius: 30px;
-        font-size: 0.85rem;
-        font-weight: 500;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
         font-family: inherit;
         margin-top: 32px;
         width: fit-content;
@@ -484,10 +493,12 @@
       }
 
       .c2-bottom-card {
-        background: linear-gradient(135deg, rgba(22, 22, 22, 0.98), rgba(8, 8, 8, 0.96));
+        background:
+          radial-gradient(circle at 12% 0%, rgba(240, 201, 111, 0.14), transparent 30%),
+          linear-gradient(135deg, rgba(22, 22, 22, 0.98), rgba(8, 8, 8, 0.96));
         border: 1px solid rgba(240, 201, 111, 0.12);
         padding: 32px;
-        min-height: 220px;
+        min-height: 0;
         animation: c2-fadeUp 1s 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
       }
 
@@ -497,15 +508,14 @@
       }
 
       .c2-bottom-card .c2-btn {
-        margin-top: 60px;
+        margin-top: 28px;
       }
 
       .c2-bottom-desc {
-        font-size: 0.85rem;
+        font-size: 0.95rem;
         color: rgba(255, 255, 255, 0.68);
         line-height: 1.6;
         max-width: 600px;
-        margin-bottom: -20px;
         z-index: 2;
         position: relative;
       }
@@ -528,12 +538,20 @@
 
       @media (max-width: 1100px) {
         body {
-          align-items: flex-start;
-          padding: 44px 18px;
+          padding: 54px 18px 64px;
         }
 
         .c2-container {
           max-width: 760px;
+        }
+
+        .c2-hero {
+          grid-template-columns: 1fr;
+          gap: 18px;
+        }
+
+        .c2-hero-copy {
+          margin-left: 0;
         }
 
         .c2-grid-wrapper {
@@ -565,12 +583,11 @@
 
       @media (max-width: 768px) {
         body {
-          padding: 32px 16px;
+          padding: 40px 14px 54px;
         }
 
         .c2-title {
-          font-size: 2.1rem;
-          margin-bottom: 28px;
+          font-size: clamp(2.65rem, 17vw, 4.4rem);
         }
 
         .c2-tree {
@@ -594,7 +611,7 @@
         }
 
         .c2-bottom-card .c2-btn {
-          margin-top: 40px;
+          margin-top: 28px;
         }
       }
 
@@ -625,8 +642,16 @@
   </head>
   <body>
     <main class="c2-container">
-      <p class="c2-eyebrow">What Happens in Shiloh, Stays in Shiloh!</p>
-      <h2 class="c2-title">Shilloh 2026 Passes</h2>
+      <header class="c2-hero">
+        <div>
+          <p class="c2-eyebrow">What Happens in Shiloh, Stays in Shiloh</p>
+          <h2 class="c2-title">Shiloh 2026 Passes</h2>
+        </div>
+        <p class="c2-hero-copy">
+          Choose the access that matches your visit, from daily transport support to premium hosted experiences across
+          Shiloh Season.
+        </p>
+      </header>
 
       <section class="c2-grid-wrapper">
         <div class="c2-grid">
@@ -700,7 +725,7 @@
       (() => {
         const PASSES = {
           ultimate: {
-            price: '$5000',
+            price: '$6999',
             note: 'USD',
             label: 'VIP Ultimate Passes',
             summary:
