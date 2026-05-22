@@ -15,14 +15,17 @@ import {
   ExternalLink,
   Figma,
   Framer,
+  Heart,
   Info,
   Layers,
   Mail,
   MapPin,
   Minus,
   Palette,
+  Pause,
   PenTool,
   Phone,
+  Play,
   Plus,
   Shirt,
   ShieldCheck,
@@ -435,6 +438,7 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
       { label: 'Parking and Shuttle', href: '/passes' },
       { label: 'Shiloh Season VIP Experience', href: '/vip' },
     ] },
+    { label: 'Resources', href: '/merch' },
     { label: 'Giving', action: 'sow' },
   ];
 
@@ -491,7 +495,7 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
           />
         )}
       </AnimatePresence>
-      <nav className="relative z-20 grid w-full max-w-none grid-cols-[1fr_auto] items-center gap-x-5 gap-y-5 rounded-b-[1.75rem] bg-black px-6 py-5 text-[#E1E0CC] shadow-[0_16px_40px_rgba(0,0,0,0.35)] md:flex md:w-[min(1160px,calc(100vw-3rem))] md:max-w-[calc(100vw-1.5rem)] md:justify-between md:gap-7 md:rounded-b-3xl md:px-7 md:py-2 md:text-white xl:w-[min(1240px,calc(100vw-4rem))] xl:px-8">
+      <nav className="relative z-20 grid w-full max-w-none grid-cols-[1fr_auto] items-center gap-x-5 gap-y-5 rounded-b-[1.75rem] bg-black px-6 py-5 text-[#E1E0CC] shadow-[0_16px_40px_rgba(0,0,0,0.35)] md:flex md:w-[min(1160px,calc(100vw-3rem))] md:max-w-[calc(100vw-1.5rem)] md:justify-between md:gap-7 md:rounded-b-3xl md:px-7 md:py-2 md:text-white xl:w-[min(1240px,calc(100vw-4rem))] xl:px-8 2xl:w-[min(1880px,calc(100vw-8rem))] 2xl:px-10">
         <a href="/" aria-label="Shiloh home" className="order-1 flex min-w-0 shrink-0 items-center gap-3 md:col-span-1 md:gap-3">
           <span className="flex flex-col text-left leading-[0.78] text-[#E1E0CC]">
             <span className="text-[18px] font-extrabold uppercase tracking-[0.2em] md:text-xs md:tracking-[0.22em]">Shiloh</span>
@@ -2691,26 +2695,65 @@ type MerchProduct = {
   priceUsd: number;
   priceLabel: string;
   checkoutProductId?: number;
+  category?: string;
+  subcategory?: string;
+  oldPriceLabel?: string;
   description: string;
   detail: string;
   accent: string;
   icon: LucideIcon;
   image?: string;
   imagePosition?: string;
+  variants?: MerchVariant[];
+};
+
+type MerchVariant = {
+  id: string;
+  label: string;
+  size?: string;
+  color?: string;
+  checkoutProductId?: number;
+  priceUsd?: number;
+  priceLabel?: string;
 };
 
 type CartItem = {
   slug: string;
+  variantId?: string;
+  size?: string;
+  color?: string;
   quantity: number;
 };
 
 const merchProducts: MerchProduct[] = [
+  {
+    slug: 'shiloh-2026-tshirt',
+    name: 'Shiloh 2026 Tshirt',
+    priceUsd: 20,
+    priceLabel: '$20 USD',
+    category: 'SHILOH 2026',
+    description: 'Official Shiloh 2026 T-shirt for conference days, travel, and cool evening gatherings.',
+    detail:
+      'Official Shiloh 2026 T-shirt prepared for conference days, travel, and cool evening gatherings. Select your preferred option, add the quantity you need, and checkout securely through UebertAngel.org once the product ID is assigned.',
+    accent: 'from-[#E1E0CC] to-[#746C4F]',
+    icon: Shirt,
+    image:
+      'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260518_193822_8c95f5ed-b142-454f-ab87-59ad1f09e758.png&w=1280&q=85',
+    variants: [
+      {
+        id: 'default',
+        label: 'Standard',
+        checkoutProductId: undefined,
+      },
+    ],
+  },
   {
     slug: 'goodnews-beanie',
     name: 'GoodNews Beanie',
     priceUsd: 13.39,
     priceLabel: '$13.39 USD',
     checkoutProductId: 28206,
+    category: 'GOODNEWSWORLD',
     description:
       'Perfect for those cold Shiloh nights, the GoodNewsWorld beanie hat is what you need.',
     detail:
@@ -2725,6 +2768,7 @@ const merchProducts: MerchProduct[] = [
     name: 'Shiloh Season Tee',
     priceUsd: 35,
     priceLabel: '$35 USD',
+    category: 'APPAREL',
     description: 'Soft event tee placeholder for the Shiloh Season 2026 collection preview.',
     detail: 'Soft event tee placeholder for the Shiloh Season 2026 collection preview.',
     accent: 'from-[#E1E0CC] to-[#746C4F]',
@@ -2736,6 +2780,7 @@ const merchProducts: MerchProduct[] = [
     name: 'Shiloh Cap',
     priceUsd: 24,
     priceLabel: '$24 USD',
+    category: 'ACCESSORIES',
     description: 'Embroidered cap concept with temporary details for merch planning.',
     detail: 'Embroidered cap concept with temporary details for merch planning.',
     accent: 'from-[#D8A945] to-[#4B3314]',
@@ -2747,6 +2792,7 @@ const merchProducts: MerchProduct[] = [
     name: 'Conference Tote',
     priceUsd: 28,
     priceLabel: '$28 USD',
+    category: 'TRAVEL',
     description: 'Everyday tote preview for carrying notes, essentials, and conference materials.',
     detail: 'Everyday tote preview for carrying notes, essentials, and conference materials.',
     accent: 'from-[#BFD3E8] to-[#263A4A]',
@@ -2757,6 +2803,7 @@ const merchProducts: MerchProduct[] = [
     name: 'Season Hoodie',
     priceUsd: 68,
     priceLabel: '$68 USD',
+    category: 'APPAREL',
     description: 'Warm hoodie placeholder for late evenings, travel days, and fellowship moments.',
     detail: 'Warm hoodie placeholder for late evenings, travel days, and fellowship moments.',
     accent: 'from-[#F4791B] to-[#1B1110]',
@@ -2770,13 +2817,30 @@ const formatUsd = (amount: number) =>
     currency: 'USD',
   }).format(amount);
 
-const getCheckoutUrl = (cartLines: Array<{ product: MerchProduct; quantity: number }>) => {
-  const checkoutLine = cartLines.find((line) => line.product.checkoutProductId);
-  if (!checkoutLine?.product.checkoutProductId) {
+const getCartKey = (slug: string, variantId = '', size = '', color = '') => `${slug}::${variantId}::${size}::${color}`;
+
+const getProductVariant = (product: MerchProduct, variantId?: string) =>
+  product.variants?.find((variant) => variant.id === variantId) ?? product.variants?.[0];
+
+const getCartLinePrice = (product: MerchProduct, variant?: MerchVariant) => variant?.priceUsd ?? product.priceUsd;
+
+const getCartLinePriceLabel = (product: MerchProduct, variant?: MerchVariant) =>
+  variant?.priceLabel ?? product.priceLabel;
+
+const getCartLineCheckoutProductId = (product: MerchProduct, variant?: MerchVariant) =>
+  variant?.checkoutProductId ?? product.checkoutProductId;
+
+const getCheckoutUrl = (cartLines: Array<{ product: MerchProduct; variant?: MerchVariant; quantity: number }>) => {
+  const checkoutLine = cartLines.find((line) => getCartLineCheckoutProductId(line.product, line.variant));
+  const checkoutProductId = checkoutLine
+    ? getCartLineCheckoutProductId(checkoutLine.product, checkoutLine.variant)
+    : undefined;
+
+  if (!checkoutLine || !checkoutProductId) {
     return '';
   }
 
-  return `https://uebertangel.org/checkout/?add-to-cart=${checkoutLine.product.checkoutProductId}&quantity=${checkoutLine.quantity}`;
+  return `https://uebertangel.org/checkout/?add-to-cart=${checkoutProductId}&quantity=${checkoutLine.quantity}`;
 };
 
 function FloatingCart({
@@ -2789,14 +2853,18 @@ function FloatingCart({
   onRemove: (slug: string) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const cartLines = cart
-    .map((item) => {
-      const product = merchProducts.find((entry) => entry.slug === item.slug);
-      return product ? { product, quantity: item.quantity } : null;
-    })
-    .filter((line): line is { product: MerchProduct; quantity: number } => Boolean(line));
+  const cartLines: Array<{ product: MerchProduct; variant?: MerchVariant; quantity: number }> = cart.flatMap((item) => {
+    const product = merchProducts.find((entry) => entry.slug === item.slug);
+    if (!product) return [];
+    const variant = getProductVariant(product, item.variantId);
+    const labelBits = [variant?.label, item.size, item.color].filter(Boolean);
+    const cartVariant = labelBits.length
+      ? { ...variant, id: variant?.id ?? 'selection', label: labelBits.join(' / '), size: item.size, color: item.color }
+      : variant;
+    return cartVariant ? [{ product, variant: cartVariant, quantity: item.quantity }] : [{ product, quantity: item.quantity }];
+  });
   const itemCount = cartLines.reduce((total, line) => total + line.quantity, 0);
-  const subtotal = cartLines.reduce((total, line) => total + line.product.priceUsd * line.quantity, 0);
+  const subtotal = cartLines.reduce((total, line) => total + getCartLinePrice(line.product, line.variant) * line.quantity, 0);
   const checkoutUrl = getCheckoutUrl(cartLines);
 
   return (
@@ -2826,16 +2894,17 @@ function FloatingCart({
                 <p className="text-sm leading-6 text-primary/55">Your cart is empty.</p>
               ) : (
                 <div className="space-y-3">
-                  {cartLines.map(({ product, quantity }) => (
-                    <div key={product.slug} className="rounded-xl bg-white/[0.055] p-3">
+                  {cartLines.map(({ product, variant, quantity }) => (
+                    <div key={getCartKey(product.slug, variant?.id)} className="rounded-xl bg-white/[0.055] p-3">
                       <div className="flex items-start justify-between gap-3">
                         <div>
                           <p className="text-sm font-semibold text-primary">{product.name}</p>
-                          <p className="mt-1 text-xs text-primary/50">{product.priceLabel}</p>
+                          <p className="mt-1 text-xs text-primary/50">{getCartLinePriceLabel(product, variant)}</p>
+                          {variant ? <p className="mt-1 text-[11px] text-primary/42">{variant.label}</p> : null}
                         </div>
                         <button
                           type="button"
-                          onClick={() => onRemove(product.slug)}
+                          onClick={() => onRemove(getCartKey(product.slug, variant?.id, variant?.size, variant?.color))}
                           className="text-primary/38 transition-colors hover:text-primary"
                           aria-label={`Remove ${product.name}`}
                         >
@@ -2846,7 +2915,7 @@ function FloatingCart({
                         <div className="inline-flex items-center rounded-full border border-primary/12 bg-black/30">
                           <button
                             type="button"
-                            onClick={() => onUpdateQuantity(product.slug, quantity - 1)}
+                            onClick={() => onUpdateQuantity(getCartKey(product.slug, variant?.id, variant?.size, variant?.color), quantity - 1)}
                             className="flex h-8 w-8 items-center justify-center text-primary/62 transition-colors hover:text-primary"
                             aria-label={`Decrease ${product.name} quantity`}
                           >
@@ -2855,14 +2924,14 @@ function FloatingCart({
                           <span className="min-w-7 text-center text-sm text-primary">{quantity}</span>
                           <button
                             type="button"
-                            onClick={() => onUpdateQuantity(product.slug, quantity + 1)}
+                            onClick={() => onUpdateQuantity(getCartKey(product.slug, variant?.id, variant?.size, variant?.color), quantity + 1)}
                             className="flex h-8 w-8 items-center justify-center text-primary/62 transition-colors hover:text-primary"
                             aria-label={`Increase ${product.name} quantity`}
                           >
                             <Plus className="h-3.5 w-3.5" />
                           </button>
                         </div>
-                        <p className="text-sm font-semibold text-primary">{formatUsd(product.priceUsd * quantity)}</p>
+                        <p className="text-sm font-semibold text-primary">{formatUsd(getCartLinePrice(product, variant) * quantity)}</p>
                       </div>
                     </div>
                   ))}
@@ -2929,6 +2998,31 @@ function ProductMedia({ product }: { product: MerchProduct }) {
   );
 }
 
+function useStretchInView<T extends HTMLElement>(threshold = 0.15) {
+  const ref = useRef<T>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold },
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [threshold]);
+
+  return { ref, isVisible };
+}
+
 function MerchPage({
   cart,
   onAddToCart,
@@ -2936,78 +3030,225 @@ function MerchPage({
   onRemoveFromCart,
 }: {
   cart: CartItem[];
-  onAddToCart: (slug: string) => void;
-  onUpdateQuantity: (slug: string, quantity: number) => void;
-  onRemoveFromCart: (slug: string) => void;
+  onAddToCart: (slug: string, quantity?: number, variantId?: string, selection?: { size?: string; color?: string }) => void;
+  onUpdateQuantity: (cartKey: string, quantity: number) => void;
+  onRemoveFromCart: (cartKey: string) => void;
 }) {
   const products = merchProducts;
+  const heroVideos = [
+    'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a1045a7c363506b9a9a3020.mp4',
+    'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a1041affe2210f89e3c3a87.mp4',
+    'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a1044d7a33d272edabd7f44.mp4',
+    'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a104a1db656b3edc43f0d93.mp4',
+  ];
+  const [activeTab, setActiveTab] = useState<'Shiloh' | 'GoodNewsWorld Merch'>('Shiloh');
+  const [activeSlide, setActiveSlide] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const heroContent = useStretchInView<HTMLDivElement>(0.2);
+  const bestSellers = useStretchInView<HTMLDivElement>(0.15);
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (paused) return;
+    const timer = window.setInterval(() => {
+      setActiveSlide((slide) => (slide + 1) % heroVideos.length);
+    }, 5000);
+    return () => window.clearInterval(timer);
+  }, [heroVideos.length, paused]);
+
+  const updateScrollProgress = () => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+    const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+    setScrollProgress(maxScroll > 0 ? carousel.scrollLeft / maxScroll : 0);
+  };
+
+  const handleCarouselWheel = (event: React.WheelEvent<HTMLDivElement>) => {
+    const carousel = carouselRef.current;
+    if (!carousel || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+    event.preventDefault();
+    carousel.scrollLeft += event.deltaY;
+    updateScrollProgress();
+  };
 
   return (
-    <main className="min-h-screen bg-black text-[#E1E0CC]">
-      <section className="relative min-h-screen overflow-hidden px-4 pb-20 pt-28 sm:px-6 md:px-10">
-        <div className="pointer-events-none absolute inset-0 overflow-hidden">
-          <video
-            className="absolute inset-0 h-full w-full object-cover opacity-55"
-            src={heroVideo}
-            autoPlay
-            loop
-            muted
-            playsInline
+    <main
+      className="min-h-screen bg-black text-white"
+      style={{
+        fontFamily:
+          '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+      }}
+    >
+      <HeroHeader />
+      <section className="relative flex min-h-screen flex-col overflow-hidden lg:flex-row">
+        <div className="relative flex min-h-[60vh] w-full items-end overflow-hidden px-6 pb-12 pt-32 lg:min-h-0 lg:w-1/2 lg:px-10 lg:pb-16">
+          <img
+            src="https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a1049b7df1cb25b061ad6b0.jpg"
+            alt="Shiloh shop visual"
+            className="absolute inset-0 h-full w-full object-cover"
           />
-          <div className="noise-overlay absolute inset-0 opacity-40 mix-blend-overlay" />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.42),rgba(0,0,0,0.82)_62%,#000_100%)]" />
-        </div>
-        <HeroHeader />
-        <div className="relative z-10 mx-auto max-w-7xl">
-          <div className="mb-10 max-w-3xl pt-10 text-left md:pt-16">
-            <p className="mb-5 text-xs font-semibold uppercase tracking-[0.45em] text-primary/65">
-              Shiloh Season 2026
-            </p>
-            <h1 className="font-serif text-5xl italic leading-none text-primary sm:text-6xl md:text-7xl">
-              2026 Shop
+          <div className="absolute inset-0 bg-black/30" />
+          <div
+            ref={heroContent.ref}
+            className={`relative z-10 max-w-xl transform transition-all duration-1000 ${
+              heroContent.isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+            }`}
+          >
+            <h1 className="mb-6 font-serif text-5xl font-normal italic leading-[0.92] tracking-[-0.045em] text-primary drop-shadow-lg sm:text-6xl md:text-7xl lg:text-[clamp(4.5rem,7vw,8rem)]">
+              Shiloh Shop 2026
             </h1>
-            <p className="mt-6 max-w-2xl text-sm leading-6 text-white/65 sm:text-base">
-              Explore Shiloh Season essentials, gifts, and GoodNewsWorld favorites prepared for conference days, travel,
-              and cool evening gatherings.
+            <p className="mb-10 max-w-md text-sm text-white/80 md:text-base">
+              Official Shiloh Merchandise Coming Soon. Please check back later for apparel, ceremonial wear, and
+              exclusive conference merchandise.
             </p>
+            <div className="flex flex-wrap items-center gap-3">
+              <a href="#shop" className="btn-primary inline-flex rounded-full bg-white px-10 py-4 text-sm text-black">
+                Know More
+              </a>
+              <a
+                href="#shop"
+                className="liquid-glass inline-flex rounded-full bg-white/10 px-10 py-4 text-sm font-medium text-white shadow-[0_16px_42px_rgba(0,0,0,0.24)] transition-transform duration-300 hover:-translate-y-0.5"
+              >
+                Get now
+              </a>
+            </div>
           </div>
-
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {products.map((product) => {
-              return (
-                <article
-                  key={product.name}
-                  className="group flex min-h-[23rem] flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.06] shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur-md transition-transform duration-300 hover:-translate-y-1"
-                >
-                  <a href={`/merch/${product.slug}`} aria-label={`View ${product.name}`}>
-                    <ProductMedia product={product} />
-                  </a>
-                  <div className="flex flex-1 flex-col p-5">
-                    <div className="mb-4 flex items-start justify-between gap-4">
-                      <a href={`/merch/${product.slug}`} className="transition-colors hover:text-white">
-                        <h2 className="text-xl leading-tight text-primary">{product.name}</h2>
-                      </a>
-                      <span className="rounded-full border border-primary/15 px-3 py-1 text-xs text-primary/80">
-                        {product.priceLabel}
-                      </span>
-                    </div>
-                    <p className="text-sm leading-6 text-primary/60">{product.description}</p>
-                    <button
-                      type="button"
-                      onClick={() => onAddToCart(product.slug)}
-                      className="mt-auto inline-flex w-max items-center gap-2 rounded-full border border-primary/15 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.22em] text-primary/75 transition-colors hover:border-primary/35 hover:text-primary"
-                    >
-                      Add to Cart
-                      <Plus className="h-3.5 w-3.5" />
-                    </button>
-                  </div>
-                </article>
-              );
-            })}
+        </div>
+        <div className="relative min-h-[40vh] w-full overflow-hidden lg:min-h-0 lg:w-1/2">
+          {heroVideos.map((video, index) => (
+            <video
+              key={video}
+              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
+                activeSlide === index ? 'opacity-100' : 'opacity-0'
+              }`}
+              src={video}
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
+          ))}
+          <div className="absolute bottom-6 right-6 z-20 flex items-center gap-3">
+            <div className="flex gap-2">
+              {heroVideos.map((video, index) => (
+                <button
+                  key={video}
+                  type="button"
+                  onClick={() => setActiveSlide(index)}
+                  aria-label={`Show slide ${index + 1}`}
+                  className={`h-2 w-2 rounded-full transition-all ${
+                    activeSlide === index ? 'scale-125 bg-white' : 'bg-white/50'
+                  }`}
+                />
+              ))}
+            </div>
+            <button
+              type="button"
+              onClick={() => setPaused((value) => !value)}
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/50 text-white"
+              aria-label={paused ? 'Play slideshow' : 'Pause slideshow'}
+            >
+              {paused ? <Play className="h-3.5 w-3.5" /> : <Pause className="h-3.5 w-3.5" />}
+            </button>
           </div>
         </div>
       </section>
-      <FloatingCart cart={cart} onUpdateQuantity={onUpdateQuantity} onRemove={onRemoveFromCart} />
+
+      <section id="shop" className="relative overflow-hidden bg-[#F9F4F0] px-4 py-12 text-black sm:px-6 sm:py-16 lg:px-10">
+        <div
+          ref={bestSellers.ref}
+          aria-hidden="true"
+          className={`pointer-events-none select-none blur-[6px] transform opacity-45 transition-transform duration-800 ${
+            bestSellers.isVisible ? 'translate-y-0' : 'translate-y-6'
+          }`}
+        >
+          <div className="mb-8 flex flex-wrap items-center gap-5 sm:gap-8">
+            {(['Shiloh', 'GoodNewsWorld Merch'] as const).map((tab) => (
+              <button
+                key={tab}
+                type="button"
+                onClick={() => setActiveTab(tab)}
+                className={`flex items-center gap-3 text-2xl font-medium transition-colors sm:text-4xl md:text-5xl ${
+                  activeTab === tab ? 'text-[#1a1a1a]' : 'text-gray-400 hover:text-gray-600'
+                }`}
+              >
+                {activeTab === tab && <span className="animate-scale-in h-5 w-5 rounded-full bg-[#1a1a1a] sm:h-6 sm:w-6" />}
+                {tab}
+              </button>
+            ))}
+          </div>
+          <div
+            ref={carouselRef}
+            onWheel={handleCarouselWheel}
+            onScroll={updateScrollProgress}
+            className="scrollbar-hide flex overflow-x-auto"
+          >
+            {products.map((product, index) => (
+              <article
+                key={`${activeTab}-${product.name}`}
+                className={`group -ml-[1px] flex w-[260px] shrink-0 flex-col border border-gray-200 bg-[#F9F4F0] first:ml-0 sm:w-[280px] md:w-[300px] lg:w-[calc(25%-1px)] ${
+                  bestSellers.isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+                } transition-all duration-500`}
+                style={{ transitionDelay: `${200 + index * 80}ms` }}
+              >
+                <div className="flex h-12 flex-col justify-center px-4">
+                  <p className="text-xs font-medium uppercase tracking-wider">{product.category ?? 'SHILOH SHOP'}</p>
+                  {product.subcategory && <p className="mt-0.5 text-xs uppercase text-gray-500">{product.subcategory}</p>}
+                </div>
+                <a href={`/merch/${product.slug}`} className="mx-4 aspect-[3/4] overflow-hidden rounded-lg bg-[#F9F4F0]" aria-label={`View ${product.name}`}>
+                  {product.image ? (
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  ) : (
+                    <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${product.accent}`}>
+                      <product.icon className="h-12 w-12 text-white" strokeWidth={1.5} />
+                    </div>
+                  )}
+                </a>
+                <div className="flex min-h-28 flex-col items-center justify-center px-4 text-center">
+                  <a href={`/merch/${product.slug}`} className="text-sm transition-colors hover:text-black/60">
+                    {product.name}
+                  </a>
+                  <div className="mt-2 flex items-center gap-2 text-sm">
+                    {product.oldPriceLabel && <span className="text-gray-400 line-through">{product.oldPriceLabel}</span>}
+                    <span>{product.priceLabel}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => onAddToCart(product.slug, 1, getProductVariant(product)?.id)}
+                    className="mt-4 rounded-full border border-black/15 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] transition-colors hover:bg-black hover:text-white"
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
+          <div className="mx-auto mt-8 max-w-[280px] sm:mt-10">
+            <div className="h-[2px] overflow-hidden rounded-full bg-gray-300">
+              <div
+                className="h-full w-[30%] rounded-full bg-[#1a1a1a] transition-transform duration-150"
+                style={{ transform: `translateX(${scrollProgress * (100 / 0.3)}%)` }}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#F9F4F0]/42 backdrop-blur-[2px]">
+          <div className="mx-4 max-w-md border border-black/10 bg-[#F9F4F0]/88 px-6 py-5 text-center shadow-[0_24px_80px_rgba(0,0,0,0.08)] backdrop-blur-md">
+            <p className="text-xs font-semibold uppercase tracking-[0.26em] text-black/45">Coming soon</p>
+            <p className="mt-3 text-lg font-medium text-black">Official Shiloh merchandise is being prepared.</p>
+            <p className="mt-2 text-sm leading-6 text-black/55">
+              Product access will open once apparel, ceremonial wear, and exclusive conference merchandise are ready.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {cart.length > 0 && <FloatingCart cart={cart} onUpdateQuantity={onUpdateQuantity} onRemove={onRemoveFromCart} />}
       <Footer />
     </main>
   );
@@ -3022,10 +3263,16 @@ function ProductPage({
 }: {
   product?: MerchProduct;
   cart: CartItem[];
-  onAddToCart: (slug: string) => void;
-  onUpdateQuantity: (slug: string, quantity: number) => void;
-  onRemoveFromCart: (slug: string) => void;
+  onAddToCart: (slug: string, quantity?: number, variantId?: string, selection?: { size?: string; color?: string }) => void;
+  onUpdateQuantity: (cartKey: string, quantity: number) => void;
+  onRemoveFromCart: (cartKey: string) => void;
 }) {
+  const [selectedQuantity, setSelectedQuantity] = useState(1);
+  const [selectedVariantId, setSelectedVariantId] = useState(product?.variants?.[0]?.id ?? '');
+  const [selectedColor, setSelectedColor] = useState('Amber');
+  const [selectedSize, setSelectedSize] = useState('M');
+  const [openProductSections, setOpenProductSections] = useState<string[]>(['About']);
+
   if (!product) {
     return (
       <main className="min-h-screen bg-black text-primary">
@@ -3047,79 +3294,225 @@ function ProductPage({
     );
   }
 
-  const productCartItem = cart.find((item) => item.slug === product.slug);
+  const selectedVariant = getProductVariant(product, selectedVariantId);
+  const selectedCartKey = getCartKey(product.slug, selectedVariant?.id, selectedSize, selectedColor);
+  const productCartItem = cart.find((item) => getCartKey(item.slug, item.variantId, item.size, item.color) === selectedCartKey);
   const productInCart = Boolean(productCartItem);
+  const updateSelectedQuantity = (quantity: number) => setSelectedQuantity(Math.max(1, Math.min(quantity, 99)));
+  const selectedPriceLabel = getCartLinePriceLabel(product, selectedVariant);
+  const displayProductName = 'Polar Fleece Sherpa Zip';
+  const colorOptions = [
+    { name: 'Amber', className: 'bg-[#d86f1f]' },
+    { name: 'Sand', className: 'bg-[#d9c3a2]' },
+    { name: 'Black', className: 'bg-[#191919]' },
+  ];
+  const sizeOptions = ['XS', 'S', 'M', 'L', 'XL'];
+  const galleryImages = [
+    'linear-gradient(135deg,#f6f1e8 0%,#eee3d2 42%,#cf681f 43%,#e78836 70%,#643118 100%)',
+    'linear-gradient(160deg,#f8f5ee 0%,#f8f5ee 38%,#d86f1f 39%,#b95b1d 68%,#211610 100%)',
+    'radial-gradient(circle at 52% 36%,#f2a34f 0 18%,#d86f1f 19% 44%,#f8f2e8 45% 100%)',
+  ];
+  const accordionSections = [
+    {
+      title: 'About',
+      copy: 'A plush cold-weather zip layer with a high collar, relaxed body, and tactile sherpa pile. Designed as a statement outerwear piece with a warm orange finish.',
+    },
+    {
+      title: 'Product details',
+      copy: 'Two-way front zip, paneled fleece body, dropped shoulder, side pockets, elasticated cuffs, and tonal woven trims. Shell: recycled polyester fleece.',
+    },
+    {
+      title: 'Size & Fit',
+      copy: 'Relaxed fit. Choose your regular size for easy layering or size down for a closer streetwear silhouette.',
+    },
+  ];
+  const toggleProductSection = (title: string) => {
+    setOpenProductSections((sections) =>
+      sections.includes(title) ? sections.filter((section) => section !== title) : [...sections, title],
+    );
+  };
 
   return (
-    <main className="min-h-screen bg-black text-primary">
+    <main className="min-h-screen bg-[#f7f4ee] text-[#151515]">
       <HeroHeader />
-      <section className="relative overflow-hidden px-4 pb-32 pt-32 sm:px-6 md:px-10">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_8%,rgba(240,201,111,0.16),transparent_28%),linear-gradient(180deg,rgba(255,255,255,0.035),rgba(0,0,0,0)_44%)]" />
-        <div className="relative z-10 mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.95fr_1fr] lg:items-center">
-          <motion.div
-            className="group overflow-hidden rounded-[1.75rem] border border-white/10 bg-white/[0.055] shadow-[0_28px_100px_rgba(0,0,0,0.42)]"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: customEase }}
-          >
-            <ProductMedia product={product} />
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.08, ease: customEase }}
-          >
-            <a href="/merch" className="inline-flex items-center gap-2 text-sm text-primary/55 transition-colors hover:text-primary">
-              <ArrowLeft className="h-4 w-4" />
-              Back to 2026 Shop
-            </a>
-            <p className="mt-10 text-xs font-semibold uppercase tracking-[0.42em] text-primary/48">GoodNewsWorld Merch</p>
-            <h1 className="mt-4 font-serif text-5xl italic leading-none text-primary sm:text-6xl md:text-7xl">
-              {product.name}
-            </h1>
-            <div className="mt-6 flex flex-wrap items-center gap-3">
-              <span className="rounded-full bg-primary px-5 py-2 text-sm font-semibold text-black">{product.priceLabel}</span>
-            </div>
-            <p className="mt-7 max-w-2xl text-base leading-8 text-primary/68">{product.detail}</p>
-            <div className="mt-10 flex flex-wrap gap-3">
-              <a
-                href="/merch"
-                className="inline-flex items-center gap-2 rounded-full border border-primary/18 px-6 py-3 text-sm font-semibold text-primary/72 transition-colors hover:text-primary"
+      <section className="px-4 pb-20 pt-32 sm:px-6 md:px-10 lg:px-14">
+        <div className="mx-auto grid max-w-[1680px] gap-10 lg:grid-cols-[minmax(0,1fr)_460px] lg:items-start">
+          <div className="space-y-4">
+            {galleryImages.map((background, index) => (
+              <figure
+                key={background}
+                className="relative flex min-h-[82vh] items-center justify-center overflow-hidden bg-[#ebe4d8]"
               >
-                Continue Shopping
-              </a>
+                <div className="absolute inset-0" style={{ background }} />
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.18),rgba(255,255,255,0)_34%,rgba(0,0,0,0.05))]" />
+                <div className="relative h-[72vh] w-[58%] max-w-[520px] rounded-t-[45%] rounded-b-[18%] bg-[#db731f] shadow-[0_55px_110px_rgba(54,27,10,0.26)]">
+                  <div className="absolute left-1/2 top-0 h-full w-[2px] -translate-x-1/2 bg-black/20" />
+                  <div className="absolute left-[18%] top-[18%] h-[52%] w-[18%] -rotate-6 rounded-full bg-[#f09a48]/60 blur-sm" />
+                  <div className="absolute right-[18%] top-[18%] h-[52%] w-[18%] rotate-6 rounded-full bg-[#b85119]/55 blur-sm" />
+                  <div className="absolute left-1/2 top-[12%] h-20 w-36 -translate-x-1/2 rounded-b-full border-b border-black/20 bg-[#f4bc77]" />
+                  <div className="absolute bottom-[8%] left-1/2 h-12 w-[86%] -translate-x-1/2 rounded-full bg-black/10" />
+                </div>
+                <figcaption className="absolute bottom-6 left-6 text-[11px] uppercase tracking-[0.22em] text-black/45">
+                  {String(index + 1).padStart(2, '0')} / Polar fleece study
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+
+          <aside className="lg:sticky lg:top-28">
+            <div className="border border-black/10 bg-[#f7f4ee]/88 p-5 backdrop-blur-sm sm:p-7">
+              <a href="/merch" className="mb-8 inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-black/50 transition-colors hover:text-black">
+              <ArrowLeft className="h-4 w-4" />
+              Back to shop
+            </a>
+              <p className="text-[11px] uppercase tracking-[0.28em] text-black/45">Home / Outerwear / Fleece</p>
+              <div className="mt-5 flex items-start justify-between gap-5">
+                <h1 className="max-w-sm text-[2.6rem] font-light leading-[0.98] tracking-[-0.045em] text-black sm:text-5xl">
+                  {displayProductName}
+                </h1>
+                <p className="pt-2 text-sm text-black/70">{selectedPriceLabel}</p>
+              </div>
+              <p className="mt-6 max-w-sm text-sm leading-6 text-black/60">
+                A plush sherpa zip jacket with an oversized collar, generous hand feel, and a vivid orange fleece finish.
+              </p>
+
+              <div className="mt-9 border-t border-black/10 pt-6">
+                <p className="mb-3 text-xs uppercase tracking-[0.22em] text-black/50">Color: {selectedColor}</p>
+                <div className="flex gap-3">
+                  {colorOptions.map((color) => (
+                    <button
+                      key={color.name}
+                      type="button"
+                      onClick={() => setSelectedColor(color.name)}
+                      className={`h-7 w-7 rounded-full border transition ${
+                        selectedColor === color.name ? 'border-black p-1' : 'border-black/20 p-0'
+                      }`}
+                      aria-label={`Select ${color.name}`}
+                    >
+                      <span className={`block h-full w-full rounded-full ${color.className}`} />
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <label className="mt-7 block">
+                <span className="mb-3 block text-xs uppercase tracking-[0.22em] text-black/50">Size</span>
+                <select
+                  value={selectedSize}
+                  onChange={(event) => setSelectedSize(event.target.value)}
+                  className="h-12 w-full border border-black/20 bg-transparent px-4 text-sm uppercase tracking-[0.12em] text-black outline-none transition focus:border-black"
+                >
+                  {sizeOptions.map((size) => (
+                    <option key={size} value={size}>
+                      {size}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              <div className="mt-5 flex items-stretch gap-3">
+                <div className="flex h-12 shrink-0 items-center border border-black/20">
+                  <button
+                    type="button"
+                    onClick={() => updateSelectedQuantity(selectedQuantity - 1)}
+                    className="flex h-full w-11 items-center justify-center text-black/55 transition-colors hover:text-black"
+                    aria-label={`Decrease ${displayProductName} quantity`}
+                  >
+                    <Minus className="h-4 w-4" />
+                  </button>
+                  <span className="min-w-8 text-center text-sm text-black">{selectedQuantity}</span>
+                  <button
+                    type="button"
+                    onClick={() => updateSelectedQuantity(selectedQuantity + 1)}
+                    className="flex h-full w-11 items-center justify-center text-black/55 transition-colors hover:text-black"
+                    aria-label={`Increase ${displayProductName} quantity`}
+                  >
+                    <Plus className="h-4 w-4" />
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => onAddToCart(product.slug, selectedQuantity, selectedVariant?.id, { size: selectedSize, color: selectedColor })}
+                  className="h-12 flex-1 bg-black px-6 text-xs font-semibold uppercase tracking-[0.22em] text-white transition-colors hover:bg-[#d86f1f]"
+                >
+                  Add to Bag
+                </button>
+                <button
+                  type="button"
+                  className="flex h-12 w-12 items-center justify-center border border-black/20 text-black transition-colors hover:border-black"
+                  aria-label="Save product"
+                >
+                  <Heart className="h-4 w-4" />
+                </button>
+              </div>
+
+              <p className="mt-4 text-xs leading-5 text-black/50">
+                Free returns within 14 days. Ships from the official UebertAngel.org checkout once merchandise opens.
+              </p>
+
+              <div className="mt-8 border-t border-black/10">
+                {accordionSections.map((section) => (
+                  <div key={section.title} className="border-b border-black/10">
+                    <button
+                      type="button"
+                      onClick={() => toggleProductSection(section.title)}
+                      className="flex w-full items-center justify-between py-5 text-left text-xs font-semibold uppercase tracking-[0.2em]"
+                    >
+                      {section.title}
+                      <Plus
+                        className={`h-4 w-4 transition-transform ${
+                          openProductSections.includes(section.title) ? 'rotate-45' : ''
+                        }`}
+                      />
+                    </button>
+                    {openProductSections.includes(section.title) ? (
+                      <p className="pb-5 text-sm leading-6 text-black/60">{section.copy}</p>
+                    ) : null}
+                  </div>
+                ))}
+              </div>
             </div>
-          </motion.div>
+          </aside>
         </div>
       </section>
-      <AnimatePresence>
-        {!productInCart && (
-          <motion.div
-            className="fixed inset-x-0 bottom-0 z-[95] border-t border-primary/12 bg-black/92 px-4 py-3 text-primary shadow-[0_-18px_70px_rgba(0,0,0,0.5)] backdrop-blur-xl sm:px-6"
-            initial={{ y: '100%' }}
-            animate={{ y: 0 }}
-            exit={{ y: '100%' }}
-            transition={{ duration: 0.3, ease: customEase }}
-          >
-            <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
-              <div className="min-w-0">
-                <p className="truncate text-sm font-semibold text-primary">{product.name}</p>
-                <p className="mt-0.5 text-xs text-primary/55">{product.priceLabel}</p>
-              </div>
-              <button
-                type="button"
-                onClick={() => onAddToCart(product.slug)}
-                className="inline-flex shrink-0 items-center gap-2 rounded-full bg-primary px-5 py-3 text-xs font-bold uppercase tracking-[0.16em] text-black transition-transform hover:-translate-y-0.5"
-              >
-                Add to Cart
-                <ShoppingCart className="h-4 w-4" />
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      {productInCart && <FloatingCart cart={cart} onUpdateQuantity={onUpdateQuantity} onRemove={onRemoveFromCart} />}
+
+      <section className="px-4 pb-24 sm:px-6 md:px-10 lg:px-14">
+        <div className="mx-auto max-w-[1680px] border-t border-black/10 pt-10">
+          <p className="text-xs uppercase tracking-[0.28em] text-black/45">Size chart</p>
+          <div className="mt-6 overflow-x-auto">
+            <table className="w-full min-w-[620px] border-collapse text-left text-sm">
+              <thead>
+                <tr className="border-b border-black/20 text-xs uppercase tracking-[0.18em] text-black/45">
+                  <th className="py-4 font-normal">Size</th>
+                  <th className="py-4 font-normal">Chest</th>
+                  <th className="py-4 font-normal">Length</th>
+                  <th className="py-4 font-normal">Sleeve</th>
+                  <th className="py-4 font-normal">Recommended fit</th>
+                </tr>
+              </thead>
+              <tbody className="text-black/70">
+                {[
+                  ['XS', '36 in', '25 in', '23 in', 'Close fit'],
+                  ['S', '38 in', '26 in', '24 in', 'Regular'],
+                  ['M', '40 in', '27 in', '25 in', 'Relaxed'],
+                  ['L', '43 in', '28 in', '26 in', 'Oversized'],
+                  ['XL', '46 in', '29 in', '27 in', 'Oversized layer'],
+                ].map((row) => (
+                  <tr key={row[0]} className="border-b border-black/10">
+                    {row.map((cell) => (
+                      <td key={cell} className="py-4">
+                        {cell}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      {cart.length > 0 && <FloatingCart cart={cart} onUpdateQuantity={onUpdateQuantity} onRemove={onRemoveFromCart} />}
       <Footer />
     </main>
   );
@@ -3266,11 +3659,11 @@ function ScheduleMarqueeRow({
 function SchedulePage() {
   const timeline = [
     ['31 Aug - 3 Sep', 'Prophetic Retreat', 'Fort Moriah City'],
-    ['4 September, 4:00 PM', 'Shiloh Conference', 'Fort Moriah City'],
-    ['5 September, 4:00 PM', 'Shiloh Conference', 'Fort Moriah City'],
+    ['4 September, 4:00 PM CAT', 'Shiloh Conference', 'Fort Moriah City'],
+    ['5 September, 4:00 PM CAT', 'Shiloh Conference', 'Fort Moriah City'],
     ['6 September, 11 AM CAT', 'Sunday Service', 'Harare Hippodrome'],
     ['TBC', 'Baptism', 'Fort Moriah City'],
-    ['6 Sep 7:00 PM', "The Ra'ah Prophet Uebert Angel Birthday Celebration", 'Harare Hippodrome'],
+    ['6 Sep 7:00 PM CAT', "The Ra'ah Prophet Uebert Angel Birthday Celebration", 'Harare Hippodrome'],
   ];
 
   return (
@@ -3480,27 +3873,34 @@ export default function App() {
     window.setTimeout(() => setCelebrating(false), 1800);
   };
 
-  const addToCart = (slug: string) => {
+  const addToCart = (slug: string, quantity = 1, variantId?: string, selection?: { size?: string; color?: string }) => {
+    const normalizedQuantity = Math.max(1, Math.min(quantity, 99));
+    const cartKey = getCartKey(slug, variantId, selection?.size, selection?.color);
+
     setCart((items) => {
-      const existing = items.find((item) => item.slug === slug);
+      const existing = items.find((item) => getCartKey(item.slug, item.variantId, item.size, item.color) === cartKey);
       if (existing) {
-        return items.map((item) => (item.slug === slug ? { ...item, quantity: item.quantity + 1 } : item));
+        return items.map((item) =>
+          getCartKey(item.slug, item.variantId, item.size, item.color) === cartKey
+            ? { ...item, quantity: Math.min(item.quantity + normalizedQuantity, 99) }
+            : item,
+        );
       }
-      return [...items, { slug, quantity: 1 }];
+      return [...items, { slug, variantId, size: selection?.size, color: selection?.color, quantity: normalizedQuantity }];
     });
   };
 
-  const updateCartQuantity = (slug: string, quantity: number) => {
+  const updateCartQuantity = (cartKey: string, quantity: number) => {
     setCart((items) => {
       if (quantity <= 0) {
-        return items.filter((item) => item.slug !== slug);
+        return items.filter((item) => getCartKey(item.slug, item.variantId, item.size, item.color) !== cartKey);
       }
-      return items.map((item) => (item.slug === slug ? { ...item, quantity } : item));
+      return items.map((item) => (getCartKey(item.slug, item.variantId, item.size, item.color) === cartKey ? { ...item, quantity } : item));
     });
   };
 
-  const removeFromCart = (slug: string) => {
-    setCart((items) => items.filter((item) => item.slug !== slug));
+  const removeFromCart = (cartKey: string) => {
+    setCart((items) => items.filter((item) => getCartKey(item.slug, item.variantId, item.size, item.color) !== cartKey));
   };
 
   useEffect(() => {

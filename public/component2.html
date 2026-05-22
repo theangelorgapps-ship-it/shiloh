@@ -81,6 +81,55 @@
         display: grid;
         grid-template-columns: minmax(260px, 0.74fr) minmax(0, 1.26fr);
         gap: 20px;
+        align-items: start;
+      }
+
+      .c2-transport-stack {
+        display: grid;
+        gap: 20px;
+      }
+
+      .c2-premium-shuttle {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: minmax(240px, 0.34fr) minmax(0, 1fr) auto;
+        gap: 24px;
+        align-items: center;
+        background:
+          radial-gradient(circle at 10% 10%, rgba(240, 201, 111, 0.14), transparent 28%),
+          linear-gradient(135deg, rgba(25, 22, 15, 0.98), rgba(9, 9, 9, 0.98));
+      }
+
+      .c2-premium-shuttle .c2-card-heading {
+        margin-bottom: 12px;
+      }
+
+      .c2-premium-shuttle .c2-price {
+        min-height: auto;
+        border-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .c2-premium-shuttle .c2-list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px 20px;
+        margin: 0;
+        padding: 0;
+      }
+
+      .c2-premium-shuttle .c2-list.bordered {
+        border-bottom: 0;
+      }
+
+      .c2-premium-shuttle .c2-list li {
+        align-items: flex-start;
+        margin-bottom: 0;
+      }
+
+      .c2-premium-shuttle .c2-btn {
+        margin-top: 0;
+        white-space: nowrap;
       }
 
       .c2-card,
@@ -173,8 +222,8 @@
 
       .c2-vip-card {
         background:
-          radial-gradient(circle at 86% 8%, rgba(240, 201, 111, 0.1), transparent 28%),
-          linear-gradient(135deg, rgba(22, 22, 22, 0.98), rgba(8, 8, 8, 0.96));
+          radial-gradient(circle at 8% 0%, rgba(240, 201, 111, 0.12), transparent 32%),
+          linear-gradient(135deg, rgba(25, 22, 15, 0.98), rgba(8, 8, 8, 0.96));
       }
 
       .c2-vip-card .c2-card-title {
@@ -196,20 +245,26 @@
 
       .c2-vip-shell {
         display: grid;
-        grid-template-columns: minmax(240px, 0.62fr) minmax(0, 1fr);
-        gap: 26px;
+        grid-template-columns: 1fr;
+        gap: 22px;
       }
 
       .c2-vip-meta {
         display: grid;
-        gap: 14px;
+        grid-template-columns: minmax(0, 1fr) minmax(210px, 0.32fr);
+        gap: 16px;
+        align-items: stretch;
       }
 
       .c2-vip-price-card {
-        border-radius: 22px;
-        background: rgba(213, 162, 56, 0.1);
-        border: 1px solid rgba(240, 201, 111, 0.1);
-        padding: 20px;
+        display: flex;
+        min-height: 100%;
+        flex-direction: column;
+        justify-content: center;
+        border-radius: 18px;
+        background: linear-gradient(135deg, rgba(240, 201, 111, 0.18), rgba(255, 255, 255, 0.045));
+        border: 1px solid rgba(240, 201, 111, 0.18);
+        padding: 18px;
       }
 
       .c2-vip-label {
@@ -240,6 +295,7 @@
         min-height: auto;
         border-bottom: 0;
         padding-bottom: 0;
+        font-size: clamp(2.5rem, 4vw, 3.7rem);
       }
 
       .c2-price span:not(.c2-price-amount) {
@@ -288,7 +344,8 @@
 
       .c2-vip-card .c2-list {
         display: grid;
-        gap: 12px;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
         margin: 0;
         padding: 0;
       }
@@ -302,12 +359,15 @@
 
       .c2-vip-card .c2-list li {
         align-items: flex-start;
-        gap: 12px;
+        gap: 10px;
         margin: 0;
-        border-radius: 18px;
-        background: rgba(255, 255, 255, 0.045);
-        padding: 14px;
-        line-height: 1.45;
+        min-height: 72px;
+        border-radius: 16px;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.03));
+        border: 1px solid rgba(255, 255, 255, 0.055);
+        padding: 12px;
+        font-size: 0.82rem;
+        line-height: 1.38;
       }
 
       .c2-vip-card .c2-list li::before {
@@ -323,10 +383,11 @@
       }
 
       .c2-vip-summary {
-        margin: 16px 0 18px;
-        color: rgba(255, 255, 255, 0.68);
-        font-size: 0.94rem;
-        line-height: 1.6;
+        margin: 0 0 16px;
+        max-width: 760px;
+        color: rgba(255, 255, 255, 0.72);
+        font-size: 0.96rem;
+        line-height: 1.55;
       }
 
       .c2-list li::before {
@@ -410,14 +471,14 @@
 
       .c2-toggle {
         display: flex;
-        flex-wrap: wrap;
-        background: rgba(0, 0, 0, 0.28);
+        flex-wrap: nowrap;
+        background: rgba(0, 0, 0, 0.32);
         border-radius: 20px;
         padding: 4px;
         margin-bottom: 15px;
         font-size: 0.75rem;
         user-select: none;
-        gap: 4px;
+        gap: 6px;
       }
 
       .c2-vip-card .c2-toggle {
@@ -427,17 +488,18 @@
       }
 
       .c2-vip-card .c2-toggle span {
-        padding: 10px 12px;
-        font-size: 0.78rem;
+        padding: 13px 12px;
+        font-size: 0.76rem;
       }
 
       .c2-toggle span {
-        flex: 1 1 calc(50% - 4px);
+        flex: 1 1 0;
         text-align: center;
-        padding: 5px 14px;
+        padding: 5px 12px;
         border-radius: 16px;
         color: rgba(255, 255, 255, 0.58);
         cursor: pointer;
+        line-height: 1.18;
         transition:
           background 0.25s,
           color 0.25s,
@@ -562,6 +624,19 @@
           grid-template-columns: 1fr;
         }
 
+        .c2-premium-shuttle {
+          grid-template-columns: 1fr;
+          gap: 18px;
+        }
+
+        .c2-premium-shuttle .c2-list {
+          grid-template-columns: 1fr;
+        }
+
+        .c2-premium-shuttle .c2-btn {
+          margin-top: 4px;
+        }
+
         .c2-card,
         .c2-bottom-card {
           padding: 26px;
@@ -570,6 +645,22 @@
         .c2-vip-shell {
           grid-template-columns: 1fr;
           gap: 20px;
+        }
+
+        .c2-vip-meta {
+          grid-template-columns: 1fr;
+        }
+
+        .c2-toggle {
+          flex-wrap: wrap;
+        }
+
+        .c2-toggle span {
+          flex: 1 1 calc(50% - 6px);
+        }
+
+        .c2-vip-card .c2-list {
+          grid-template-columns: 1fr;
         }
 
         .c2-vip-card .c2-card-title {
@@ -655,30 +746,32 @@
 
       <section class="c2-grid-wrapper">
         <div class="c2-grid">
-          <article class="c2-card">
-            <div class="c2-dot-bl"></div>
-            <div class="c2-dot-br"></div>
-            <div class="c2-card-heading">
-              <h3 class="c2-card-title">Shuttle Pass</h3>
-              <span class="c2-pass-badge">Transport</span>
-            </div>
-            <div class="c2-price">$30 <span>USD</span></div>
-            <ul class="c2-list bordered">
-              <li>Valid transport support for all three Fort Moriah conference days.</li>
-              <li>Daily shuttle movement from Harare Hippodrome to Fort Moriah City.</li>
-              <li>Return shuttle coordination after scheduled sessions and gatherings.</li>
-              <li>Removes the stress of arranging daily transport during Shiloh Season.</li>
-            </ul>
-            <a
-              class="c2-btn"
-              href="https://programs.uebertangel.org/checkout/?add-to-cart=13607&quantity=1"
-              data-checkout-product="13607"
-              data-quantity="1"
-            >
-              Register Now
-            </a>
-            <span class="c2-ticket" aria-hidden="true"></span>
-          </article>
+          <div class="c2-transport-stack">
+            <article class="c2-card">
+              <div class="c2-dot-bl"></div>
+              <div class="c2-dot-br"></div>
+              <div class="c2-card-heading">
+                <h3 class="c2-card-title">Free Shuttle Pass</h3>
+                <span class="c2-pass-badge">Local Routes</span>
+              </div>
+              <div class="c2-price">Free <span>Pre-registration required</span></div>
+              <ul class="c2-list bordered">
+                <li>Free shuttle transportation will be available on select local routes throughout Shiloh Week.</li>
+                <li>Transportation may include shuttle buses, minibuses, or commuter vehicles depending on route demand and operational allocation.</li>
+                <li>Free Shuttle access is only available to attendees who complete transportation pre-registration in advance.</li>
+                <li>Due to transportation planning and limited route capacity, shuttle access cannot be guaranteed for unregistered attendees during conference week.</li>
+                <li>Free Local Shuttle Registration closes August 20th, 2026.</li>
+              </ul>
+              <button
+                class="c2-btn"
+                type="button"
+                data-package="Free Shuttle Pass"
+              >
+                Register Now
+              </button>
+              <span class="c2-ticket" aria-hidden="true"></span>
+            </article>
+          </div>
 
           <article class="c2-card c2-vip-card" data-card="web">
             <div class="c2-dot-bl"></div>
@@ -713,6 +806,33 @@
                 </ul>
               </div>
             </div>
+            <span class="c2-ticket" aria-hidden="true"></span>
+          </article>
+
+          <article class="c2-card c2-premium-shuttle">
+            <div class="c2-dot-bl"></div>
+            <div class="c2-dot-br"></div>
+            <div>
+              <div class="c2-card-heading">
+                <h3 class="c2-card-title">Premium Shuttle Pass</h3>
+                <span class="c2-pass-badge">Transport</span>
+              </div>
+              <div class="c2-price">$30 <span>USD</span></div>
+            </div>
+            <ul class="c2-list bordered">
+              <li>Valid transport support for all three Fort Moriah conference days.</li>
+              <li>Daily shuttle movement from Harare Hippodrome to Fort Moriah City.</li>
+              <li>Return shuttle coordination after scheduled sessions and gatherings.</li>
+              <li>Removes the stress of arranging daily transport during Shiloh Season.</li>
+            </ul>
+            <a
+              class="c2-btn"
+              href="https://programs.uebertangel.org/checkout/?add-to-cart=13607&quantity=1"
+              data-checkout-product="13607"
+              data-quantity="1"
+            >
+              Register Now
+            </a>
             <span class="c2-ticket" aria-hidden="true"></span>
           </article>
         </div>
