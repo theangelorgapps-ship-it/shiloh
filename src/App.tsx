@@ -2467,7 +2467,7 @@ function SponsorModal({
     { amount: '$25', impact: '1 person' },
     { amount: '$100', impact: '4 people' },
     { amount: '$500', impact: '20 people' },
-    { amount: '$1,600', impact: '65 people' },
+    { amount: '$2,500', impact: '65 people' },
   ];
 
   useEffect(() => {
@@ -3240,9 +3240,9 @@ function MerchPage({
         <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#F9F4F0]/42 backdrop-blur-[2px]">
           <div className="mx-4 max-w-md border border-black/10 bg-[#F9F4F0]/88 px-6 py-5 text-center shadow-[0_24px_80px_rgba(0,0,0,0.08)] backdrop-blur-md">
             <p className="text-xs font-semibold uppercase tracking-[0.26em] text-black/45">Coming soon</p>
-            <p className="mt-3 text-lg font-medium text-black">Official Shiloh merchandise is being prepared.</p>
+            <p className="mt-3 text-lg font-medium text-black">Official Shiloh Merchandise Coming Soon</p>
             <p className="mt-2 text-sm leading-6 text-black/55">
-              Product access will open once apparel, ceremonial wear, and exclusive conference merchandise are ready.
+              Conference apparel, ceremonial wear and exclusive event merchandise will be available soon.
             </p>
           </div>
         </div>

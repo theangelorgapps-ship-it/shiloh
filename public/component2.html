@@ -132,6 +132,19 @@
         white-space: nowrap;
       }
 
+      .c2-transport-card .c2-toggle {
+        margin: 14px 0 18px;
+      }
+
+      .c2-transport-card .c2-toggle span {
+        padding: 12px 14px;
+        font-size: 0.76rem;
+      }
+
+      .c2-transport-card .c2-btn {
+        align-self: flex-start;
+      }
+
       .c2-card,
       .c2-bottom-card {
         background:
@@ -747,28 +760,33 @@
       <section class="c2-grid-wrapper">
         <div class="c2-grid">
           <div class="c2-transport-stack">
-            <article class="c2-card">
+            <article class="c2-card c2-transport-card">
               <div class="c2-dot-bl"></div>
               <div class="c2-dot-br"></div>
               <div class="c2-card-heading">
-                <h3 class="c2-card-title">Free Shuttle Pass</h3>
-                <span class="c2-pass-badge">Local Routes</span>
+                <h3 class="c2-card-title">Shuttle Passes</h3>
+                <span class="c2-pass-badge" data-transport-badge>Local Routes</span>
               </div>
-              <div class="c2-price">Free <span>Pre-registration required</span></div>
-              <ul class="c2-list bordered">
+              <div class="c2-toggle" role="tablist" aria-label="Shuttle pass type">
+                <span role="tab" tabindex="0" data-transport="free" aria-selected="true" class="active">Free Shuttle</span>
+                <span role="tab" tabindex="0" data-transport="premium" aria-selected="false">Premium Shuttle</span>
+              </div>
+              <div class="c2-price"><span class="c2-price-amount" data-transport-price>Free</span> <span data-transport-note>Pre-registration required</span></div>
+              <ul class="c2-list bordered" data-transport-list>
                 <li>Free shuttle transportation will be available on select local routes throughout Shiloh Week.</li>
                 <li>Transportation may include shuttle buses, minibuses, or commuter vehicles depending on route demand and operational allocation.</li>
                 <li>Free Shuttle access is only available to attendees who complete transportation pre-registration in advance.</li>
                 <li>Due to transportation planning and limited route capacity, shuttle access cannot be guaranteed for unregistered attendees during conference week.</li>
                 <li>Free Local Shuttle Registration closes August 20th, 2026.</li>
               </ul>
-              <button
+              <a
                 class="c2-btn"
-                type="button"
+                href="#"
                 data-package="Free Shuttle Pass"
+                data-transport-register
               >
                 Register Now
-              </button>
+              </a>
               <span class="c2-ticket" aria-hidden="true"></span>
             </article>
           </div>
@@ -809,39 +827,13 @@
             <span class="c2-ticket" aria-hidden="true"></span>
           </article>
 
-          <article class="c2-card c2-premium-shuttle">
-            <div class="c2-dot-bl"></div>
-            <div class="c2-dot-br"></div>
-            <div>
-              <div class="c2-card-heading">
-                <h3 class="c2-card-title">Premium Shuttle Pass</h3>
-                <span class="c2-pass-badge">Transport</span>
-              </div>
-              <div class="c2-price">$30 <span>USD</span></div>
-            </div>
-            <ul class="c2-list bordered">
-              <li>Valid transport support for all three Fort Moriah conference days.</li>
-              <li>Daily shuttle movement from Harare Hippodrome to Fort Moriah City.</li>
-              <li>Return shuttle coordination after scheduled sessions and gatherings.</li>
-              <li>Removes the stress of arranging daily transport during Shiloh Season.</li>
-            </ul>
-            <a
-              class="c2-btn"
-              href="https://programs.uebertangel.org/checkout/?add-to-cart=13607&quantity=1"
-              data-checkout-product="13607"
-              data-quantity="1"
-            >
-              Register Now
-            </a>
-            <span class="c2-ticket" aria-hidden="true"></span>
-          </article>
         </div>
       </section>
 
       <section class="c2-bottom-card">
         <h3 class="c2-card-title">Parking Passes</h3>
         <p class="c2-bottom-desc">
-          Parking for the entire duration of the conference.<br />Coming Soon
+          Parking for the entire duration of the conference.<br /><strong>Coming Soon</strong>
         </p>
         <button class="c2-btn" type="button" data-package="Parking Passes">Register Now</button>
         <span class="c2-ticket" aria-hidden="true"></span>
@@ -914,12 +906,47 @@
             ],
           },
         };
-        const state = { pages: 'retreat' };
+        const TRANSPORT_PASSES = {
+          free: {
+            price: 'Free',
+            note: 'Pre-registration required',
+            badge: 'Local Routes',
+            label: 'Free Shuttle Pass',
+            href: '',
+            features: [
+              'Free shuttle transportation will be available on select local routes throughout Shiloh Week.',
+              'Transportation may include shuttle buses, minibuses, or commuter vehicles depending on route demand and operational allocation.',
+              'Free Shuttle access is only available to attendees who complete transportation pre-registration in advance.',
+              'Due to transportation planning and limited route capacity, shuttle access cannot be guaranteed for unregistered attendees during conference week.',
+              'Free Local Shuttle Registration closes August 20th, 2026.',
+            ],
+          },
+          premium: {
+            price: '$30',
+            note: 'USD',
+            badge: 'Transport',
+            label: 'Premium Shuttle Pass',
+            href: 'https://programs.uebertangel.org/checkout/?add-to-cart=13607&quantity=1',
+            features: [
+              'Valid transport support for all three Fort Moriah conference days.',
+              'Daily shuttle movement from Harare Hippodrome to Fort Moriah City.',
+              'Return shuttle coordination after scheduled sessions and gatherings.',
+              'Removes the stress of arranging daily transport during Shiloh Season.',
+            ],
+          },
+        };
+        const state = { pages: 'retreat', transport: 'free' };
         const price = document.querySelector('[data-price]');
         const priceNote = document.querySelector('[data-price-note]');
         const tabs = document.querySelectorAll('[data-pages]');
         const featureList = document.querySelector('[data-feature-list]');
         const summary = document.querySelector('[data-summary]');
+        const transportTabs = document.querySelectorAll('[data-transport]');
+        const transportPrice = document.querySelector('[data-transport-price]');
+        const transportNote = document.querySelector('[data-transport-note]');
+        const transportBadge = document.querySelector('[data-transport-badge]');
+        const transportList = document.querySelector('[data-transport-list]');
+        const transportRegister = document.querySelector('[data-transport-register]');
 
         function render() {
           const pass = PASSES[state.pages];
@@ -948,6 +975,41 @@
           render();
         }
 
+        function renderTransport() {
+          const pass = TRANSPORT_PASSES[state.transport];
+          transportNote.textContent = pass.note;
+          transportBadge.textContent = pass.badge;
+          transportList.innerHTML = pass.features.map((feature) => `<li>${feature}</li>`).join('');
+          transportRegister.dataset.package = pass.label;
+          if (pass.href) {
+            transportRegister.href = pass.href;
+            transportRegister.dataset.checkoutProduct = '13607';
+            transportRegister.dataset.quantity = '1';
+          } else {
+            transportRegister.href = '#';
+            delete transportRegister.dataset.checkoutProduct;
+            delete transportRegister.dataset.quantity;
+          }
+          if (transportPrice.textContent === pass.price) return;
+
+          transportPrice.classList.add('c2-flip');
+          setTimeout(() => {
+            transportPrice.textContent = pass.price;
+            transportPrice.classList.remove('c2-flip');
+          }, 160);
+        }
+
+        function selectTransport(value) {
+          if (state.transport === value) return;
+          state.transport = value;
+          transportTabs.forEach((tab) => {
+            const selected = tab.dataset.transport === value;
+            tab.classList.toggle('active', selected);
+            tab.setAttribute('aria-selected', String(selected));
+          });
+          renderTransport();
+        }
+
         tabs.forEach((tab) => {
           tab.addEventListener('click', () => selectPages(tab.dataset.pages));
           tab.addEventListener('keydown', (event) => {
@@ -969,6 +1031,37 @@
           });
         });
 
+        transportTabs.forEach((tab) => {
+          tab.addEventListener('click', () => selectTransport(tab.dataset.transport));
+          tab.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              selectTransport(tab.dataset.transport);
+            }
+            if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+              event.preventDefault();
+              const currentIndex = Array.from(transportTabs).findIndex(
+                (item) => item.dataset.transport === state.transport,
+              );
+              const nextIndex =
+                event.key === 'ArrowLeft'
+                  ? Math.max(currentIndex - 1, 0)
+                  : Math.min(currentIndex + 1, transportTabs.length - 1);
+              const next = transportTabs[nextIndex];
+              selectTransport(next.dataset.transport);
+              next.focus();
+            }
+          });
+        });
+
+        transportRegister.addEventListener('click', (event) => {
+          const pass = TRANSPORT_PASSES[state.transport];
+          if (!pass.href) {
+            event.preventDefault();
+            console.log('[c2] contact requested:', pass.label);
+          }
+        });
+
         document.querySelectorAll('[data-checkout-product]').forEach((link) => {
           const quantity = Number(link.dataset.quantity || '1') || 1;
           link.href = `https://programs.uebertangel.org/checkout/?add-to-cart=${link.dataset.checkoutProduct}&quantity=${quantity}`;
@@ -983,6 +1076,7 @@
             console.log('[c2] contact requested:', label);
           });
         });
+        renderTransport();
       })();
     </script>
   </body>
