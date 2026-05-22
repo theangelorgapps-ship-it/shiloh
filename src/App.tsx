@@ -438,7 +438,7 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
       { label: 'Parking and Shuttle', href: '/passes' },
       { label: 'Shiloh Season VIP Experience', href: '/vip' },
     ] },
-    { label: 'Resources', href: '/merch' },
+    { label: '2026 Shiloh Shop', href: '/merch' },
     { label: 'Giving', action: 'sow' },
   ];
 
