@@ -474,6 +474,95 @@
         outline-offset: 3px;
       }
 
+      .c2-btn-disabled,
+      .c2-btn[aria-disabled='true'],
+      .c2-btn[aria-disabled='true']:hover {
+        cursor: not-allowed;
+        background: rgba(225, 224, 204, 0.32);
+        color: rgba(225, 224, 204, 0.62);
+        box-shadow: none;
+        transform: none;
+        pointer-events: none;
+      }
+
+      .c2-transport-card.is-registration-closed {
+        border-color: rgba(225, 224, 204, 0.14);
+      }
+
+      .c2-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 20;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 18px;
+        background: rgba(0, 0, 0, 0.78);
+        backdrop-filter: blur(10px);
+      }
+
+      .c2-modal:target {
+        display: flex;
+      }
+
+      .c2-modal-panel {
+        width: min(760px, 100%);
+        max-height: min(720px, calc(100vh - 36px));
+        overflow: hidden;
+        border: 1px solid rgba(240, 201, 111, 0.28);
+        border-radius: 22px;
+        background:
+          radial-gradient(circle at 90% 4%, rgba(240, 201, 111, 0.16), transparent 24%),
+          #080808;
+        box-shadow: 0 28px 90px rgba(0, 0, 0, 0.62);
+      }
+
+      .c2-modal-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 18px 20px;
+        border-bottom: 1px solid rgba(225, 224, 204, 0.12);
+      }
+
+      .c2-modal-title {
+        color: #ffffff;
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+
+      .c2-modal-close {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border: 1px solid rgba(225, 224, 204, 0.2);
+        border-radius: 50%;
+        background: rgba(225, 224, 204, 0.08);
+        color: #e1e0cc;
+        cursor: pointer;
+        font-size: 1.35rem;
+        line-height: 1;
+      }
+
+      .c2-modal-close:hover,
+      .c2-modal-close:focus-visible {
+        border-color: rgba(240, 201, 111, 0.56);
+        color: #f0c96f;
+        outline: none;
+      }
+
+      .c2-modal-frame {
+        display: block;
+        width: 100%;
+        height: min(560px, calc(100vh - 124px));
+        border: 0;
+        background: #ffffff;
+      }
+
       .c2-tree {
         display: none;
       }
@@ -731,6 +820,23 @@
         .c2-landscape {
           width: 180px;
         }
+
+        .c2-modal {
+          padding: 10px;
+        }
+
+        .c2-modal-panel {
+          max-height: calc(100vh - 20px);
+          border-radius: 16px;
+        }
+
+        .c2-modal-header {
+          padding: 14px 16px;
+        }
+
+        .c2-modal-frame {
+          height: calc(100vh - 94px);
+        }
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -842,6 +948,23 @@
       </section>
     </main>
 
+    <div id="free-shuttle-registration" class="c2-modal" data-shuttle-modal role="dialog" aria-modal="true" aria-labelledby="c2-shuttle-title">
+      <div class="c2-modal-panel">
+        <div class="c2-modal-header">
+          <h2 class="c2-modal-title" id="c2-shuttle-title">Free Shuttle Registration</h2>
+          <a class="c2-modal-close" href="#" aria-label="Close Free Shuttle Registration" data-shuttle-modal-close>&times;</a>
+        </div>
+        <iframe
+          id="ziframe_577603"
+          class="c2-modal-frame"
+          data-shuttle-iframe
+          aria-label="Free Shuttle"
+          title="Free Shuttle"
+          src="https://forms.zohopublic.eu/rikki/form/FreeBus/formperma/awe29HoqrkSWw9iAEK5xiauyvJZ5MXGKb9df31mnl4U"
+        ></iframe>
+      </div>
+    </div>
+
     <script>
       (() => {
         const PASSES = {
@@ -915,6 +1038,7 @@
             badge: 'Local Routes',
             label: 'Free Shuttle Pass',
             href: '',
+            formUrl: 'https://forms.zohopublic.eu/rikki/form/FreeBus/formperma/awe29HoqrkSWw9iAEK5xiauyvJZ5MXGKb9df31mnl4U',
             features: [
               'Free shuttle transportation will be available from the Harare Hippodrome to Ft Moriah.',
               'Shuttle transportation will operate strictly on a first come, first served basis and seating is very limited.',
@@ -941,6 +1065,7 @@
             ],
           },
         };
+        const FREE_SHUTTLE_REGISTRATION_CLOSES_AT = Date.parse('2026-08-20T23:59:00+01:00');
         const state = { pages: 'retreat', transport: 'free' };
         const price = document.querySelector('[data-price]');
         const priceNote = document.querySelector('[data-price-note]');
@@ -953,6 +1078,10 @@
         const transportBadge = document.querySelector('[data-transport-badge]');
         const transportList = document.querySelector('[data-transport-list]');
         const transportRegister = document.querySelector('[data-transport-register]');
+        const transportCard = document.querySelector('.c2-transport-card');
+        const shuttleModal = document.querySelector('[data-shuttle-modal]');
+        const shuttleModalClose = document.querySelector('[data-shuttle-modal-close]');
+        const shuttleIframe = document.querySelector('[data-shuttle-iframe]');
 
         function render() {
           const pass = PASSES[state.pages];
@@ -983,16 +1112,33 @@
 
         function renderTransport() {
           const pass = TRANSPORT_PASSES[state.transport];
+          const freeShuttleClosed = state.transport === 'free' && Date.now() >= FREE_SHUTTLE_REGISTRATION_CLOSES_AT;
           transportNote.textContent = pass.note;
           transportBadge.textContent = pass.badge;
           transportList.innerHTML = pass.features.map((feature) => `<li>${feature}</li>`).join('');
           transportRegister.dataset.package = pass.label;
-          if (pass.href) {
+          transportRegister.textContent = freeShuttleClosed ? 'Registration Closed' : 'Register Now';
+          transportRegister.classList.toggle('c2-btn-disabled', freeShuttleClosed);
+          transportRegister.setAttribute('aria-disabled', String(freeShuttleClosed));
+          transportCard.classList.toggle('is-registration-closed', freeShuttleClosed);
+          if (freeShuttleClosed) {
+            transportRegister.href = '#';
+            delete transportRegister.dataset.formUrl;
+            delete transportRegister.dataset.checkoutProduct;
+            delete transportRegister.dataset.quantity;
+          } else if (pass.href) {
             transportRegister.href = pass.href;
             transportRegister.dataset.checkoutProduct = '13607';
             transportRegister.dataset.quantity = '1';
+            delete transportRegister.dataset.formUrl;
           } else {
-            transportRegister.href = '#';
+            if (pass.formUrl) {
+              transportRegister.href = '#free-shuttle-registration';
+              transportRegister.dataset.formUrl = pass.formUrl;
+            } else {
+              transportRegister.href = '#';
+              delete transportRegister.dataset.formUrl;
+            }
             delete transportRegister.dataset.checkoutProduct;
             delete transportRegister.dataset.quantity;
           }
@@ -1060,8 +1206,66 @@
           });
         });
 
+        function buildReferrerUrl(url) {
+          if (/[?&]referrername=/.test(url)) return url;
+
+          let referrer = window.location.href;
+          try {
+            referrer =
+              window.self !== window.top
+                ? window.top.location.href
+                : /^https?:\/\/[\w.-]+\.[a-zA-Z]{2,}/i.test(referrer)
+                  ? referrer
+                  : '';
+          } catch (error) {}
+
+          if (!referrer) return url;
+          if (referrer.length > 1800) {
+            const queryIndex = referrer.indexOf('?');
+            if (queryIndex > -1) {
+              referrer = referrer.substring(0, queryIndex);
+            }
+            if (referrer.length > 1800) {
+              referrer = referrer.substring(0, 1800);
+            }
+          }
+
+          return `${url}${url.includes('?') ? '&' : '?'}referrername=${encodeURIComponent(referrer)}`;
+        }
+
+        function prepareShuttleIframe(formUrl) {
+          shuttleIframe.src = buildReferrerUrl(formUrl);
+        }
+
+        prepareShuttleIframe(shuttleIframe.src);
+
+        shuttleModalClose.addEventListener('click', () => {
+          document.body.style.overflow = '';
+        });
+        shuttleModal.addEventListener('click', (event) => {
+          if (event.target === shuttleModal) {
+            window.location.hash = '';
+          }
+        });
+
+        document.addEventListener('keydown', (event) => {
+          if (event.key === 'Escape' && window.location.hash === '#free-shuttle-registration') {
+            window.location.hash = '';
+            transportRegister.focus();
+          }
+        });
+
         transportRegister.addEventListener('click', (event) => {
           const pass = TRANSPORT_PASSES[state.transport];
+          if (state.transport === 'free' && Date.now() >= FREE_SHUTTLE_REGISTRATION_CLOSES_AT) {
+            event.preventDefault();
+            return;
+          }
+          if (pass.formUrl) {
+            prepareShuttleIframe(pass.formUrl);
+            document.body.style.overflow = 'hidden';
+            return;
+          }
           if (!pass.href) {
             event.preventDefault();
             console.log('[c2] contact requested:', pass.label);
@@ -1083,6 +1287,7 @@
           });
         });
         renderTransport();
+        setInterval(renderTransport, 60 * 1000);
       })();
     </script>
   </body>
