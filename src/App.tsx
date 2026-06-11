@@ -5894,17 +5894,6 @@ function FloatingCart({
           </motion.div>
         )}
       </AnimatePresence>
-      <button
-        type="button"
-        onClick={() => setOpen(!open)}
-        className="group hidden md:inline-flex items-center gap-3 rounded-full border border-primary/18 bg-[#071d27] px-5 py-3 text-sm font-bold uppercase tracking-[0.18em] text-primary shadow-[0_18px_55px_rgba(0,0,0,0.45)] transition-transform hover:-translate-y-0.5"
-      >
-        <ShoppingCart className="h-5 w-5" />
-        Cart
-        <span className="flex h-7 min-w-7 items-center justify-center rounded-full bg-primary px-2 text-xs text-black">
-          {itemCount}
-        </span>
-      </button>
     </div>
   );
 }
@@ -7120,15 +7109,13 @@ export default function App() {
       <SponsorModal open={sponsorOpen} onClose={() => setSponsorOpen(false)} />
       <SowModal open={sowOpen} onClose={() => setSowOpen(false)} />
       <CelebrationBurst active={celebrating} />
-      {cart.length > 0 && !isProductPage && (
-        <FloatingCart
-          cart={cart}
-          onUpdateQuantity={updateCartQuantity}
-          onRemove={removeFromCart}
-          open={cartOpen}
-          setOpen={setCartOpen}
-        />
-      )}
+      <FloatingCart
+        cart={cart}
+        onUpdateQuantity={updateCartQuantity}
+        onRemove={removeFromCart}
+        open={cartOpen}
+        setOpen={setCartOpen}
+      />
     </>
   );
 }
