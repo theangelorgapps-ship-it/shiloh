@@ -515,6 +515,18 @@ function HeroHeader({ sticky = true, pageType }: { sticky?: boolean; pageType?: 
     window.dispatchEvent(new CustomEvent('open-sponsor-modal'));
   };
 
+  const isShopOrProduct = pageType === 'shop' || pageType === 'product';
+
+  const navClassName = `relative z-20 grid w-full max-w-none ${
+    isShopOrProduct
+      ? 'grid-cols-[1fr_auto_auto] gap-x-2 px-4 py-2 rounded-b-[1.75rem]'
+      : 'grid-cols-[1fr_auto] gap-x-5 gap-y-5 px-6 py-5 rounded-b-[1.75rem]'
+  } bg-black text-[#E1E0CC] shadow-[0_16px_40px_rgba(0,0,0,0.35)] md:flex md:w-[min(1160px,calc(100vw-3rem))] md:max-w-[calc(100vw-1.5rem)] md:justify-between md:gap-7 md:rounded-b-3xl md:px-7 md:py-2 md:text-white xl:w-[min(1240px,calc(100vw-4rem))] xl:px-8 2xl:w-[min(1880px,calc(100vw-8rem))] 2xl:px-10`;
+
+  const hamburgerClassName = isShopOrProduct
+    ? 'order-3 -mr-1 ml-1 flex h-10 w-10 shrink-0 flex-col items-center justify-center gap-1.5 rounded-full text-[#E1E0CC] transition-transform duration-300 hover:scale-105 md:hidden'
+    : 'order-2 -mr-4 ml-auto flex h-16 w-16 shrink-0 flex-col items-center justify-center gap-2 rounded-full text-[#E1E0CC] transition-transform duration-300 hover:scale-105 md:hidden';
+
   return (
     <header
       className={`${sticky ? 'fixed' : 'absolute'} inset-x-0 top-0 z-40 flex justify-center px-3`}
@@ -534,7 +546,7 @@ function HeroHeader({ sticky = true, pageType }: { sticky?: boolean; pageType?: 
           />
         )}
       </AnimatePresence>
-      <nav className="relative z-20 grid w-full max-w-none grid-cols-[auto_1fr_auto] items-center gap-x-2 rounded-b-[1.75rem] bg-black px-4 py-2 text-[#E1E0CC] shadow-[0_16px_40px_rgba(0,0,0,0.35)] md:flex md:w-[min(1160px,calc(100vw-3rem))] md:max-w-[calc(100vw-1.5rem)] md:justify-between md:gap-7 md:rounded-b-3xl md:px-7 md:py-2 md:text-white xl:w-[min(1240px,calc(100vw-4rem))] xl:px-8 2xl:w-[min(1880px,calc(100vw-8rem))] 2xl:px-10">
+      <nav className={navClassName}>
         <a href="/" aria-label="Shiloh home" className="order-1 flex min-w-0 shrink-0 items-center gap-3 md:col-span-1 md:gap-3">
           <span className="flex flex-col text-left leading-[0.78] text-[#E1E0CC]">
             <span className="text-[18px] font-extrabold uppercase tracking-[0.2em] md:text-xs md:tracking-[0.22em]">Shiloh</span>
@@ -552,7 +564,11 @@ function HeroHeader({ sticky = true, pageType }: { sticky?: boolean; pageType?: 
           onClick={() => {
             window.dispatchEvent(new CustomEvent('open-cart'));
           }}
-          className="order-4 hidden md:flex items-center justify-center relative w-12 h-12 text-[#E1E0CC] active:scale-95 transition-transform"
+          className={`items-center justify-center relative w-12 h-12 text-[#E1E0CC] active:scale-95 transition-transform ${
+            isShopOrProduct
+              ? 'order-2 ml-auto flex md:order-4 md:ml-0'
+              : 'hidden'
+          }`}
           aria-label="Open cart"
         >
           <ShoppingCart className="h-6 w-6" />
@@ -619,11 +635,11 @@ function HeroHeader({ sticky = true, pageType }: { sticky?: boolean; pageType?: 
             </div>
           ))}
         </div>
-        <div className="header-cta-wrapper order-2 ml-auto flex shrink-0 items-center justify-center gap-1 md:order-3 md:ml-0 md:gap-2">
+        <div className="header-cta-wrapper order-4 col-span-2 grid min-w-0 grid-cols-2 gap-2 md:order-3 md:col-span-1 md:flex md:shrink-0 md:items-center md:justify-center md:gap-2">
           <button
             type="button"
             onClick={openSponsorModal}
-            className="mobile-cta-btn bring-someone-btn group inline-flex min-h-[2.75rem] min-w-0 items-center justify-center rounded-full border border-white/15 bg-white/10 px-2.5 text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 hover:bg-white/15 md:min-h-[3rem] md:min-w-[9.3rem] md:px-4"
+            className="group inline-flex min-h-[3.75rem] min-w-0 items-center justify-center rounded-sm border border-white/15 bg-white/10 px-3 text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 hover:bg-white/15 md:min-h-[3rem] md:min-w-[9.3rem] md:rounded-full md:border-white/20 md:px-4"
           >
             <span className="flex flex-col items-center text-center leading-none">
               <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-primary/60 md:text-[9px]">
@@ -635,7 +651,7 @@ function HeroHeader({ sticky = true, pageType }: { sticky?: boolean; pageType?: 
           <button
             type="button"
             data-registration-type="conference"
-            className="mobile-cta-btn youre-coming-btn group inline-flex min-h-[2.75rem] min-w-0 items-center justify-center rounded-full border border-white/20 bg-[#E1E0CC] px-2.5 text-black shadow-[0_8px_20px_rgba(225,224,204,0.16)] transition-all duration-300 hover:bg-white md:min-h-0 md:gap-2 md:bg-white/10 md:py-1 md:pl-3 md:pr-1 md:text-[#E1E0CC] md:shadow-none md:backdrop-blur-xl md:hover:bg-white/15 md:hover:gap-3"
+            className="group inline-flex min-h-[3.75rem] min-w-0 items-center justify-center rounded-sm bg-[#E1E0CC] px-3 text-black shadow-[0_8px_20px_rgba(225,224,204,0.16)] transition-all duration-300 hover:bg-white md:min-h-0 md:gap-2 md:rounded-full md:border md:border-white/25 md:bg-white/10 md:py-1 md:pl-3 md:pr-1 md:text-[#E1E0CC] md:shadow-none md:backdrop-blur-xl md:hover:bg-white/15 md:hover:gap-3"
           >
             <span className="flex flex-col items-start leading-none">
               <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-black/55 md:text-[9px] md:text-primary/60">
@@ -661,13 +677,13 @@ function HeroHeader({ sticky = true, pageType }: { sticky?: boolean; pageType?: 
               return !current;
             });
           }}
-          className="order-3 -mr-1 ml-1 flex h-10 w-10 shrink-0 flex-col items-center justify-center gap-1.5 rounded-full text-[#E1E0CC] transition-transform duration-300 hover:scale-105 md:hidden"
+          className={hamburgerClassName}
           aria-label="Toggle menu"
           aria-expanded={menuOpen}
         >
-          <span className={`block h-0.5 w-6 rounded-full bg-current transition-transform duration-300 ${menuOpen ? 'translate-y-2 rotate-45' : ''}`} />
-          <span className={`block h-0.5 w-6 rounded-full bg-current transition-opacity duration-300 ${menuOpen ? 'opacity-0' : 'opacity-100'}`} />
-          <span className={`block h-0.5 w-6 rounded-full bg-current transition-transform duration-300 ${menuOpen ? '-translate-y-2 -rotate-45' : ''}`} />
+          <span className={`block ${isShopOrProduct ? 'h-0.5 w-6' : 'h-1 w-9'} rounded-full bg-current transition-transform duration-300 ${menuOpen ? (isShopOrProduct ? 'translate-y-2 rotate-45' : 'translate-y-3 rotate-45') : ''}`} />
+          <span className={`block ${isShopOrProduct ? 'h-0.5 w-6' : 'h-1 w-9'} rounded-full bg-current transition-opacity duration-300 ${menuOpen ? 'opacity-0' : 'opacity-100'}`} />
+          <span className={`block ${isShopOrProduct ? 'h-0.5 w-6' : 'h-1 w-9'} rounded-full bg-current transition-transform duration-300 ${menuOpen ? (isShopOrProduct ? '-translate-y-2 -rotate-45' : '-translate-y-3 -rotate-45') : ''}`} />
         </button>
       </nav>
       <AnimatePresence>
@@ -2500,48 +2516,7 @@ function FloatingSponsorButton({ onClick, visible }: { onClick: () => void; visi
   );
 }
 
-/* ─── Mobile Sticky Bottom Actions ──────────────────────────────────────────
- * Shown ONLY on mobile (≤767px) and ONLY on non-shop / non-product pages.
- * Uses the same Liquid Glass aesthetic as the global button treatment.
- * ──────────────────────────────────────────────────────────────────────────── */
-function MobileStickyActions({
-  onOpenSponsor,
-  pageType,
-}: {
-  onOpenSponsor: () => void;
-  pageType?: 'shop' | 'product' | '';
-}) {
-  if (pageType === 'shop' || pageType === 'product') return null;
-  return (
-    <div
-      id="mobile-sticky-actions"
-      className="mobile-sticky-bar pointer-events-none fixed inset-x-0 bottom-0 z-[90] flex items-end justify-center gap-2 px-4 pb-[max(env(safe-area-inset-bottom),0.75rem)] pt-3 md:hidden"
-    >
-      {/* Liquid glass background strip */}
-      <div className="absolute inset-0 rounded-t-2xl border-t border-white/10 bg-black/55 backdrop-blur-xl" />
-      {/* Bring Someone to Shiloh */}
-      <button
-        type="button"
-        onClick={onOpenSponsor}
-        className="mobile-sticky-btn bring-someone-sticky pointer-events-auto relative flex-1 overflow-hidden rounded-full border border-white/20 bg-[#061923]/80 px-4 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.22em] text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 active:scale-[0.97]"
-        aria-label="Bring someone to Shiloh"
-      >
-        <span className="absolute inset-x-0 top-0 h-[40%] rounded-t-full bg-gradient-to-b from-white/20 to-transparent pointer-events-none" />
-        Bring Someone to Shiloh
-      </button>
-      {/* Let Us Know You're Coming */}
-      <button
-        type="button"
-        data-registration-type="conference"
-        className="mobile-sticky-btn youre-coming-sticky pointer-events-auto relative flex-1 overflow-hidden rounded-full border border-[#E1E0CC]/30 bg-[#E1E0CC] px-4 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.22em] text-black transition-all duration-300 active:scale-[0.97]"
-        aria-label="Let us know you are coming to Shiloh"
-      >
-        <span className="absolute inset-x-0 top-0 h-[40%] rounded-t-full bg-gradient-to-b from-white/40 to-transparent pointer-events-none" />
-        You&apos;re Coming
-      </button>
-    </div>
-  );
-}
+
 
 function SponsorModal({
   open,
@@ -6146,22 +6121,17 @@ function MerchPage({
             {products
               .filter((p) => (activeTab === 'Shiloh' ? p.category === 'SHILOH 2026' : p.category === 'GOODNEWSWORLD'))
               .map((product, index) => (
-                <article
+                <a
                   key={`${activeTab}-${product.name}`}
-                  className={`shop-product-card group -ml-[1px] flex w-[260px] shrink-0 flex-col border border-[#1f4068] first:ml-0 sm:w-[280px] md:w-[300px] lg:w-[calc(25%-1px)] ${
+                  href={`/merch/${product.slug}`}
+                  className={`group -ml-[1px] flex w-[260px] shrink-0 flex-col overflow-hidden rounded-3xl bg-white border border-black/[0.08] shadow-[0_8px_30px_rgb(0,0,0,0.03)] first:ml-0 sm:w-[280px] md:w-[300px] lg:w-[calc(25%-1px)] ${
                     bestSellers.isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-                  } transition-all duration-500`}
+                  } transition-all duration-500 hover:shadow-md`}
                   style={{ transitionDelay: `${200 + index * 80}ms` }}
+                  aria-label={`View ${product.name}`}
                 >
-                  <div className="flex h-12 flex-col justify-center px-4">
-                    <p className="card-footer-sub text-xs font-medium uppercase tracking-wider">{product.category ?? 'SHILOH SHOP'}</p>
-                    {product.subcategory && <p className="card-footer-sub mt-0.5 text-xs uppercase">{product.subcategory}</p>}
-                  </div>
-                  <a
-                    href={`/merch/${product.slug}`}
-                    className="mx-4 aspect-[3/4] overflow-hidden rounded-xl bg-[#0d2137]"
-                    aria-label={`View ${product.name}`}
-                  >
+                  {/* Curved Product Image */}
+                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-t-2xl bg-[#ebe4d8]">
                     {product.image ? (
                       <img
                         src={product.image}
@@ -6170,26 +6140,29 @@ function MerchPage({
                       />
                     ) : (
                       <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${product.accent}`}>
-                        <product.icon className="h-12 w-12 text-white" strokeWidth={1.5} />
+                        <product.icon className="h-14 w-14 text-white" strokeWidth={1.5} />
                       </div>
                     )}
-                  </a>
-                  <div className="flex min-h-28 flex-col items-center justify-center px-4 text-center">
-                    <a href={`/merch/${product.slug}`} className="card-footer-text text-sm transition-colors hover:opacity-70">
-                      {product.name}
-                    </a>
-                    <div className="mt-2 flex items-center gap-2 text-sm">
-                      {product.oldPriceLabel && <span className="card-footer-sub line-through">{product.oldPriceLabel}</span>}
-                      <span className="card-footer-price">{product.priceLabel}</span>
-                    </div>
-                    <a
-                      href={`/merch/${product.slug}`}
-                      className="card-view-pill mt-4 rounded-full border px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] transition-colors"
-                    >
-                      View Item
-                    </a>
                   </div>
-                </article>
+
+                  {/* Card Footer: Name left, Price + View right */}
+                  <div className="flex items-center justify-between gap-3 px-4 py-4">
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate font-serif text-base italic font-light leading-tight text-black">
+                        {product.name}
+                      </p>
+                      {product.subcategory && (
+                        <p className="mt-0.5 text-[10px] uppercase tracking-wider text-black/40">{product.subcategory}</p>
+                      )}
+                    </div>
+                    <div className="flex shrink-0 flex-col items-end gap-1.5">
+                      <span className="font-serif text-sm italic text-black/80">{product.priceLabel}</span>
+                      <span className="rounded-full border border-black/15 px-3 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-black transition-colors group-hover:bg-black group-hover:text-white group-hover:border-black">
+                        View
+                      </span>
+                    </div>
+                  </div>
+                </a>
               ))}
           </div>
 
@@ -6623,14 +6596,14 @@ function ProductPage({
                   </button>
                 </div>
 
-                {/* Liquid Glass Navy Blue Add to Bag Button */}
+                {/* Solid Navy Blue Add to Bag Button */}
                 <button
                   type="button"
                   onClick={() => {
                     onAddToCart(product.slug, selectedQuantity, selectedVariantId, { size: selectedSize, color: selectedColor });
                     setIsAddedSuccess(true);
                   }}
-                  className="flex-1 h-11 bg-gradient-to-b from-[#0b1a30]/85 to-[#040c17]/95 border border-white/20 backdrop-blur-[10px] text-white text-xs font-bold uppercase tracking-[0.2em] flex items-center justify-center transition-all duration-200 active:scale-[0.98] rounded-lg shadow-[0_4px_15px_rgba(11,26,48,0.25),inset_0_1px_0_rgba(255,255,255,0.15)]"
+                  className="flex-1 h-11 bg-[#0b1a30] text-white text-xs font-bold uppercase tracking-[0.2em] flex items-center justify-center transition-all duration-200 active:scale-[0.98] rounded-lg shadow-md hover:bg-[#142642]"
                 >
                   Add to Bag — {selectedPriceLabel}
                 </button>
@@ -7199,19 +7172,13 @@ export default function App() {
       )}
       <FloatingSponsorButton
         onClick={() => setSponsorOpen(true)}
-        visible={!isLoading && sponsorVisible && !registrationOpen && !sponsorOpen && !sowOpen && !isMobile}
-      />
-      {/* Mobile sticky bottom CTA bar — only on non-shop/product pages */}
-      <MobileStickyActions
-        onOpenSponsor={() => setSponsorOpen(true)}
-        pageType={isProductPage ? 'product' : isMerchPage ? 'shop' : ''}
+        visible={!isLoading && sponsorVisible && !registrationOpen && !sponsorOpen && !sowOpen && (!isMobile || (!isMerchPage && !isProductPage))}
       />
       <RegistrationModal open={registrationOpen} onClose={() => setRegistrationOpen(false)} type={registrationType} />
       <SponsorModal open={sponsorOpen} onClose={() => setSponsorOpen(false)} />
       <SowModal open={sowOpen} onClose={() => setSowOpen(false)} />
       <CelebrationBurst active={celebrating} />
-      {/* FloatingCart — desktop only, no floating cart on mobile */}
-      {cart.length > 0 && !isMobile && (
+      {cart.length > 0 && (
         <FloatingCart
           cart={cart}
           onUpdateQuantity={updateCartQuantity}
