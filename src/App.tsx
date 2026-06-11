@@ -10,6 +10,8 @@ import {
   Car,
   Check,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Chrome,
   CreditCard,
   ExternalLink,
@@ -263,16 +265,16 @@ function WordsPullUp({
           >
             {showAsterisk && isLastWord
               ? word.split('').map((character, characterIndex) => (
-                  <span
-                    key={`${character}-${characterIndex}`}
-                    className={characterIndex === finalCharacterIndex ? 'relative inline-block' : undefined}
-                  >
-                    {character}
-                    {characterIndex === finalCharacterIndex && (
-                      <span className="absolute -right-[0.3em] top-[0.65em] text-[0.31em]">*</span>
-                    )}
-                  </span>
-                ))
+                <span
+                  key={`${character}-${characterIndex}`}
+                  className={characterIndex === finalCharacterIndex ? 'relative inline-block' : undefined}
+                >
+                  {character}
+                  {characterIndex === finalCharacterIndex && (
+                    <span className="absolute -right-[0.3em] top-[0.65em] text-[0.31em]">*</span>
+                  )}
+                </span>
+              ))
               : word}
           </motion.span>
         );
@@ -374,17 +376,15 @@ function PillButton({
   return (
     <a
       href={href}
-      className={`group inline-flex items-center gap-2 rounded-full py-1 pl-5 pr-1 text-sm font-medium transition-all duration-300 hover:gap-3 sm:text-base ${
-        isGlass
+      className={`group inline-flex items-center gap-2 rounded-full py-1 pl-5 pr-1 text-sm font-medium transition-all duration-300 hover:gap-3 sm:text-base ${isGlass
           ? 'border border-white/35 bg-white/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] backdrop-blur-xl'
           : 'bg-white text-black'
-      }`}
+        }`}
     >
       {children}
       <span
-        className={`flex h-9 w-9 items-center justify-center rounded-full transition-transform duration-300 group-hover:scale-110 sm:h-10 sm:w-10 ${
-          isGlass ? 'bg-white text-black' : 'bg-black text-white'
-        }`}
+        className={`flex h-9 w-9 items-center justify-center rounded-full transition-transform duration-300 group-hover:scale-110 sm:h-10 sm:w-10 ${isGlass ? 'bg-white text-black' : 'bg-black text-white'
+          }`}
       >
         <ArrowRight className="h-4 w-4" />
       </span>
@@ -420,24 +420,60 @@ function AnimatedLetter({
 type HeaderNavItem =
   | { label: string; href: string; children?: never; action?: never }
   | {
-      label: string;
-      children: Array<{ label: string; href: string; action?: never } | { label: string; action: 'sponsor'; href?: never }>;
-      href?: never;
-      action?: never;
-    }
+    label: string;
+    children: Array<{ label: string; href: string; action?: never } | { label: string; action: 'sponsor'; href?: never }>;
+    href?: never;
+    action?: never;
+  }
   | { label: string; action: 'sow' | 'sponsor'; href?: never; children?: never };
 
 function HeroHeader({ sticky = true }: { sticky?: boolean }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileSubmenu, setMobileSubmenu] = useState<string | null>(null);
+  const [cartCount, setCartCount] = useState(() => {
+    try {
+      const stored = window.localStorage.getItem('shiloh-merch-cart');
+      const items = stored ? JSON.parse(stored) : [];
+      return items.reduce((acc: number, item: any) => acc + item.quantity, 0);
+    } catch {
+      return 0;
+    }
+  });
+
+  useEffect(() => {
+    const handleCartUpdate = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const cartItems = customEvent.detail || [];
+      const count = cartItems.reduce((acc: number, item: any) => acc + item.quantity, 0);
+      setCartCount(count);
+    };
+
+    const handleStorageChange = () => {
+      try {
+        const stored = window.localStorage.getItem('shiloh-merch-cart');
+        const items = stored ? JSON.parse(stored) : [];
+        setCartCount(items.reduce((acc: number, item: any) => acc + item.quantity, 0));
+      } catch { }
+    };
+
+    window.addEventListener('cart-updated', handleCartUpdate);
+    window.addEventListener('storage', handleStorageChange);
+    return () => {
+      window.removeEventListener('cart-updated', handleCartUpdate);
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
   const navItems: HeaderNavItem[] = [
     { label: 'Home', href: '/' },
-    { label: 'Plan', children: [
-      { label: '2026 Shiloh Season Guide', href: '/journey' },
-      { label: 'Events Schedule', href: '/schedule' },
-      { label: 'Parking and Shuttle', href: '/passes' },
-      { label: 'Shiloh Season VIP Experience', href: '/vip' },
-    ] },
+    {
+      label: 'Plan', children: [
+        { label: '2026 Shiloh Season Guide', href: '/journey' },
+        { label: 'Events Schedule', href: '/schedule' },
+        { label: 'Parking and Shuttle', href: '/passes' },
+        { label: 'Shiloh Season VIP Experience', href: '/vip' },
+      ]
+    },
     { label: '2026 Shiloh Shop', href: '/merch' },
     { label: 'Giving', action: 'sow' },
   ];
@@ -495,7 +531,7 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
           />
         )}
       </AnimatePresence>
-      <nav className="relative z-20 grid w-full max-w-none grid-cols-[1fr_auto] items-center gap-x-5 gap-y-5 rounded-b-[1.75rem] bg-black px-6 py-5 text-[#E1E0CC] shadow-[0_16px_40px_rgba(0,0,0,0.35)] md:flex md:w-[min(1160px,calc(100vw-3rem))] md:max-w-[calc(100vw-1.5rem)] md:justify-between md:gap-7 md:rounded-b-3xl md:px-7 md:py-2 md:text-white xl:w-[min(1240px,calc(100vw-4rem))] xl:px-8 2xl:w-[min(1880px,calc(100vw-8rem))] 2xl:px-10">
+      <nav className="relative z-20 grid w-full max-w-none grid-cols-[1fr_auto_auto] items-center gap-x-3 rounded-b-[1.75rem] bg-black px-6 py-3.5 text-[#E1E0CC] shadow-[0_16px_40px_rgba(0,0,0,0.35)] md:flex md:w-[min(1160px,calc(100vw-3rem))] md:max-w-[calc(100vw-1.5rem)] md:justify-between md:gap-7 md:rounded-b-3xl md:px-7 md:py-2 md:text-white xl:w-[min(1240px,calc(100vw-4rem))] xl:px-8 2xl:w-[min(1880px,calc(100vw-8rem))] 2xl:px-10">
         <a href="/" aria-label="Shiloh home" className="order-1 flex min-w-0 shrink-0 items-center gap-3 md:col-span-1 md:gap-3">
           <span className="flex flex-col text-left leading-[0.78] text-[#E1E0CC]">
             <span className="text-[18px] font-extrabold uppercase tracking-[0.2em] md:text-xs md:tracking-[0.22em]">Shiloh</span>
@@ -508,6 +544,21 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
             <span>6 Sep</span>
           </span>
         </a>
+        <button
+          type="button"
+          onClick={() => {
+            window.dispatchEvent(new CustomEvent('open-cart'));
+          }}
+          className="order-2 ml-auto md:hidden flex items-center justify-center relative w-12 h-12 text-[#E1E0CC] active:scale-95 transition-transform"
+          aria-label="Open cart"
+        >
+          <ShoppingCart className="h-6 w-6" />
+          {cartCount > 0 && (
+            <span className="absolute top-1.5 right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[9px] font-extrabold text-black leading-none shadow-[0_2px_5px_rgba(0,0,0,0.3)] animate-scaleIn">
+              {cartCount}
+            </span>
+          )}
+        </button>
         <div className="order-2 hidden items-center gap-4 whitespace-nowrap text-[13px] text-[rgba(225,224,204,0.82)] md:flex lg:gap-6 lg:text-sm xl:gap-8 xl:text-[15px]">
           {navItems.map((item) => (
             <div key={item.label} className="group relative py-2">
@@ -565,7 +616,7 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
             </div>
           ))}
         </div>
-        <div className="order-4 col-span-2 grid min-w-0 grid-cols-2 gap-2 md:order-3 md:col-span-1 md:flex md:shrink-0 md:items-center md:justify-center md:gap-2">
+        <div className="hidden md:flex md:order-3 md:shrink-0 md:items-center md:justify-center md:gap-2">
           <button
             type="button"
             onClick={openSponsorModal}
@@ -607,13 +658,13 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
               return !current;
             });
           }}
-          className="order-2 -mr-4 ml-auto flex h-16 w-16 shrink-0 flex-col items-center justify-center gap-2 rounded-full text-[#E1E0CC] transition-transform duration-300 hover:scale-105 md:hidden"
+          className="order-3 -mr-2 ml-2 flex h-12 w-12 shrink-0 flex-col items-center justify-center gap-1.5 rounded-full text-[#E1E0CC] transition-transform duration-300 hover:scale-105 md:hidden"
           aria-label="Toggle menu"
           aria-expanded={menuOpen}
         >
-          <span className={`block h-1 w-9 rounded-full bg-current transition-transform duration-300 ${menuOpen ? 'translate-y-3 rotate-45' : ''}`} />
-          <span className={`block h-1 w-9 rounded-full bg-current transition-opacity duration-300 ${menuOpen ? 'opacity-0' : 'opacity-100'}`} />
-          <span className={`block h-1 w-9 rounded-full bg-current transition-transform duration-300 ${menuOpen ? '-translate-y-3 -rotate-45' : ''}`} />
+          <span className={`block h-0.5 w-6 rounded-full bg-current transition-transform duration-300 ${menuOpen ? 'translate-y-2 rotate-45' : ''}`} />
+          <span className={`block h-0.5 w-6 rounded-full bg-current transition-opacity duration-300 ${menuOpen ? 'opacity-0' : 'opacity-100'}`} />
+          <span className={`block h-0.5 w-6 rounded-full bg-current transition-transform duration-300 ${menuOpen ? '-translate-y-2 -rotate-45' : ''}`} />
         </button>
       </nav>
       <AnimatePresence>
@@ -637,9 +688,8 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
                     >
                       <span>{item.label}</span>
                       <ChevronDown
-                        className={`h-4 w-4 transition-transform duration-200 ${
-                          mobileSubmenu === item.label ? 'rotate-180' : ''
-                        }`}
+                        className={`h-4 w-4 transition-transform duration-200 ${mobileSubmenu === item.label ? 'rotate-180' : ''
+                          }`}
                       />
                     </button>
                     <AnimatePresence initial={false}>
@@ -913,9 +963,8 @@ function JourneyCarouselSection() {
               key={event.tab}
               type="button"
               onClick={() => setActiveIndex(index)}
-              className={`shrink-0 border-b pb-4 transition-colors ${
-                activeIndex === index ? 'border-black text-black' : 'border-transparent hover:text-black/60'
-              }`}
+              className={`shrink-0 border-b pb-4 transition-colors ${activeIndex === index ? 'border-black text-black' : 'border-transparent hover:text-black/60'
+                }`}
             >
               {event.tab}
             </button>
@@ -946,11 +995,10 @@ function JourneyCarouselSection() {
                   key={button.label}
                   href={button.href}
                   data-direct-registration={button.external ? 'true' : undefined}
-                  className={`rounded-full px-7 py-3 text-xs font-bold uppercase tracking-[0.28em] transition-transform hover:-translate-y-0.5 ${
-                    index === 0
+                  className={`rounded-full px-7 py-3 text-xs font-bold uppercase tracking-[0.28em] transition-transform hover:-translate-y-0.5 ${index === 0
                       ? 'bg-black text-white shadow-[0_18px_40px_rgba(0,0,0,0.14)]'
                       : 'border border-black/10 bg-white text-black'
-                  }`}
+                    }`}
                 >
                   {button.label}
                 </a>
@@ -1016,9 +1064,8 @@ function FortMoriahMapSection() {
                   key={location.title}
                   type="button"
                   onClick={() => selectLocation(index)}
-                  className={`flex w-full items-center justify-between rounded-full px-4 py-3 text-left text-xs uppercase tracking-[0.2em] transition-colors ${
-                    activeIndex === index ? 'bg-black text-white' : 'bg-black/[0.035] text-black/55 hover:bg-black/[0.07] hover:text-black'
-                  }`}
+                  className={`flex w-full items-center justify-between rounded-full px-4 py-3 text-left text-xs uppercase tracking-[0.2em] transition-colors ${activeIndex === index ? 'bg-black text-white' : 'bg-black/[0.035] text-black/55 hover:bg-black/[0.07] hover:text-black'
+                    }`}
                 >
                   {location.title}
                   <MapPin className="h-4 w-4" />
@@ -1042,14 +1089,12 @@ function FortMoriahMapSection() {
                     aria-label={`Show ${location.title}`}
                   >
                     <span
-                      className={`absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#d7aa43]/60 transition-all duration-300 ${
-                        activeIndex === index ? 'scale-125 opacity-100 shadow-[0_0_28px_rgba(215,170,67,0.55)]' : 'scale-100 opacity-60 group-hover:scale-125'
-                      }`}
+                      className={`absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#d7aa43]/60 transition-all duration-300 ${activeIndex === index ? 'scale-125 opacity-100 shadow-[0_0_28px_rgba(215,170,67,0.55)]' : 'scale-100 opacity-60 group-hover:scale-125'
+                        }`}
                     />
                     <span
-                      className={`relative flex h-9 w-9 items-center justify-center rounded-full border transition-all duration-300 ${
-                        activeIndex === index ? 'border-[#f0c96f] bg-[#f0c96f] text-black' : 'border-[#d7aa43]/70 bg-black/55 text-[#f0c96f] backdrop-blur-sm'
-                      }`}
+                      className={`relative flex h-9 w-9 items-center justify-center rounded-full border transition-all duration-300 ${activeIndex === index ? 'border-[#f0c96f] bg-[#f0c96f] text-black' : 'border-[#d7aa43]/70 bg-black/55 text-[#f0c96f] backdrop-blur-sm'
+                        }`}
                     >
                       <MapPin className="h-4 w-4" />
                     </span>
@@ -1242,50 +1287,50 @@ function JourneySupportSection({
             from conference venues.
           </p>
           <div className="grid gap-4 md:grid-cols-2">
-          {[
-            {
-              name: 'Rainbow Towers Hotel',
-              tag: 'Conference hotel',
-              detail: 'RTG hotel at 1 Pennefather Avenue, positioned for major conference and business travel in Harare.',
-              href: 'https://rtgafrica.com/',
-            },
-            {
-              name: 'Cresta Jameson',
-              tag: 'Central Harare',
-              detail: 'A four-star Cresta property in Harare’s central business district with accommodation and conference options.',
-              href: 'https://www.crestahotels.com/hotels/zimbabwe/cresta-jameson',
-            },
-            {
-              name: 'Holiday Inn Harare',
-              tag: 'IHG hotel',
-              detail: 'Comfort-focused hotel on Samora Machel Avenue with parking, restaurants, pool, gym, and Wi-Fi.',
-              href: 'https://www.ihg.com/holidayinn/hotels/us/en/harare/harsf/hoteldetail',
-            },
-            {
-              name: 'Hyatt Regency Harare The Meikles',
-              tag: 'Luxury stay',
-              detail: 'Five-star city hotel in central Harare with dining, spa, pool, meeting facilities, and concierge services.',
-              href: 'https://www.hyatt.com/hyatt-regency/en-US/hrerh-hyatt-regency-harare-the-meikles',
-            },
-          ].map((stay) => (
-            <a
-              key={stay.name}
-              href={stay.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex min-h-[12rem] flex-col justify-between rounded-[1.25rem] border border-black/8 bg-[#fbfbfb] p-5 transition-all hover:-translate-y-1 hover:border-black/20 hover:bg-white hover:shadow-[0_18px_50px_rgba(0,0,0,0.08)]"
-            >
-              <div>
-                <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.28em] text-black/35">{stay.tag}</p>
-                <h4 className="journey-card-title mb-4 text-xl leading-none text-black sm:text-2xl">{stay.name}</h4>
-                <p className="text-sm leading-relaxed text-black/55">{stay.detail}</p>
-              </div>
-              <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-black">
-                View stay
-                <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
-              </span>
-            </a>
-          ))}
+            {[
+              {
+                name: 'Rainbow Towers Hotel',
+                tag: 'Conference hotel',
+                detail: 'RTG hotel at 1 Pennefather Avenue, positioned for major conference and business travel in Harare.',
+                href: 'https://rtgafrica.com/',
+              },
+              {
+                name: 'Cresta Jameson',
+                tag: 'Central Harare',
+                detail: 'A four-star Cresta property in Harare’s central business district with accommodation and conference options.',
+                href: 'https://www.crestahotels.com/hotels/zimbabwe/cresta-jameson',
+              },
+              {
+                name: 'Holiday Inn Harare',
+                tag: 'IHG hotel',
+                detail: 'Comfort-focused hotel on Samora Machel Avenue with parking, restaurants, pool, gym, and Wi-Fi.',
+                href: 'https://www.ihg.com/holidayinn/hotels/us/en/harare/harsf/hoteldetail',
+              },
+              {
+                name: 'Hyatt Regency Harare The Meikles',
+                tag: 'Luxury stay',
+                detail: 'Five-star city hotel in central Harare with dining, spa, pool, meeting facilities, and concierge services.',
+                href: 'https://www.hyatt.com/hyatt-regency/en-US/hrerh-hyatt-regency-harare-the-meikles',
+              },
+            ].map((stay) => (
+              <a
+                key={stay.name}
+                href={stay.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex min-h-[12rem] flex-col justify-between rounded-[1.25rem] border border-black/8 bg-[#fbfbfb] p-5 transition-all hover:-translate-y-1 hover:border-black/20 hover:bg-white hover:shadow-[0_18px_50px_rgba(0,0,0,0.08)]"
+              >
+                <div>
+                  <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.28em] text-black/35">{stay.tag}</p>
+                  <h4 className="journey-card-title mb-4 text-xl leading-none text-black sm:text-2xl">{stay.name}</h4>
+                  <p className="text-sm leading-relaxed text-black/55">{stay.detail}</p>
+                </div>
+                <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.22em] text-black">
+                  View stay
+                  <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                </span>
+              </a>
+            ))}
           </div>
         </div>
       ),
@@ -1382,9 +1427,8 @@ function JourneySupportSection({
               return (
                 <div
                   key={item.title}
-                  className={`overflow-hidden rounded-[1.75rem] border bg-white transition-shadow ${
-                    isOpen ? 'border-black shadow-[0_18px_60px_rgba(0,0,0,0.08)]' : 'border-black/[0.08] shadow-[0_10px_40px_rgba(0,0,0,0.025)]'
-                  }`}
+                  className={`overflow-hidden rounded-[1.75rem] border bg-white transition-shadow ${isOpen ? 'border-black shadow-[0_18px_60px_rgba(0,0,0,0.08)]' : 'border-black/[0.08] shadow-[0_10px_40px_rgba(0,0,0,0.025)]'
+                    }`}
                 >
                   <button
                     type="button"
@@ -1393,9 +1437,8 @@ function JourneySupportSection({
                     aria-expanded={isOpen}
                   >
                     <span
-                      className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl transition-colors ${
-                        isOpen ? 'bg-black text-white' : 'bg-black/[0.035] text-black/35'
-                      }`}
+                      className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl transition-colors ${isOpen ? 'bg-black text-white' : 'bg-black/[0.035] text-black/35'
+                        }`}
                     >
                       <Icon className="h-5 w-5" />
                     </span>
@@ -1760,11 +1803,10 @@ function VipFeaturesSection() {
                 key={pass.label}
                 type="button"
                 onClick={() => setActivePassIndex(index)}
-                className={`rounded-[0.9rem] px-4 py-3 text-left transition-all duration-300 ${
-                  activePassIndex === index
+                className={`rounded-[0.9rem] px-4 py-3 text-left transition-all duration-300 ${activePassIndex === index
                     ? 'bg-[#f0c96f] text-black shadow-[0_12px_34px_rgba(240,201,111,0.24)]'
                     : 'text-white/66 hover:bg-white/10 hover:text-white'
-                }`}
+                  }`}
               >
                 <span className="block text-[9px] font-bold uppercase tracking-[0.22em] opacity-70 sm:text-[10px] sm:tracking-[0.28em]">
                   {pass.date}
@@ -2508,18 +2550,16 @@ function SponsorModal({
                 <button
                   type="button"
                   onClick={() => setActiveTab('about')}
-                  className={`rounded-full px-4 py-2 transition-colors ${
-                    activeTab === 'about' ? 'bg-black text-white' : 'hover:text-black'
-                  }`}
+                  className={`rounded-full px-4 py-2 transition-colors ${activeTab === 'about' ? 'bg-black text-white' : 'hover:text-black'
+                    }`}
                 >
                   About
                 </button>
                 <button
                   type="button"
                   onClick={() => setActiveTab('sponsor')}
-                  className={`rounded-full px-4 py-2 transition-colors ${
-                    activeTab === 'sponsor' ? 'bg-black text-white' : 'hover:text-black'
-                  }`}
+                  className={`rounded-full px-4 py-2 transition-colors ${activeTab === 'sponsor' ? 'bg-black text-white' : 'hover:text-black'
+                    }`}
                 >
                   Sponsor Now
                 </button>
@@ -2670,9 +2710,8 @@ function SowModal({
                     key={option.id}
                     type="button"
                     onClick={() => setActiveSeed(option.id)}
-                    className={`rounded-full px-4 py-2 transition-colors ${
-                      activeSeed === option.id ? 'bg-black text-white' : 'hover:text-black'
-                    }`}
+                    className={`rounded-full px-4 py-2 transition-colors ${activeSeed === option.id ? 'bg-black text-white' : 'hover:text-black'
+                      }`}
                   >
                     {option.label}
                   </button>
@@ -2705,6 +2744,9 @@ type MerchProduct = {
   image?: string;
   imagePosition?: string;
   variants?: MerchVariant[];
+  sizes?: string[];
+  colors?: Array<{ name: string; className: string }>;
+  images?: string[];
 };
 
 type MerchVariant = {
@@ -2727,25 +2769,2919 @@ type CartItem = {
 
 const merchProducts: MerchProduct[] = [
   {
-    slug: 'shiloh-2026-tshirt',
-    name: 'Shiloh 2026 Tshirt',
+    slug: 'shiloh-season-jumper',
+    name: 'Pre Order - Shiloh Season Jumper',
+    priceUsd: 35,
+    priceLabel: '$35 USD',
+    category: 'SHILOH 2026',
+    description: 'Step into your Shiloh Season in style, a season of surrender, growth, breakthrough and divine encounter! The Shiloh Season Jumper is more than apparel, it\'s a statement of faith and expectation. Inspired by the biblical place of encounter and transformation, this piece represents a season where prayers are answered, purpose is revealed, and God\'s presence is experienced deeply. With a comfortable modern fit, this tee is designed for everyday wear while carrying a powerful message. Whether worn casually, to church gatherings, conferences or community events, it serves as a reminder that every season has purpose. And this Shiloh is YOUR Shiloh Season!',
+    detail: 'Step into your Shiloh Season in style, a season of surrender, growth, breakthrough and divine encounter! The Shiloh Season Jumper is more than apparel, it\'s a statement of faith and expectation. Inspired by the biblical place of encounter and transformation, this piece represents a season where prayers are answered, purpose is revealed, and God\'s presence is experienced deeply. With a comfortable modern fit, this tee is designed for everyday wear while carrying a powerful message. Whether worn casually, to church gatherings, conferences or community events, it serves as a reminder that every season has purpose. And this Shiloh is YOUR Shiloh Season!',
+    accent: 'from-[#E1E0CC] to-[#746C4F]',
+    icon: Shirt,
+    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Jumper-Shiloh.webp',
+    sizes: ["S", "M", "L", "XL", "XXL", "XXXL", "XXXXL"],
+    colors: [{ "name": "Black", "className": "#111111" }, { "name": "Charcoal Grey", "className": "#333333" }, { "name": "Pink", "className": "#ad1457" }, { "name": "Red", "className": "#d32f2f" }, { "name": "Blue", "className": "#1976d2" }, { "name": "Green", "className": "#2e7d32" }, { "name": "Maroon", "className": "#800000" }, { "name": "White", "className": "#ffffff" }, { "name": "Brown", "className": "#5d4037" }],
+    variants: [
+      {
+        id: '33022',
+        label: 'Size: S / Color: Black',
+        checkoutProductId: 33022,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'S',
+        color: 'Black'
+      },
+      {
+        id: '33023',
+        label: 'Size: M / Color: Black',
+        checkoutProductId: 33023,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'M',
+        color: 'Black'
+      },
+      {
+        id: '33024',
+        label: 'Size: L / Color: Black',
+        checkoutProductId: 33024,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'L',
+        color: 'Black'
+      },
+      {
+        id: '33025',
+        label: 'Size: XL / Color: Black',
+        checkoutProductId: 33025,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XL',
+        color: 'Black'
+      },
+      {
+        id: '33026',
+        label: 'Size: XXL / Color: Black',
+        checkoutProductId: 33026,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXL',
+        color: 'Black'
+      },
+      {
+        id: '33027',
+        label: 'Size: XXXL / Color: Black',
+        checkoutProductId: 33027,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXXL',
+        color: 'Black'
+      },
+      {
+        id: '33028',
+        label: 'Size: XXXXL / Color: Black',
+        checkoutProductId: 33028,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXXXL',
+        color: 'Black'
+      },
+      {
+        id: '33029',
+        label: 'Size: S / Color: Charcoal Grey',
+        checkoutProductId: 33029,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'S',
+        color: 'Charcoal Grey'
+      },
+      {
+        id: '33030',
+        label: 'Size: M / Color: Charcoal Grey',
+        checkoutProductId: 33030,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'M',
+        color: 'Charcoal Grey'
+      },
+      {
+        id: '33031',
+        label: 'Size: L / Color: Charcoal Grey',
+        checkoutProductId: 33031,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'L',
+        color: 'Charcoal Grey'
+      },
+      {
+        id: '33032',
+        label: 'Size: XL / Color: Charcoal Grey',
+        checkoutProductId: 33032,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XL',
+        color: 'Charcoal Grey'
+      },
+      {
+        id: '33033',
+        label: 'Size: XXL / Color: Charcoal Grey',
+        checkoutProductId: 33033,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXL',
+        color: 'Charcoal Grey'
+      },
+      {
+        id: '33034',
+        label: 'Size: XXXL / Color: Charcoal Grey',
+        checkoutProductId: 33034,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXXL',
+        color: 'Charcoal Grey'
+      },
+      {
+        id: '33035',
+        label: 'Size: XXXXL / Color: Charcoal Grey',
+        checkoutProductId: 33035,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXXXL',
+        color: 'Charcoal Grey'
+      },
+      {
+        id: '33036',
+        label: 'Size: S / Color: Pink',
+        checkoutProductId: 33036,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'S',
+        color: 'Pink'
+      },
+      {
+        id: '33037',
+        label: 'Size: M / Color: Pink',
+        checkoutProductId: 33037,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'M',
+        color: 'Pink'
+      },
+      {
+        id: '33038',
+        label: 'Size: L / Color: Pink',
+        checkoutProductId: 33038,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'L',
+        color: 'Pink'
+      },
+      {
+        id: '33039',
+        label: 'Size: XL / Color: Pink',
+        checkoutProductId: 33039,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XL',
+        color: 'Pink'
+      },
+      {
+        id: '33040',
+        label: 'Size: XXL / Color: Pink',
+        checkoutProductId: 33040,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXL',
+        color: 'Pink'
+      },
+      {
+        id: '33041',
+        label: 'Size: XXXL / Color: Pink',
+        checkoutProductId: 33041,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXXL',
+        color: 'Pink'
+      },
+      {
+        id: '33042',
+        label: 'Size: XXXXL / Color: Pink',
+        checkoutProductId: 33042,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXXXL',
+        color: 'Pink'
+      },
+      {
+        id: '33043',
+        label: 'Size: S / Color: Red',
+        checkoutProductId: 33043,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'S',
+        color: 'Red'
+      },
+      {
+        id: '33044',
+        label: 'Size: M / Color: Red',
+        checkoutProductId: 33044,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'M',
+        color: 'Red'
+      },
+      {
+        id: '33045',
+        label: 'Size: L / Color: Red',
+        checkoutProductId: 33045,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'L',
+        color: 'Red'
+      },
+      {
+        id: '33046',
+        label: 'Size: XL / Color: Red',
+        checkoutProductId: 33046,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XL',
+        color: 'Red'
+      },
+      {
+        id: '33047',
+        label: 'Size: XXL / Color: Red',
+        checkoutProductId: 33047,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXL',
+        color: 'Red'
+      },
+      {
+        id: '33048',
+        label: 'Size: XXXL / Color: Red',
+        checkoutProductId: 33048,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXXL',
+        color: 'Red'
+      },
+      {
+        id: '33049',
+        label: 'Size: XXXXL / Color: Red',
+        checkoutProductId: 33049,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXXXL',
+        color: 'Red'
+      },
+      {
+        id: '33050',
+        label: 'Size: S / Color: Blue',
+        checkoutProductId: 33050,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'S',
+        color: 'Blue'
+      },
+      {
+        id: '33051',
+        label: 'Size: M / Color: Blue',
+        checkoutProductId: 33051,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'M',
+        color: 'Blue'
+      },
+      {
+        id: '33052',
+        label: 'Size: L / Color: Blue',
+        checkoutProductId: 33052,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'L',
+        color: 'Blue'
+      },
+      {
+        id: '33053',
+        label: 'Size: XL / Color: Blue',
+        checkoutProductId: 33053,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XL',
+        color: 'Blue'
+      },
+      {
+        id: '33054',
+        label: 'Size: XXL / Color: Blue',
+        checkoutProductId: 33054,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXL',
+        color: 'Blue'
+      },
+      {
+        id: '33055',
+        label: 'Size: XXXL / Color: Blue',
+        checkoutProductId: 33055,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXXL',
+        color: 'Blue'
+      },
+      {
+        id: '33056',
+        label: 'Size: XXXXL / Color: Blue',
+        checkoutProductId: 33056,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXXXL',
+        color: 'Blue'
+      },
+      {
+        id: '33057',
+        label: 'Size: S / Color: Green',
+        checkoutProductId: 33057,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'S',
+        color: 'Green'
+      },
+      {
+        id: '33058',
+        label: 'Size: M / Color: Green',
+        checkoutProductId: 33058,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'M',
+        color: 'Green'
+      },
+      {
+        id: '33059',
+        label: 'Size: L / Color: Green',
+        checkoutProductId: 33059,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'L',
+        color: 'Green'
+      },
+      {
+        id: '33060',
+        label: 'Size: XL / Color: Green',
+        checkoutProductId: 33060,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XL',
+        color: 'Green'
+      },
+      {
+        id: '33061',
+        label: 'Size: XXL / Color: Green',
+        checkoutProductId: 33061,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXL',
+        color: 'Green'
+      },
+      {
+        id: '33062',
+        label: 'Size: XXXL / Color: Green',
+        checkoutProductId: 33062,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXXL',
+        color: 'Green'
+      },
+      {
+        id: '33063',
+        label: 'Size: XXXXL / Color: Green',
+        checkoutProductId: 33063,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXXXL',
+        color: 'Green'
+      },
+      {
+        id: '33064',
+        label: 'Size: S / Color: Maroon',
+        checkoutProductId: 33064,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'S',
+        color: 'Maroon'
+      },
+      {
+        id: '33065',
+        label: 'Size: M / Color: Maroon',
+        checkoutProductId: 33065,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'M',
+        color: 'Maroon'
+      },
+      {
+        id: '33066',
+        label: 'Size: L / Color: Maroon',
+        checkoutProductId: 33066,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'L',
+        color: 'Maroon'
+      },
+      {
+        id: '33067',
+        label: 'Size: XL / Color: Maroon',
+        checkoutProductId: 33067,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XL',
+        color: 'Maroon'
+      },
+      {
+        id: '33068',
+        label: 'Size: XXL / Color: Maroon',
+        checkoutProductId: 33068,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXL',
+        color: 'Maroon'
+      },
+      {
+        id: '33069',
+        label: 'Size: XXXL / Color: Maroon',
+        checkoutProductId: 33069,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXXL',
+        color: 'Maroon'
+      },
+      {
+        id: '33070',
+        label: 'Size: XXXXL / Color: Maroon',
+        checkoutProductId: 33070,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXXXL',
+        color: 'Maroon'
+      },
+      {
+        id: '33071',
+        label: 'Size: S / Color: White',
+        checkoutProductId: 33071,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'S',
+        color: 'White'
+      },
+      {
+        id: '33072',
+        label: 'Size: M / Color: White',
+        checkoutProductId: 33072,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'M',
+        color: 'White'
+      },
+      {
+        id: '33073',
+        label: 'Size: L / Color: White',
+        checkoutProductId: 33073,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'L',
+        color: 'White'
+      },
+      {
+        id: '33074',
+        label: 'Size: XL / Color: White',
+        checkoutProductId: 33074,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XL',
+        color: 'White'
+      },
+      {
+        id: '33075',
+        label: 'Size: XXL / Color: White',
+        checkoutProductId: 33075,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXL',
+        color: 'White'
+      },
+      {
+        id: '33076',
+        label: 'Size: XXXL / Color: White',
+        checkoutProductId: 33076,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXXL',
+        color: 'White'
+      },
+      {
+        id: '33077',
+        label: 'Size: XXXXL / Color: White',
+        checkoutProductId: 33077,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXXXL',
+        color: 'White'
+      },
+      {
+        id: '33078',
+        label: 'Size: S / Color: Brown',
+        checkoutProductId: 33078,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'S',
+        color: 'Brown'
+      },
+      {
+        id: '33079',
+        label: 'Size: M / Color: Brown',
+        checkoutProductId: 33079,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'M',
+        color: 'Brown'
+      },
+      {
+        id: '33080',
+        label: 'Size: L / Color: Brown',
+        checkoutProductId: 33080,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'L',
+        color: 'Brown'
+      },
+      {
+        id: '33081',
+        label: 'Size: XL / Color: Brown',
+        checkoutProductId: 33081,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XL',
+        color: 'Brown'
+      },
+      {
+        id: '33082',
+        label: 'Size: XXL / Color: Brown',
+        checkoutProductId: 33082,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXL',
+        color: 'Brown'
+      },
+      {
+        id: '33083',
+        label: 'Size: XXXL / Color: Brown',
+        checkoutProductId: 33083,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXXL',
+        color: 'Brown'
+      },
+      {
+        id: '33084',
+        label: 'Size: XXXXL / Color: Brown',
+        checkoutProductId: 33084,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XXXXL',
+        color: 'Brown'
+      }
+    ]
+  },
+  {
+    slug: 'shiloh-season-long-sleeve-t-shirt',
+    name: 'Pre Order - Shiloh Season Long Sleeve T-Shirt',
     priceUsd: 20,
     priceLabel: '$20 USD',
     category: 'SHILOH 2026',
-    description: 'Official Shiloh 2026 T-shirt for conference days, travel, and cool evening gatherings.',
-    detail:
-      'Official Shiloh 2026 T-shirt prepared for conference days, travel, and cool evening gatherings. Select your preferred option, add the quantity you need, and checkout securely through UebertAngel.org once the product ID is assigned.',
+    description: 'Step into your Shiloh Season in style, a season of surrender, growth, breakthrough and divine encounter! The Shiloh Season T-Shirt is more than apparel, it&#8217;s a statement of faith and expectation. Inspired by the biblical place of encounter and transformation, this piece represents a season where prayers are answered, purpose is revealed, and God&#8217;s presence is experienced deeply. With a comfortable modern fit, this tee is designed for everyday wear while carrying a powerful message. Whether worn casually, to church gatherings, conferences or community events, it serves as a reminder that every season has purpose. And this Shiloh is YOUR Shiloh Season!',
+    detail: 'Step into your Shiloh Season in style, a season of surrender, growth, breakthrough and divine encounter! The Shiloh Season T-Shirt is more than apparel, it&#8217;s a statement of faith and expectation. Inspired by the biblical place of encounter and transformation, this piece represents a season where prayers are answered, purpose is revealed, and God&#8217;s presence is experienced deeply. With a comfortable modern fit, this tee is designed for everyday wear while carrying a powerful message. Whether worn casually, to church gatherings, conferences or community events, it serves as a reminder that every season has purpose. And this Shiloh is YOUR Shiloh Season!',
     accent: 'from-[#E1E0CC] to-[#746C4F]',
     icon: Shirt,
-    image:
-      'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_20260518_193822_8c95f5ed-b142-454f-ab87-59ad1f09e758.png&w=1280&q=85',
+    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Long-Sleeve-Shiloh.webp',
+    sizes: ["S", "M", "L", "XL", "XXL", "XXXL", "XXXXL"],
+    colors: [{ "name": "Black/Silver Logo", "className": "linear-gradient(135deg, #111 50%, #c0c0c0 50%)" }, { "name": "White/Silver Logo", "className": "linear-gradient(135deg, #fff 50%, #c0c0c0 50%)" }, { "name": "Red/Blue Logo", "className": "linear-gradient(135deg, #d32f2f 50%, #1976d2 50%)" }, { "name": "Green/Gold Logo", "className": "linear-gradient(135deg, #2e7d32 50%, #ffd700 50%)" }, { "name": "Blue/Silver Logo", "className": "linear-gradient(135deg, #1976d2 50%, #c0c0c0 50%)" }, { "name": "Cream/Gold Logo", "className": "linear-gradient(135deg, #f5f5dc 50%, #ffd700 50%)" }, { "name": "Purple/Blue Logo", "className": "linear-gradient(135deg, #7b1fa2 50%, #1976d2 50%)" }, { "name": "Pink/Silver Logo", "className": "linear-gradient(135deg, #ad1457 50%, #c0c0c0 50%)" }, { "name": "Maroon/Gold Logo", "className": "linear-gradient(135deg, #800000 50%, #ffd700 50%)" }],
     variants: [
       {
-        id: 'default',
-        label: 'Standard',
-        checkoutProductId: undefined,
+        id: '32956',
+        label: 'Size: S / Color: Black/Silver Logo',
+        checkoutProductId: 32956,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Black/Silver Logo'
       },
-    ],
+      {
+        id: '32957',
+        label: 'Size: M / Color: Black/Silver Logo',
+        checkoutProductId: 32957,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Black/Silver Logo'
+      },
+      {
+        id: '32958',
+        label: 'Size: L / Color: Black/Silver Logo',
+        checkoutProductId: 32958,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Black/Silver Logo'
+      },
+      {
+        id: '32959',
+        label: 'Size: XL / Color: Black/Silver Logo',
+        checkoutProductId: 32959,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Black/Silver Logo'
+      },
+      {
+        id: '32960',
+        label: 'Size: XXL / Color: Black/Silver Logo',
+        checkoutProductId: 32960,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Black/Silver Logo'
+      },
+      {
+        id: '32961',
+        label: 'Size: XXXL / Color: Black/Silver Logo',
+        checkoutProductId: 32961,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Black/Silver Logo'
+      },
+      {
+        id: '32962',
+        label: 'Size: XXXXL / Color: Black/Silver Logo',
+        checkoutProductId: 32962,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Black/Silver Logo'
+      },
+      {
+        id: '32963',
+        label: 'Size: S / Color: White/Silver Logo',
+        checkoutProductId: 32963,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'White/Silver Logo'
+      },
+      {
+        id: '32964',
+        label: 'Size: M / Color: White/Silver Logo',
+        checkoutProductId: 32964,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'White/Silver Logo'
+      },
+      {
+        id: '32965',
+        label: 'Size: L / Color: White/Silver Logo',
+        checkoutProductId: 32965,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'White/Silver Logo'
+      },
+      {
+        id: '32966',
+        label: 'Size: XL / Color: White/Silver Logo',
+        checkoutProductId: 32966,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'White/Silver Logo'
+      },
+      {
+        id: '32967',
+        label: 'Size: XXL / Color: White/Silver Logo',
+        checkoutProductId: 32967,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'White/Silver Logo'
+      },
+      {
+        id: '32968',
+        label: 'Size: XXXL / Color: White/Silver Logo',
+        checkoutProductId: 32968,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'White/Silver Logo'
+      },
+      {
+        id: '32969',
+        label: 'Size: XXXXL / Color: White/Silver Logo',
+        checkoutProductId: 32969,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'White/Silver Logo'
+      },
+      {
+        id: '32970',
+        label: 'Size: S / Color: Red/Blue Logo',
+        checkoutProductId: 32970,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Red/Blue Logo'
+      },
+      {
+        id: '32971',
+        label: 'Size: M / Color: Red/Blue Logo',
+        checkoutProductId: 32971,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Red/Blue Logo'
+      },
+      {
+        id: '32972',
+        label: 'Size: L / Color: Red/Blue Logo',
+        checkoutProductId: 32972,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Red/Blue Logo'
+      },
+      {
+        id: '32973',
+        label: 'Size: XL / Color: Red/Blue Logo',
+        checkoutProductId: 32973,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Red/Blue Logo'
+      },
+      {
+        id: '32974',
+        label: 'Size: XXL / Color: Red/Blue Logo',
+        checkoutProductId: 32974,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Red/Blue Logo'
+      },
+      {
+        id: '32975',
+        label: 'Size: XXXL / Color: Red/Blue Logo',
+        checkoutProductId: 32975,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Red/Blue Logo'
+      },
+      {
+        id: '32976',
+        label: 'Size: XXXXL / Color: Red/Blue Logo',
+        checkoutProductId: 32976,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Red/Blue Logo'
+      },
+      {
+        id: '32977',
+        label: 'Size: S / Color: Green/Gold Logo',
+        checkoutProductId: 32977,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Green/Gold Logo'
+      },
+      {
+        id: '32978',
+        label: 'Size: M / Color: Green/Gold Logo',
+        checkoutProductId: 32978,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Green/Gold Logo'
+      },
+      {
+        id: '32979',
+        label: 'Size: L / Color: Green/Gold Logo',
+        checkoutProductId: 32979,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Green/Gold Logo'
+      },
+      {
+        id: '32980',
+        label: 'Size: XL / Color: Green/Gold Logo',
+        checkoutProductId: 32980,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Green/Gold Logo'
+      },
+      {
+        id: '32981',
+        label: 'Size: XXL / Color: Green/Gold Logo',
+        checkoutProductId: 32981,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Green/Gold Logo'
+      },
+      {
+        id: '32982',
+        label: 'Size: XXXL / Color: Green/Gold Logo',
+        checkoutProductId: 32982,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Green/Gold Logo'
+      },
+      {
+        id: '32983',
+        label: 'Size: XXXXL / Color: Green/Gold Logo',
+        checkoutProductId: 32983,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Green/Gold Logo'
+      },
+      {
+        id: '32984',
+        label: 'Size: S / Color: Blue/Silver Logo',
+        checkoutProductId: 32984,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Blue/Silver Logo'
+      },
+      {
+        id: '32985',
+        label: 'Size: M / Color: Blue/Silver Logo',
+        checkoutProductId: 32985,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Blue/Silver Logo'
+      },
+      {
+        id: '32986',
+        label: 'Size: L / Color: Blue/Silver Logo',
+        checkoutProductId: 32986,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Blue/Silver Logo'
+      },
+      {
+        id: '32987',
+        label: 'Size: XL / Color: Blue/Silver Logo',
+        checkoutProductId: 32987,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Blue/Silver Logo'
+      },
+      {
+        id: '32988',
+        label: 'Size: XXL / Color: Blue/Silver Logo',
+        checkoutProductId: 32988,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Blue/Silver Logo'
+      },
+      {
+        id: '32989',
+        label: 'Size: XXXL / Color: Blue/Silver Logo',
+        checkoutProductId: 32989,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Blue/Silver Logo'
+      },
+      {
+        id: '32990',
+        label: 'Size: XXXXL / Color: Blue/Silver Logo',
+        checkoutProductId: 32990,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Blue/Silver Logo'
+      },
+      {
+        id: '32991',
+        label: 'Size: S / Color: Cream/Gold Logo',
+        checkoutProductId: 32991,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Cream/Gold Logo'
+      },
+      {
+        id: '32992',
+        label: 'Size: M / Color: Cream/Gold Logo',
+        checkoutProductId: 32992,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Cream/Gold Logo'
+      },
+      {
+        id: '32993',
+        label: 'Size: L / Color: Cream/Gold Logo',
+        checkoutProductId: 32993,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Cream/Gold Logo'
+      },
+      {
+        id: '32994',
+        label: 'Size: XL / Color: Cream/Gold Logo',
+        checkoutProductId: 32994,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Cream/Gold Logo'
+      },
+      {
+        id: '32995',
+        label: 'Size: XXL / Color: Cream/Gold Logo',
+        checkoutProductId: 32995,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Cream/Gold Logo'
+      },
+      {
+        id: '32996',
+        label: 'Size: XXXL / Color: Cream/Gold Logo',
+        checkoutProductId: 32996,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Cream/Gold Logo'
+      },
+      {
+        id: '32997',
+        label: 'Size: XXXXL / Color: Cream/Gold Logo',
+        checkoutProductId: 32997,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Cream/Gold Logo'
+      },
+      {
+        id: '32998',
+        label: 'Size: S / Color: Purple/Blue Logo',
+        checkoutProductId: 32998,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Purple/Blue Logo'
+      },
+      {
+        id: '32999',
+        label: 'Size: M / Color: Purple/Blue Logo',
+        checkoutProductId: 32999,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Purple/Blue Logo'
+      },
+      {
+        id: '33000',
+        label: 'Size: L / Color: Purple/Blue Logo',
+        checkoutProductId: 33000,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Purple/Blue Logo'
+      },
+      {
+        id: '33001',
+        label: 'Size: XL / Color: Purple/Blue Logo',
+        checkoutProductId: 33001,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Purple/Blue Logo'
+      },
+      {
+        id: '33002',
+        label: 'Size: XXL / Color: Purple/Blue Logo',
+        checkoutProductId: 33002,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Purple/Blue Logo'
+      },
+      {
+        id: '33003',
+        label: 'Size: XXXL / Color: Purple/Blue Logo',
+        checkoutProductId: 33003,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Purple/Blue Logo'
+      },
+      {
+        id: '33004',
+        label: 'Size: XXXXL / Color: Purple/Blue Logo',
+        checkoutProductId: 33004,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Purple/Blue Logo'
+      },
+      {
+        id: '33005',
+        label: 'Size: S / Color: Pink/Silver Logo',
+        checkoutProductId: 33005,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Pink/Silver Logo'
+      },
+      {
+        id: '33006',
+        label: 'Size: M / Color: Pink/Silver Logo',
+        checkoutProductId: 33006,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Pink/Silver Logo'
+      },
+      {
+        id: '33007',
+        label: 'Size: L / Color: Pink/Silver Logo',
+        checkoutProductId: 33007,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Pink/Silver Logo'
+      },
+      {
+        id: '33008',
+        label: 'Size: XL / Color: Pink/Silver Logo',
+        checkoutProductId: 33008,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Pink/Silver Logo'
+      },
+      {
+        id: '33009',
+        label: 'Size: XXL / Color: Pink/Silver Logo',
+        checkoutProductId: 33009,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Pink/Silver Logo'
+      },
+      {
+        id: '33010',
+        label: 'Size: XXXL / Color: Pink/Silver Logo',
+        checkoutProductId: 33010,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Pink/Silver Logo'
+      },
+      {
+        id: '33011',
+        label: 'Size: XXXXL / Color: Pink/Silver Logo',
+        checkoutProductId: 33011,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Pink/Silver Logo'
+      },
+      {
+        id: '33012',
+        label: 'Size: S / Color: Maroon/Gold Logo',
+        checkoutProductId: 33012,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Maroon/Gold Logo'
+      },
+      {
+        id: '33013',
+        label: 'Size: M / Color: Maroon/Gold Logo',
+        checkoutProductId: 33013,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Maroon/Gold Logo'
+      },
+      {
+        id: '33014',
+        label: 'Size: L / Color: Maroon/Gold Logo',
+        checkoutProductId: 33014,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Maroon/Gold Logo'
+      },
+      {
+        id: '33015',
+        label: 'Size: XL / Color: Maroon/Gold Logo',
+        checkoutProductId: 33015,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Maroon/Gold Logo'
+      },
+      {
+        id: '33016',
+        label: 'Size: XXL / Color: Maroon/Gold Logo',
+        checkoutProductId: 33016,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Maroon/Gold Logo'
+      },
+      {
+        id: '33017',
+        label: 'Size: XXXL / Color: Maroon/Gold Logo',
+        checkoutProductId: 33017,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Maroon/Gold Logo'
+      },
+      {
+        id: '33018',
+        label: 'Size: XXXXL / Color: Maroon/Gold Logo',
+        checkoutProductId: 33018,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Maroon/Gold Logo'
+      }
+    ]
+  },
+  {
+    slug: 'shiloh-season-silver-logo-t-shirt',
+    name: 'Pre Order - Shiloh Season Silver Logo T-Shirt',
+    priceUsd: 20,
+    priceLabel: '$20 USD',
+    category: 'SHILOH 2026',
+    description: 'Step into your Shiloh Season in style, a season of surrender, growth, breakthrough and divine encounter! The Shiloh Season T-Shirt is more than apparel, it&#8217;s a statement of faith and expectation. Inspired by the biblical place of encounter and transformation, this piece represents a season where prayers are answered, purpose is revealed, and God&#8217;s presence is experienced deeply. With a comfortable modern fit, this tee is designed for everyday wear while carrying a powerful message. Whether worn casually, to church gatherings, conferences or community events, it serves as a reminder that every season has purpose. And this Shiloh is YOUR Shiloh Season!',
+    detail: 'Step into your Shiloh Season in style, a season of surrender, growth, breakthrough and divine encounter! The Shiloh Season T-Shirt is more than apparel, it&#8217;s a statement of faith and expectation. Inspired by the biblical place of encounter and transformation, this piece represents a season where prayers are answered, purpose is revealed, and God&#8217;s presence is experienced deeply. With a comfortable modern fit, this tee is designed for everyday wear while carrying a powerful message. Whether worn casually, to church gatherings, conferences or community events, it serves as a reminder that every season has purpose. And this Shiloh is YOUR Shiloh Season!',
+    accent: 'from-[#E1E0CC] to-[#746C4F]',
+    icon: Shirt,
+    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Green-Silver.webp',
+    sizes: ["S", "M", "L", "XL", "XXL", "XXXL", "XXXXL"],
+    colors: [{ "name": "Black", "className": "#111111" }, { "name": "White", "className": "#ffffff" }, { "name": "Green", "className": "#2e7d32" }, { "name": "Red", "className": "#d32f2f" }, { "name": "Cream", "className": "#f5f5dc" }, { "name": "Blue", "className": "#1976d2" }, { "name": "Purple", "className": "#7b1fa2" }, { "name": "Pink", "className": "#ad1457" }, { "name": "Maroon", "className": "#800000" }],
+    variants: [
+      {
+        id: '32889',
+        label: 'Size: S / Color: Black',
+        checkoutProductId: 32889,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Black'
+      },
+      {
+        id: '32890',
+        label: 'Size: M / Color: Black',
+        checkoutProductId: 32890,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Black'
+      },
+      {
+        id: '32891',
+        label: 'Size: L / Color: Black',
+        checkoutProductId: 32891,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Black'
+      },
+      {
+        id: '32892',
+        label: 'Size: XL / Color: Black',
+        checkoutProductId: 32892,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Black'
+      },
+      {
+        id: '32893',
+        label: 'Size: XXL / Color: Black',
+        checkoutProductId: 32893,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Black'
+      },
+      {
+        id: '32894',
+        label: 'Size: XXXL / Color: Black',
+        checkoutProductId: 32894,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Black'
+      },
+      {
+        id: '32895',
+        label: 'Size: XXXXL / Color: Black',
+        checkoutProductId: 32895,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Black'
+      },
+      {
+        id: '32896',
+        label: 'Size: S / Color: White',
+        checkoutProductId: 32896,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'White'
+      },
+      {
+        id: '32897',
+        label: 'Size: M / Color: White',
+        checkoutProductId: 32897,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'White'
+      },
+      {
+        id: '32898',
+        label: 'Size: L / Color: White',
+        checkoutProductId: 32898,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'White'
+      },
+      {
+        id: '32899',
+        label: 'Size: XL / Color: White',
+        checkoutProductId: 32899,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'White'
+      },
+      {
+        id: '32900',
+        label: 'Size: XXL / Color: White',
+        checkoutProductId: 32900,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'White'
+      },
+      {
+        id: '32901',
+        label: 'Size: XXXL / Color: White',
+        checkoutProductId: 32901,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'White'
+      },
+      {
+        id: '32902',
+        label: 'Size: XXXXL / Color: White',
+        checkoutProductId: 32902,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'White'
+      },
+      {
+        id: '32904',
+        label: 'Size: S / Color: Green',
+        checkoutProductId: 32904,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Green'
+      },
+      {
+        id: '32905',
+        label: 'Size: M / Color: Green',
+        checkoutProductId: 32905,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Green'
+      },
+      {
+        id: '32906',
+        label: 'Size: L / Color: Green',
+        checkoutProductId: 32906,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Green'
+      },
+      {
+        id: '32907',
+        label: 'Size: XL / Color: Green',
+        checkoutProductId: 32907,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Green'
+      },
+      {
+        id: '32908',
+        label: 'Size: XXL / Color: Green',
+        checkoutProductId: 32908,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Green'
+      },
+      {
+        id: '32909',
+        label: 'Size: XXXL / Color: Green',
+        checkoutProductId: 32909,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Green'
+      },
+      {
+        id: '32910',
+        label: 'Size: XXXXL / Color: Green',
+        checkoutProductId: 32910,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Green'
+      },
+      {
+        id: '32911',
+        label: 'Size: S / Color: Red',
+        checkoutProductId: 32911,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Red'
+      },
+      {
+        id: '32912',
+        label: 'Size: M / Color: Red',
+        checkoutProductId: 32912,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Red'
+      },
+      {
+        id: '32913',
+        label: 'Size: L / Color: Red',
+        checkoutProductId: 32913,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Red'
+      },
+      {
+        id: '32914',
+        label: 'Size: XL / Color: Red',
+        checkoutProductId: 32914,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Red'
+      },
+      {
+        id: '32915',
+        label: 'Size: XXL / Color: Red',
+        checkoutProductId: 32915,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Red'
+      },
+      {
+        id: '32916',
+        label: 'Size: XXXL / Color: Red',
+        checkoutProductId: 32916,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Red'
+      },
+      {
+        id: '32917',
+        label: 'Size: XXXXL / Color: Red',
+        checkoutProductId: 32917,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Red'
+      },
+      {
+        id: '32918',
+        label: 'Size: S / Color: Cream',
+        checkoutProductId: 32918,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Cream'
+      },
+      {
+        id: '32919',
+        label: 'Size: M / Color: Cream',
+        checkoutProductId: 32919,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Cream'
+      },
+      {
+        id: '32920',
+        label: 'Size: L / Color: Cream',
+        checkoutProductId: 32920,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Cream'
+      },
+      {
+        id: '32921',
+        label: 'Size: XL / Color: Cream',
+        checkoutProductId: 32921,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Cream'
+      },
+      {
+        id: '32922',
+        label: 'Size: XXL / Color: Cream',
+        checkoutProductId: 32922,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Cream'
+      },
+      {
+        id: '32923',
+        label: 'Size: XXXL / Color: Cream',
+        checkoutProductId: 32923,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Cream'
+      },
+      {
+        id: '32924',
+        label: 'Size: XXXXL / Color: Cream',
+        checkoutProductId: 32924,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Cream'
+      },
+      {
+        id: '32925',
+        label: 'Size: S / Color: Blue',
+        checkoutProductId: 32925,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Blue'
+      },
+      {
+        id: '32926',
+        label: 'Size: M / Color: Blue',
+        checkoutProductId: 32926,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Blue'
+      },
+      {
+        id: '32927',
+        label: 'Size: L / Color: Blue',
+        checkoutProductId: 32927,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Blue'
+      },
+      {
+        id: '32928',
+        label: 'Size: XL / Color: Blue',
+        checkoutProductId: 32928,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Blue'
+      },
+      {
+        id: '32929',
+        label: 'Size: XXL / Color: Blue',
+        checkoutProductId: 32929,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Blue'
+      },
+      {
+        id: '32930',
+        label: 'Size: XXXL / Color: Blue',
+        checkoutProductId: 32930,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Blue'
+      },
+      {
+        id: '32931',
+        label: 'Size: XXXXL / Color: Blue',
+        checkoutProductId: 32931,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Blue'
+      },
+      {
+        id: '32932',
+        label: 'Size: S / Color: Purple',
+        checkoutProductId: 32932,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Purple'
+      },
+      {
+        id: '32933',
+        label: 'Size: M / Color: Purple',
+        checkoutProductId: 32933,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Purple'
+      },
+      {
+        id: '32934',
+        label: 'Size: L / Color: Purple',
+        checkoutProductId: 32934,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Purple'
+      },
+      {
+        id: '32935',
+        label: 'Size: XL / Color: Purple',
+        checkoutProductId: 32935,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Purple'
+      },
+      {
+        id: '32936',
+        label: 'Size: XXL / Color: Purple',
+        checkoutProductId: 32936,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Purple'
+      },
+      {
+        id: '32937',
+        label: 'Size: XXXL / Color: Purple',
+        checkoutProductId: 32937,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Purple'
+      },
+      {
+        id: '32938',
+        label: 'Size: XXXXL / Color: Purple',
+        checkoutProductId: 32938,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Purple'
+      },
+      {
+        id: '32939',
+        label: 'Size: S / Color: Pink',
+        checkoutProductId: 32939,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Pink'
+      },
+      {
+        id: '32940',
+        label: 'Size: M / Color: Pink',
+        checkoutProductId: 32940,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Pink'
+      },
+      {
+        id: '32941',
+        label: 'Size: L / Color: Pink',
+        checkoutProductId: 32941,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Pink'
+      },
+      {
+        id: '32942',
+        label: 'Size: XL / Color: Pink',
+        checkoutProductId: 32942,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Pink'
+      },
+      {
+        id: '32943',
+        label: 'Size: XXL / Color: Pink',
+        checkoutProductId: 32943,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Pink'
+      },
+      {
+        id: '32944',
+        label: 'Size: XXXL / Color: Pink',
+        checkoutProductId: 32944,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Pink'
+      },
+      {
+        id: '32945',
+        label: 'Size: XXXXL / Color: Pink',
+        checkoutProductId: 32945,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Pink'
+      },
+      {
+        id: '32946',
+        label: 'Size: S / Color: Maroon',
+        checkoutProductId: 32946,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Maroon'
+      },
+      {
+        id: '32947',
+        label: 'Size: M / Color: Maroon',
+        checkoutProductId: 32947,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Maroon'
+      },
+      {
+        id: '32948',
+        label: 'Size: L / Color: Maroon',
+        checkoutProductId: 32948,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Maroon'
+      },
+      {
+        id: '32949',
+        label: 'Size: XL / Color: Maroon',
+        checkoutProductId: 32949,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Maroon'
+      },
+      {
+        id: '32950',
+        label: 'Size: XXL / Color: Maroon',
+        checkoutProductId: 32950,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Maroon'
+      },
+      {
+        id: '32951',
+        label: 'Size: XXXL / Color: Maroon',
+        checkoutProductId: 32951,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Maroon'
+      },
+      {
+        id: '32952',
+        label: 'Size: XXXXL / Color: Maroon',
+        checkoutProductId: 32952,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Maroon'
+      }
+    ]
+  },
+  {
+    slug: 'shiloh-season-gold-logo-t-shirt',
+    name: 'Pre Order - Shiloh Season Gold Logo T-Shirt',
+    priceUsd: 20,
+    priceLabel: '$20 USD',
+    category: 'SHILOH 2026',
+    description: 'Step into your Shiloh Season in style, a season of surrender, growth, breakthrough and divine encounter! The Shiloh Season T-Shirt is more than apparel, it&#8217;s a statement of faith and expectation. Inspired by the biblical place of encounter and transformation, this piece represents a season where prayers are answered, purpose is revealed, and God&#8217;s presence is experienced deeply. With a comfortable modern fit, this tee is designed for everyday wear while carrying a powerful message. Whether worn casually, to church gatherings, conferences or community events, it serves as a reminder that every season has purpose. And this Shiloh is YOUR Shiloh Season!',
+    detail: 'Step into your Shiloh Season in style, a season of surrender, growth, breakthrough and divine encounter! The Shiloh Season T-Shirt is more than apparel, it&#8217;s a statement of faith and expectation. Inspired by the biblical place of encounter and transformation, this piece represents a season where prayers are answered, purpose is revealed, and God&#8217;s presence is experienced deeply. With a comfortable modern fit, this tee is designed for everyday wear while carrying a powerful message. Whether worn casually, to church gatherings, conferences or community events, it serves as a reminder that every season has purpose. And this Shiloh is YOUR Shiloh Season!',
+    accent: 'from-[#E1E0CC] to-[#746C4F]',
+    icon: Shirt,
+    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Gold-Shiloh-Mock-Up.webp',
+    sizes: ["S", "M", "L", "XL", "XXL", "XXXL", "XXXXL"],
+    colors: [{ "name": "Black", "className": "#111111" }, { "name": "Red", "className": "#d32f2f" }, { "name": "Green", "className": "#2e7d32" }, { "name": "White", "className": "#ffffff" }, { "name": "Blue", "className": "#1976d2" }, { "name": "Cream", "className": "#f5f5dc" }, { "name": "Purple", "className": "#7b1fa2" }, { "name": "Pink", "className": "#ad1457" }, { "name": "Maroon", "className": "#800000" }],
+    variants: [
+      {
+        id: '32823',
+        label: 'Size: S / Color: Black',
+        checkoutProductId: 32823,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Black'
+      },
+      {
+        id: '32824',
+        label: 'Size: M / Color: Black',
+        checkoutProductId: 32824,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Black'
+      },
+      {
+        id: '32825',
+        label: 'Size: L / Color: Black',
+        checkoutProductId: 32825,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Black'
+      },
+      {
+        id: '32826',
+        label: 'Size: XL / Color: Black',
+        checkoutProductId: 32826,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Black'
+      },
+      {
+        id: '32827',
+        label: 'Size: XXL / Color: Black',
+        checkoutProductId: 32827,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Black'
+      },
+      {
+        id: '32828',
+        label: 'Size: XXXL / Color: Black',
+        checkoutProductId: 32828,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Black'
+      },
+      {
+        id: '32829',
+        label: 'Size: XXXXL / Color: Black',
+        checkoutProductId: 32829,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Black'
+      },
+      {
+        id: '32830',
+        label: 'Size: S / Color: Red',
+        checkoutProductId: 32830,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Red'
+      },
+      {
+        id: '32831',
+        label: 'Size: M / Color: Red',
+        checkoutProductId: 32831,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Red'
+      },
+      {
+        id: '32832',
+        label: 'Size: L / Color: Red',
+        checkoutProductId: 32832,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Red'
+      },
+      {
+        id: '32833',
+        label: 'Size: XL / Color: Red',
+        checkoutProductId: 32833,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Red'
+      },
+      {
+        id: '32834',
+        label: 'Size: XXL / Color: Red',
+        checkoutProductId: 32834,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Red'
+      },
+      {
+        id: '32835',
+        label: 'Size: XXXL / Color: Red',
+        checkoutProductId: 32835,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Red'
+      },
+      {
+        id: '32836',
+        label: 'Size: XXXXL / Color: Red',
+        checkoutProductId: 32836,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Red'
+      },
+      {
+        id: '32837',
+        label: 'Size: S / Color: Green',
+        checkoutProductId: 32837,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Green'
+      },
+      {
+        id: '32838',
+        label: 'Size: M / Color: Green',
+        checkoutProductId: 32838,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Green'
+      },
+      {
+        id: '32839',
+        label: 'Size: L / Color: Green',
+        checkoutProductId: 32839,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Green'
+      },
+      {
+        id: '32840',
+        label: 'Size: XL / Color: Green',
+        checkoutProductId: 32840,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Green'
+      },
+      {
+        id: '32841',
+        label: 'Size: XXL / Color: Green',
+        checkoutProductId: 32841,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Green'
+      },
+      {
+        id: '32842',
+        label: 'Size: XXXL / Color: Green',
+        checkoutProductId: 32842,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Green'
+      },
+      {
+        id: '32843',
+        label: 'Size: XXXXL / Color: Green',
+        checkoutProductId: 32843,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Green'
+      },
+      {
+        id: '32844',
+        label: 'Size: S / Color: White',
+        checkoutProductId: 32844,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'White'
+      },
+      {
+        id: '32845',
+        label: 'Size: M / Color: White',
+        checkoutProductId: 32845,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'White'
+      },
+      {
+        id: '32846',
+        label: 'Size: L / Color: White',
+        checkoutProductId: 32846,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'White'
+      },
+      {
+        id: '32847',
+        label: 'Size: XL / Color: White',
+        checkoutProductId: 32847,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'White'
+      },
+      {
+        id: '32848',
+        label: 'Size: XXL / Color: White',
+        checkoutProductId: 32848,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'White'
+      },
+      {
+        id: '32849',
+        label: 'Size: XXXL / Color: White',
+        checkoutProductId: 32849,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'White'
+      },
+      {
+        id: '32850',
+        label: 'Size: XXXXL / Color: White',
+        checkoutProductId: 32850,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'White'
+      },
+      {
+        id: '32851',
+        label: 'Size: S / Color: Blue',
+        checkoutProductId: 32851,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Blue'
+      },
+      {
+        id: '32852',
+        label: 'Size: M / Color: Blue',
+        checkoutProductId: 32852,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Blue'
+      },
+      {
+        id: '32853',
+        label: 'Size: L / Color: Blue',
+        checkoutProductId: 32853,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Blue'
+      },
+      {
+        id: '32854',
+        label: 'Size: XL / Color: Blue',
+        checkoutProductId: 32854,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Blue'
+      },
+      {
+        id: '32855',
+        label: 'Size: XXL / Color: Blue',
+        checkoutProductId: 32855,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Blue'
+      },
+      {
+        id: '32856',
+        label: 'Size: XXXL / Color: Blue',
+        checkoutProductId: 32856,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Blue'
+      },
+      {
+        id: '32857',
+        label: 'Size: XXXXL / Color: Blue',
+        checkoutProductId: 32857,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Blue'
+      },
+      {
+        id: '32858',
+        label: 'Size: S / Color: Cream',
+        checkoutProductId: 32858,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Cream'
+      },
+      {
+        id: '32859',
+        label: 'Size: M / Color: Cream',
+        checkoutProductId: 32859,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Cream'
+      },
+      {
+        id: '32860',
+        label: 'Size: L / Color: Cream',
+        checkoutProductId: 32860,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Cream'
+      },
+      {
+        id: '32861',
+        label: 'Size: XL / Color: Cream',
+        checkoutProductId: 32861,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Cream'
+      },
+      {
+        id: '32862',
+        label: 'Size: XXL / Color: Cream',
+        checkoutProductId: 32862,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Cream'
+      },
+      {
+        id: '32863',
+        label: 'Size: XXXL / Color: Cream',
+        checkoutProductId: 32863,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Cream'
+      },
+      {
+        id: '32864',
+        label: 'Size: XXXXL / Color: Cream',
+        checkoutProductId: 32864,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Cream'
+      },
+      {
+        id: '32865',
+        label: 'Size: S / Color: Purple',
+        checkoutProductId: 32865,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Purple'
+      },
+      {
+        id: '32866',
+        label: 'Size: M / Color: Purple',
+        checkoutProductId: 32866,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Purple'
+      },
+      {
+        id: '32867',
+        label: 'Size: L / Color: Purple',
+        checkoutProductId: 32867,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Purple'
+      },
+      {
+        id: '32868',
+        label: 'Size: XL / Color: Purple',
+        checkoutProductId: 32868,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Purple'
+      },
+      {
+        id: '32869',
+        label: 'Size: XXL / Color: Purple',
+        checkoutProductId: 32869,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Purple'
+      },
+      {
+        id: '32870',
+        label: 'Size: XXXL / Color: Purple',
+        checkoutProductId: 32870,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Purple'
+      },
+      {
+        id: '32871',
+        label: 'Size: XXXXL / Color: Purple',
+        checkoutProductId: 32871,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Purple'
+      },
+      {
+        id: '32872',
+        label: 'Size: S / Color: Pink',
+        checkoutProductId: 32872,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Pink'
+      },
+      {
+        id: '32873',
+        label: 'Size: M / Color: Pink',
+        checkoutProductId: 32873,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Pink'
+      },
+      {
+        id: '32874',
+        label: 'Size: L / Color: Pink',
+        checkoutProductId: 32874,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Pink'
+      },
+      {
+        id: '32875',
+        label: 'Size: XL / Color: Pink',
+        checkoutProductId: 32875,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Pink'
+      },
+      {
+        id: '32876',
+        label: 'Size: XXL / Color: Pink',
+        checkoutProductId: 32876,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Pink'
+      },
+      {
+        id: '32877',
+        label: 'Size: XXXL / Color: Pink',
+        checkoutProductId: 32877,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Pink'
+      },
+      {
+        id: '32878',
+        label: 'Size: XXXXL / Color: Pink',
+        checkoutProductId: 32878,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Pink'
+      },
+      {
+        id: '32879',
+        label: 'Size: S / Color: Maroon',
+        checkoutProductId: 32879,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Maroon'
+      },
+      {
+        id: '32880',
+        label: 'Size: M / Color: Maroon',
+        checkoutProductId: 32880,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Maroon'
+      },
+      {
+        id: '32881',
+        label: 'Size: L / Color: Maroon',
+        checkoutProductId: 32881,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Maroon'
+      },
+      {
+        id: '32882',
+        label: 'Size: XL / Color: Maroon',
+        checkoutProductId: 32882,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Maroon'
+      },
+      {
+        id: '32883',
+        label: 'Size: XXL / Color: Maroon',
+        checkoutProductId: 32883,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Maroon'
+      },
+      {
+        id: '32884',
+        label: 'Size: XXXL / Color: Maroon',
+        checkoutProductId: 32884,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Maroon'
+      },
+      {
+        id: '32885',
+        label: 'Size: XXXXL / Color: Maroon',
+        checkoutProductId: 32885,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Maroon'
+      }
+    ]
+  },
+  {
+    slug: 'shiloh-season-blue-logo-t-shirt',
+    name: 'Pre Order - Shiloh Season Blue Logo T-Shirt',
+    priceUsd: 20,
+    priceLabel: '$20 USD',
+    category: 'SHILOH 2026',
+    description: 'Step into your Shiloh Season in style, a season of surrender, growth, breakthrough and divine encounter! The Shiloh Season T-Shirt is more than apparel, it&#8217;s a statement of faith and expectation. Inspired by the biblical place of encounter and transformation, this piece represents a season where prayers are answered, purpose is revealed, and God&#8217;s presence is experienced deeply. With a comfortable modern fit, this tee is designed for everyday wear while carrying a powerful message. Whether worn casually, to church gatherings, conferences or community events, it serves as a reminder that every season has purpose. And this Shiloh is YOUR Shiloh Season!',
+    detail: 'Step into your Shiloh Season in style, a season of surrender, growth, breakthrough and divine encounter! The Shiloh Season T-Shirt is more than apparel, it&#8217;s a statement of faith and expectation. Inspired by the biblical place of encounter and transformation, this piece represents a season where prayers are answered, purpose is revealed, and God&#8217;s presence is experienced deeply. With a comfortable modern fit, this tee is designed for everyday wear while carrying a powerful message. Whether worn casually, to church gatherings, conferences or community events, it serves as a reminder that every season has purpose. And this Shiloh is YOUR Shiloh Season!',
+    accent: 'from-[#E1E0CC] to-[#746C4F]',
+    icon: Shirt,
+    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Blue-Shiloh-Mock-Up.webp',
+    sizes: ["S", "M", "L", "XL", "XXL", "XXXL", "XXXXL"],
+    colors: [{ "name": "Black", "className": "#111111" }, { "name": "White", "className": "#ffffff" }, { "name": "Red", "className": "#d32f2f" }, { "name": "Green", "className": "#2e7d32" }, { "name": "Blue", "className": "#1976d2" }, { "name": "Cream", "className": "#f5f5dc" }, { "name": "Purple", "className": "#7b1fa2" }, { "name": "Pink", "className": "#ad1457" }, { "name": "Maroon", "className": "#800000" }],
+    variants: [
+      {
+        id: '32745',
+        label: 'Size: S / Color: Black',
+        checkoutProductId: 32745,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Black'
+      },
+      {
+        id: '32746',
+        label: 'Size: M / Color: Black',
+        checkoutProductId: 32746,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Black'
+      },
+      {
+        id: '32747',
+        label: 'Size: L / Color: Black',
+        checkoutProductId: 32747,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Black'
+      },
+      {
+        id: '32748',
+        label: 'Size: XL / Color: Black',
+        checkoutProductId: 32748,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Black'
+      },
+      {
+        id: '32749',
+        label: 'Size: XXL / Color: Black',
+        checkoutProductId: 32749,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Black'
+      },
+      {
+        id: '32750',
+        label: 'Size: XXXL / Color: Black',
+        checkoutProductId: 32750,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Black'
+      },
+      {
+        id: '32751',
+        label: 'Size: XXXXL / Color: Black',
+        checkoutProductId: 32751,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Black'
+      },
+      {
+        id: '32764',
+        label: 'Size: S / Color: White',
+        checkoutProductId: 32764,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'White'
+      },
+      {
+        id: '32765',
+        label: 'Size: M / Color: White',
+        checkoutProductId: 32765,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'White'
+      },
+      {
+        id: '32766',
+        label: 'Size: L / Color: White',
+        checkoutProductId: 32766,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'White'
+      },
+      {
+        id: '32767',
+        label: 'Size: XL / Color: White',
+        checkoutProductId: 32767,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'White'
+      },
+      {
+        id: '32768',
+        label: 'Size: XXL / Color: White',
+        checkoutProductId: 32768,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'White'
+      },
+      {
+        id: '32769',
+        label: 'Size: XXXL / Color: White',
+        checkoutProductId: 32769,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'White'
+      },
+      {
+        id: '32770',
+        label: 'Size: XXXXL / Color: White',
+        checkoutProductId: 32770,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'White'
+      },
+      {
+        id: '32771',
+        label: 'Size: S / Color: Red',
+        checkoutProductId: 32771,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Red'
+      },
+      {
+        id: '32772',
+        label: 'Size: M / Color: Red',
+        checkoutProductId: 32772,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Red'
+      },
+      {
+        id: '32773',
+        label: 'Size: L / Color: Red',
+        checkoutProductId: 32773,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Red'
+      },
+      {
+        id: '32774',
+        label: 'Size: XL / Color: Red',
+        checkoutProductId: 32774,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Red'
+      },
+      {
+        id: '32775',
+        label: 'Size: XXL / Color: Red',
+        checkoutProductId: 32775,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Red'
+      },
+      {
+        id: '32776',
+        label: 'Size: XXXL / Color: Red',
+        checkoutProductId: 32776,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Red'
+      },
+      {
+        id: '32777',
+        label: 'Size: XXXXL / Color: Red',
+        checkoutProductId: 32777,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Red'
+      },
+      {
+        id: '32778',
+        label: 'Size: S / Color: Green',
+        checkoutProductId: 32778,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Green'
+      },
+      {
+        id: '32779',
+        label: 'Size: M / Color: Green',
+        checkoutProductId: 32779,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Green'
+      },
+      {
+        id: '32780',
+        label: 'Size: L / Color: Green',
+        checkoutProductId: 32780,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Green'
+      },
+      {
+        id: '32781',
+        label: 'Size: XL / Color: Green',
+        checkoutProductId: 32781,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Green'
+      },
+      {
+        id: '32782',
+        label: 'Size: XXL / Color: Green',
+        checkoutProductId: 32782,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Green'
+      },
+      {
+        id: '32783',
+        label: 'Size: XXXL / Color: Green',
+        checkoutProductId: 32783,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Green'
+      },
+      {
+        id: '32784',
+        label: 'Size: XXXXL / Color: Green',
+        checkoutProductId: 32784,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Green'
+      },
+      {
+        id: '32785',
+        label: 'Size: S / Color: Blue',
+        checkoutProductId: 32785,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Blue'
+      },
+      {
+        id: '32786',
+        label: 'Size: M / Color: Blue',
+        checkoutProductId: 32786,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Blue'
+      },
+      {
+        id: '32787',
+        label: 'Size: L / Color: Blue',
+        checkoutProductId: 32787,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Blue'
+      },
+      {
+        id: '32788',
+        label: 'Size: XL / Color: Blue',
+        checkoutProductId: 32788,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Blue'
+      },
+      {
+        id: '32789',
+        label: 'Size: XXL / Color: Blue',
+        checkoutProductId: 32789,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Blue'
+      },
+      {
+        id: '32790',
+        label: 'Size: XXXL / Color: Blue',
+        checkoutProductId: 32790,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Blue'
+      },
+      {
+        id: '32791',
+        label: 'Size: XXXXL / Color: Blue',
+        checkoutProductId: 32791,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Blue'
+      },
+      {
+        id: '32792',
+        label: 'Size: S / Color: Cream',
+        checkoutProductId: 32792,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Cream'
+      },
+      {
+        id: '32793',
+        label: 'Size: M / Color: Cream',
+        checkoutProductId: 32793,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Cream'
+      },
+      {
+        id: '32794',
+        label: 'Size: L / Color: Cream',
+        checkoutProductId: 32794,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Cream'
+      },
+      {
+        id: '32795',
+        label: 'Size: XL / Color: Cream',
+        checkoutProductId: 32795,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Cream'
+      },
+      {
+        id: '32796',
+        label: 'Size: XXL / Color: Cream',
+        checkoutProductId: 32796,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Cream'
+      },
+      {
+        id: '32797',
+        label: 'Size: XXXL / Color: Cream',
+        checkoutProductId: 32797,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Cream'
+      },
+      {
+        id: '32798',
+        label: 'Size: XXXXL / Color: Cream',
+        checkoutProductId: 32798,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Cream'
+      },
+      {
+        id: '32799',
+        label: 'Size: S / Color: Purple',
+        checkoutProductId: 32799,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Purple'
+      },
+      {
+        id: '32800',
+        label: 'Size: M / Color: Purple',
+        checkoutProductId: 32800,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Purple'
+      },
+      {
+        id: '32801',
+        label: 'Size: L / Color: Purple',
+        checkoutProductId: 32801,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Purple'
+      },
+      {
+        id: '32802',
+        label: 'Size: XL / Color: Purple',
+        checkoutProductId: 32802,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Purple'
+      },
+      {
+        id: '32803',
+        label: 'Size: XXL / Color: Purple',
+        checkoutProductId: 32803,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Purple'
+      },
+      {
+        id: '32804',
+        label: 'Size: XXXL / Color: Purple',
+        checkoutProductId: 32804,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Purple'
+      },
+      {
+        id: '32805',
+        label: 'Size: XXXXL / Color: Purple',
+        checkoutProductId: 32805,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Purple'
+      },
+      {
+        id: '32806',
+        label: 'Size: S / Color: Pink',
+        checkoutProductId: 32806,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Pink'
+      },
+      {
+        id: '32807',
+        label: 'Size: M / Color: Pink',
+        checkoutProductId: 32807,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Pink'
+      },
+      {
+        id: '32808',
+        label: 'Size: L / Color: Pink',
+        checkoutProductId: 32808,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Pink'
+      },
+      {
+        id: '32809',
+        label: 'Size: XL / Color: Pink',
+        checkoutProductId: 32809,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Pink'
+      },
+      {
+        id: '32810',
+        label: 'Size: XXL / Color: Pink',
+        checkoutProductId: 32810,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Pink'
+      },
+      {
+        id: '32811',
+        label: 'Size: XXXL / Color: Pink',
+        checkoutProductId: 32811,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Pink'
+      },
+      {
+        id: '32812',
+        label: 'Size: XXXXL / Color: Pink',
+        checkoutProductId: 32812,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Pink'
+      },
+      {
+        id: '32813',
+        label: 'Size: S / Color: Maroon',
+        checkoutProductId: 32813,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'S',
+        color: 'Maroon'
+      },
+      {
+        id: '32814',
+        label: 'Size: M / Color: Maroon',
+        checkoutProductId: 32814,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'M',
+        color: 'Maroon'
+      },
+      {
+        id: '32815',
+        label: 'Size: L / Color: Maroon',
+        checkoutProductId: 32815,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'L',
+        color: 'Maroon'
+      },
+      {
+        id: '32816',
+        label: 'Size: XL / Color: Maroon',
+        checkoutProductId: 32816,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XL',
+        color: 'Maroon'
+      },
+      {
+        id: '32817',
+        label: 'Size: XXL / Color: Maroon',
+        checkoutProductId: 32817,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXL',
+        color: 'Maroon'
+      },
+      {
+        id: '32818',
+        label: 'Size: XXXL / Color: Maroon',
+        checkoutProductId: 32818,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXL',
+        color: 'Maroon'
+      },
+      {
+        id: '32819',
+        label: 'Size: XXXXL / Color: Maroon',
+        checkoutProductId: 32819,
+        priceUsd: 20,
+        priceLabel: '$20 USD',
+        size: 'XXXXL',
+        color: 'Maroon'
+      }
+    ]
   },
   {
     slug: 'goodnews-beanie',
@@ -2754,61 +5690,16 @@ const merchProducts: MerchProduct[] = [
     priceLabel: '$13.39 USD',
     checkoutProductId: 28206,
     category: 'GOODNEWSWORLD',
-    description:
-      'Perfect for those cold Shiloh nights, the GoodNewsWorld beanie hat is what you need.',
-    detail:
-      'Perfect for those cold Shiloh nights, the GoodNewsWorld beanie hat is what you need. Branded with the famous Wild Custard Apple Tree logo of GoodNewsWorld, this is an ideal gift for your loved ones and for yourself.',
+    description: 'Perfect for those cold Shiloh nights, the GoodNewsWorld beanie hat is what you need.',
+    detail: 'Perfect for those cold Shiloh nights, the GoodNewsWorld beanie hat is what you need. Branded with the famous Wild Custard Apple Tree logo of GoodNewsWorld, this is an ideal gift for your loved ones and for yourself.',
     accent: 'from-[#E1E0CC] to-[#101010]',
     icon: Shirt,
     image: 'https://uebertangel.org/wp-content/uploads/2024/12/Untitled-design-91-scaled.webp',
     imagePosition: 'object-center',
-  },
-  {
-    slug: 'shiloh-season-tee',
-    name: 'Shiloh Season Tee',
-    priceUsd: 35,
-    priceLabel: '$35 USD',
-    category: 'APPAREL',
-    description: 'Soft event tee placeholder for the Shiloh Season 2026 collection preview.',
-    detail: 'Soft event tee placeholder for the Shiloh Season 2026 collection preview.',
-    accent: 'from-[#E1E0CC] to-[#746C4F]',
-    icon: Shirt,
-    image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a037b6882125b987483840d.jpeg',
-  },
-  {
-    slug: 'shiloh-cap',
-    name: 'Shiloh Cap',
-    priceUsd: 24,
-    priceLabel: '$24 USD',
-    category: 'ACCESSORIES',
-    description: 'Embroidered cap concept with temporary details for merch planning.',
-    detail: 'Embroidered cap concept with temporary details for merch planning.',
-    accent: 'from-[#D8A945] to-[#4B3314]',
-    icon: Sparkle,
-    image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a037b6882125b987483840c.jpeg',
-  },
-  {
-    slug: 'conference-tote',
-    name: 'Conference Tote',
-    priceUsd: 28,
-    priceLabel: '$28 USD',
-    category: 'TRAVEL',
-    description: 'Everyday tote preview for carrying notes, essentials, and conference materials.',
-    detail: 'Everyday tote preview for carrying notes, essentials, and conference materials.',
-    accent: 'from-[#BFD3E8] to-[#263A4A]',
-    icon: CreditCard,
-  },
-  {
-    slug: 'season-hoodie',
-    name: 'Season Hoodie',
-    priceUsd: 68,
-    priceLabel: '$68 USD',
-    category: 'APPAREL',
-    description: 'Warm hoodie placeholder for late evenings, travel days, and fellowship moments.',
-    detail: 'Warm hoodie placeholder for late evenings, travel days, and fellowship moments.',
-    accent: 'from-[#F4791B] to-[#1B1110]',
-    icon: Shirt,
-  },
+    sizes: [],
+    colors: [],
+    variants: []
+  }
 ];
 
 const formatUsd = (amount: number) =>
@@ -2847,12 +5738,19 @@ function FloatingCart({
   cart,
   onUpdateQuantity,
   onRemove,
+  open: externalOpen,
+  setOpen: externalSetOpen,
 }: {
   cart: CartItem[];
   onUpdateQuantity: (slug: string, quantity: number) => void;
   onRemove: (slug: string) => void;
+  open?: boolean;
+  setOpen?: (open: boolean) => void;
 }) {
-  const [open, setOpen] = useState(false);
+  const [localOpen, setLocalOpen] = useState(false);
+  const open = externalOpen !== undefined ? externalOpen : localOpen;
+  const setOpen = externalSetOpen !== undefined ? externalSetOpen : setLocalOpen;
+
   const cartLines: Array<{ product: MerchProduct; variant?: MerchVariant; quantity: number }> = cart.flatMap((item) => {
     const product = merchProducts.find((entry) => entry.slug === item.slug);
     if (!product) return [];
@@ -2876,7 +5774,7 @@ function FloatingCart({
             initial={{ opacity: 0, y: 18, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 18, scale: 0.98 }}
-            transition={{ duration: 0.25, ease: customEase }}
+            transition={{ duration: 0.3, ease: [0.25, 1, 0.5, 1] }}
           >
             <div className="flex items-center justify-between border-b border-primary/10 px-4 py-3">
               <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-primary/50">Cart</p>
@@ -2938,15 +5836,15 @@ function FloatingCart({
                 </div>
               )}
             </div>
-            <div className="border-t border-primary/10 p-4">
-              <div className="flex items-center justify-between text-sm">
+            <div className="border-t border-primary/10 p-4 flex flex-col items-center gap-3">
+              <div className="flex w-full items-center justify-between text-sm mb-1">
                 <span className="text-primary/52">Subtotal</span>
                 <span className="font-semibold text-primary">{formatUsd(subtotal)}</span>
               </div>
               {checkoutUrl ? (
                 <a
                   href={checkoutUrl}
-                  className="mt-4 block w-full rounded-full bg-primary px-5 py-3 text-center text-sm font-semibold text-black transition-transform hover:-translate-y-0.5"
+                  className="w-full rounded-full bg-primary px-5 py-3 text-center text-sm font-semibold text-black transition-transform hover:-translate-y-0.5"
                 >
                   Checkout
                 </a>
@@ -2954,19 +5852,31 @@ function FloatingCart({
                 <button
                   type="button"
                   disabled
-                  className="mt-4 w-full rounded-full bg-primary px-5 py-3 text-sm font-semibold text-black opacity-45"
+                  className="w-full rounded-full bg-primary px-5 py-3 text-sm font-semibold text-black opacity-45"
                 >
                   Checkout Coming Soon
                 </button>
               )}
+              <a
+                href="/shop"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.history.pushState({}, '', '/shop');
+                  window.dispatchEvent(new PopStateEvent('popstate'));
+                  setOpen(false);
+                }}
+                className="text-white hover:text-white/80 text-xs font-bold uppercase tracking-[0.2em] transition-colors py-2 text-center"
+              >
+                Keep Shopping
+              </a>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
       <button
         type="button"
-        onClick={() => setOpen((value) => !value)}
-        className="group inline-flex items-center gap-3 rounded-full border border-primary/18 bg-[#071d27] px-5 py-3 text-sm font-bold uppercase tracking-[0.18em] text-primary shadow-[0_18px_55px_rgba(0,0,0,0.45)] transition-transform hover:-translate-y-0.5"
+        onClick={() => setOpen(!open)}
+        className="group hidden md:inline-flex items-center gap-3 rounded-full border border-primary/18 bg-[#071d27] px-5 py-3 text-sm font-bold uppercase tracking-[0.18em] text-primary shadow-[0_18px_55px_rgba(0,0,0,0.45)] transition-transform hover:-translate-y-0.5"
       >
         <ShoppingCart className="h-5 w-5" />
         Cart
@@ -3034,20 +5944,17 @@ function MerchPage({
   onUpdateQuantity: (cartKey: string, quantity: number) => void;
   onRemoveFromCart: (cartKey: string) => void;
 }) {
-  const products = merchProducts;
+  const products = merchProducts.filter((p) => p.category === 'SHILOH 2026');
   const heroVideos = [
     'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a1045a7c363506b9a9a3020.mp4',
     'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a1041affe2210f89e3c3a87.mp4',
     'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a1044d7a33d272edabd7f44.mp4',
     'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a104a1db656b3edc43f0d93.mp4',
   ];
-  const [activeTab, setActiveTab] = useState<'Shiloh' | 'GoodNewsWorld Merch'>('Shiloh');
   const [activeSlide, setActiveSlide] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const heroContent = useStretchInView<HTMLDivElement>(0.2);
   const bestSellers = useStretchInView<HTMLDivElement>(0.15);
-  const carouselRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (paused) return;
@@ -3056,21 +5963,6 @@ function MerchPage({
     }, 5000);
     return () => window.clearInterval(timer);
   }, [heroVideos.length, paused]);
-
-  const updateScrollProgress = () => {
-    const carousel = carouselRef.current;
-    if (!carousel) return;
-    const maxScroll = carousel.scrollWidth - carousel.clientWidth;
-    setScrollProgress(maxScroll > 0 ? carousel.scrollLeft / maxScroll : 0);
-  };
-
-  const handleCarouselWheel = (event: React.WheelEvent<HTMLDivElement>) => {
-    const carousel = carouselRef.current;
-    if (!carousel || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
-    event.preventDefault();
-    carousel.scrollLeft += event.deltaY;
-    updateScrollProgress();
-  };
 
   return (
     <main
@@ -3091,26 +5983,24 @@ function MerchPage({
           <div className="absolute inset-0 bg-black/30" />
           <div
             ref={heroContent.ref}
-            className={`relative z-10 max-w-xl transform transition-all duration-1000 ${
-              heroContent.isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-            }`}
+            className={`relative z-10 max-w-xl transform transition-all duration-1000 ${heroContent.isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+              }`}
           >
             <h1 className="mb-6 font-serif text-5xl font-normal italic leading-[0.92] tracking-[-0.045em] text-primary drop-shadow-lg sm:text-6xl md:text-7xl lg:text-[clamp(4.5rem,7vw,8rem)]">
               Shiloh Shop 2026
             </h1>
             <p className="mb-10 max-w-md text-sm text-white/80 md:text-base">
-              Official Shiloh Merchandise Coming Soon. Please check back later for apparel, ceremonial wear, and
-              exclusive conference merchandise.
+              Official Shiloh Merchandise. Premium apparel and exclusive conference merchandise.
             </p>
             <div className="flex flex-wrap items-center gap-3">
               <a href="#shop" className="btn-primary inline-flex rounded-full bg-white px-10 py-4 text-sm text-black">
-                Know More
+                Shop Now
               </a>
               <a
                 href="#shop"
                 className="liquid-glass inline-flex rounded-full bg-white/10 px-10 py-4 text-sm font-medium text-white shadow-[0_16px_42px_rgba(0,0,0,0.24)] transition-transform duration-300 hover:-translate-y-0.5"
               >
-                Get now
+                View All
               </a>
             </div>
           </div>
@@ -3119,9 +6009,8 @@ function MerchPage({
           {heroVideos.map((video, index) => (
             <video
               key={video}
-              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
-                activeSlide === index ? 'opacity-100' : 'opacity-0'
-              }`}
+              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${activeSlide === index ? 'opacity-100' : 'opacity-0'
+                }`}
               src={video}
               autoPlay
               loop
@@ -3137,9 +6026,8 @@ function MerchPage({
                   type="button"
                   onClick={() => setActiveSlide(index)}
                   aria-label={`Show slide ${index + 1}`}
-                  className={`h-2 w-2 rounded-full transition-all ${
-                    activeSlide === index ? 'scale-125 bg-white' : 'bg-white/50'
-                  }`}
+                  className={`h-2 w-2 rounded-full transition-all ${activeSlide === index ? 'scale-125 bg-white' : 'bg-white/50'
+                    }`}
                 />
               ))}
             </div>
@@ -3155,48 +6043,36 @@ function MerchPage({
         </div>
       </section>
 
-      <section id="shop" className="relative overflow-hidden bg-[#F9F4F0] px-4 py-12 text-black sm:px-6 sm:py-16 lg:px-10">
+      <section id="shop" className="relative overflow-hidden bg-[#F9F4F0] px-4 py-14 text-black sm:px-6 sm:py-20 lg:px-10">
         <div
           ref={bestSellers.ref}
-          aria-hidden="true"
-          className={`pointer-events-none select-none blur-[6px] transform opacity-45 transition-transform duration-800 ${
-            bestSellers.isVisible ? 'translate-y-0' : 'translate-y-6'
-          }`}
+          className={`transform transition-all duration-700 ${bestSellers.isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
+            }`}
         >
-          <div className="mb-8 flex flex-wrap items-center gap-5 sm:gap-8">
-            {(['Shiloh', 'GoodNewsWorld Merch'] as const).map((tab) => (
-              <button
-                key={tab}
-                type="button"
-                onClick={() => setActiveTab(tab)}
-                className={`flex items-center gap-3 text-2xl font-medium transition-colors sm:text-4xl md:text-5xl ${
-                  activeTab === tab ? 'text-[#1a1a1a]' : 'text-gray-400 hover:text-gray-600'
-                }`}
-              >
-                {activeTab === tab && <span className="animate-scale-in h-5 w-5 rounded-full bg-[#1a1a1a] sm:h-6 sm:w-6" />}
-                {tab}
-              </button>
-            ))}
+          {/* Section heading */}
+          <div className="mb-10 flex items-end justify-between">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-black/40">Official Collection</p>
+              <h2 className="mt-2 font-serif text-4xl font-light italic tracking-tight text-black sm:text-5xl">
+                Shiloh 2026
+              </h2>
+            </div>
+            <p className="hidden text-xs text-black/40 sm:block">{products.length} items</p>
           </div>
-          <div
-            ref={carouselRef}
-            onWheel={handleCarouselWheel}
-            onScroll={updateScrollProgress}
-            className="scrollbar-hide flex overflow-x-auto"
-          >
+
+          {/* Product Grid */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {products.map((product, index) => (
-              <article
-                key={`${activeTab}-${product.name}`}
-                className={`group -ml-[1px] flex w-[260px] shrink-0 flex-col border border-gray-200 bg-[#F9F4F0] first:ml-0 sm:w-[280px] md:w-[300px] lg:w-[calc(25%-1px)] ${
-                  bestSellers.isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-                } transition-all duration-500`}
-                style={{ transitionDelay: `${200 + index * 80}ms` }}
+              <a
+                key={product.slug}
+                href={`/merch/${product.slug}`}
+                className={`group flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 ${bestSellers.isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+                  }`}
+                style={{ transitionDelay: `${100 + index * 60}ms` }}
+                aria-label={`View ${product.name}`}
               >
-                <div className="flex h-12 flex-col justify-center px-4">
-                  <p className="text-xs font-medium uppercase tracking-wider">{product.category ?? 'SHILOH SHOP'}</p>
-                  {product.subcategory && <p className="mt-0.5 text-xs uppercase text-gray-500">{product.subcategory}</p>}
-                </div>
-                <a href={`/merch/${product.slug}`} className="mx-4 aspect-[3/4] overflow-hidden rounded-lg bg-[#F9F4F0]" aria-label={`View ${product.name}`}>
+                {/* Curved Product Image */}
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-t-2xl bg-[#ebe4d8]">
                   {product.image ? (
                     <img
                       src={product.image}
@@ -3205,50 +6081,34 @@ function MerchPage({
                     />
                   ) : (
                     <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${product.accent}`}>
-                      <product.icon className="h-12 w-12 text-white" strokeWidth={1.5} />
+                      <product.icon className="h-14 w-14 text-white" strokeWidth={1.5} />
                     </div>
                   )}
-                </a>
-                <div className="flex min-h-28 flex-col items-center justify-center px-4 text-center">
-                  <a href={`/merch/${product.slug}`} className="text-sm transition-colors hover:text-black/60">
-                    {product.name}
-                  </a>
-                  <div className="mt-2 flex items-center gap-2 text-sm">
-                    {product.oldPriceLabel && <span className="text-gray-400 line-through">{product.oldPriceLabel}</span>}
-                    <span>{product.priceLabel}</span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => onAddToCart(product.slug, 1, getProductVariant(product)?.id)}
-                    className="mt-4 rounded-full border border-black/15 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] transition-colors hover:bg-black hover:text-white"
-                  >
-                    Add to Cart
-                  </button>
                 </div>
-              </article>
+
+                {/* Card Footer: Name left, Price + View right */}
+                <div className="flex items-center justify-between gap-3 px-4 py-4">
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-serif text-base italic font-light leading-tight text-black">
+                      {product.name}
+                    </p>
+                    {product.subcategory && (
+                      <p className="mt-0.5 text-[10px] uppercase tracking-wider text-black/40">{product.subcategory}</p>
+                    )}
+                  </div>
+                  <div className="flex shrink-0 flex-col items-end gap-1.5">
+                    <span className="font-serif text-sm italic text-black/80">{product.priceLabel}</span>
+                    <span className="rounded-full border border-black/15 px-3 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-black transition-colors group-hover:bg-black group-hover:text-white group-hover:border-black">
+                      View
+                    </span>
+                  </div>
+                </div>
+              </a>
             ))}
-          </div>
-          <div className="mx-auto mt-8 max-w-[280px] sm:mt-10">
-            <div className="h-[2px] overflow-hidden rounded-full bg-gray-300">
-              <div
-                className="h-full w-[30%] rounded-full bg-[#1a1a1a] transition-transform duration-150"
-                style={{ transform: `translateX(${scrollProgress * (100 / 0.3)}%)` }}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#F9F4F0]/42 backdrop-blur-[2px]">
-          <div className="mx-4 max-w-md border border-black/10 bg-[#F9F4F0]/88 px-6 py-5 text-center shadow-[0_24px_80px_rgba(0,0,0,0.08)] backdrop-blur-md">
-            <p className="text-xs font-semibold uppercase tracking-[0.26em] text-black/45">Coming soon</p>
-            <p className="mt-3 text-lg font-medium text-black">Official Shiloh Merchandise Coming Soon</p>
-            <p className="mt-2 text-sm leading-6 text-black/55">
-              Conference apparel, ceremonial wear and exclusive event merchandise will be available soon.
-            </p>
           </div>
         </div>
       </section>
 
-      {cart.length > 0 && <FloatingCart cart={cart} onUpdateQuantity={onUpdateQuantity} onRemove={onRemoveFromCart} />}
       <Footer />
     </main>
   );
@@ -3260,18 +6120,46 @@ function ProductPage({
   onAddToCart,
   onUpdateQuantity,
   onRemoveFromCart,
+  onOpenSponsor,
 }: {
   product?: MerchProduct;
   cart: CartItem[];
   onAddToCart: (slug: string, quantity?: number, variantId?: string, selection?: { size?: string; color?: string }) => void;
   onUpdateQuantity: (cartKey: string, quantity: number) => void;
   onRemoveFromCart: (cartKey: string) => void;
+  onOpenSponsor?: () => void;
 }) {
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [selectedVariantId, setSelectedVariantId] = useState(product?.variants?.[0]?.id ?? '');
-  const [selectedColor, setSelectedColor] = useState('Amber');
-  const [selectedSize, setSelectedSize] = useState('M');
+  const [selectedColor, setSelectedColor] = useState(product?.colors?.[0]?.name ?? 'Default');
+  const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] ?? 'M');
   const [openProductSections, setOpenProductSections] = useState<string[]>(['About']);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [isAddedSuccess, setIsAddedSuccess] = useState(false);
+  const mobileGalleryRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (product) {
+      setSelectedQuantity(1);
+      setSelectedVariantId(product.variants?.[0]?.id ?? '');
+      setSelectedColor(product.colors?.[0]?.name ?? 'Default');
+      setSelectedSize(product.sizes?.[0] ?? 'M');
+      setActiveImageIndex(0);
+      setIsAddedSuccess(false);
+    }
+  }, [product]);
+
+  useEffect(() => {
+    if (!product || !product.variants || product.variants.length === 0) return;
+    const variant = product.variants.find((v) => {
+      const matchSize = !v.size || v.size.toLowerCase() === selectedSize.toLowerCase();
+      const matchColor = !v.color || v.color.toLowerCase() === selectedColor.toLowerCase();
+      return matchSize && matchColor;
+    });
+    if (variant) {
+      setSelectedVariantId(variant.id);
+    }
+  }, [selectedSize, selectedColor, product]);
 
   if (!product) {
     return (
@@ -3300,32 +6188,50 @@ function ProductPage({
   const productInCart = Boolean(productCartItem);
   const updateSelectedQuantity = (quantity: number) => setSelectedQuantity(Math.max(1, Math.min(quantity, 99)));
   const selectedPriceLabel = getCartLinePriceLabel(product, selectedVariant);
-  const displayProductName = 'Polar Fleece Sherpa Zip';
-  const colorOptions = [
-    { name: 'Amber', className: 'bg-[#d86f1f]' },
-    { name: 'Sand', className: 'bg-[#d9c3a2]' },
-    { name: 'Black', className: 'bg-[#191919]' },
-  ];
-  const sizeOptions = ['XS', 'S', 'M', 'L', 'XL'];
-  const galleryImages = [
-    'linear-gradient(135deg,#f6f1e8 0%,#eee3d2 42%,#cf681f 43%,#e78836 70%,#643118 100%)',
-    'linear-gradient(160deg,#f8f5ee 0%,#f8f5ee 38%,#d86f1f 39%,#b95b1d 68%,#211610 100%)',
-    'radial-gradient(circle at 52% 36%,#f2a34f 0 18%,#d86f1f 19% 44%,#f8f2e8 45% 100%)',
-  ];
+  const displayProductName = product.name;
+
+  const colorOptions = product.colors && product.colors.length > 0
+    ? product.colors
+    : [{ name: 'Default', className: 'bg-primary' }];
+  const sizeOptions = product.sizes && product.sizes.length > 0
+    ? product.sizes
+    : [];
+  const images = (product.images && product.images.length > 0
+    ? product.images
+    : [product.image].filter(Boolean)) as string[];
+
+  const scrollGallery = (direction: 'left' | 'right') => {
+    const container = mobileGalleryRef.current;
+    if (!container) return;
+    const scrollAmount = container.clientWidth;
+    container.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth'
+    });
+  };
+
+  const handleMobileGalleryScroll = () => {
+    const container = mobileGalleryRef.current;
+    if (!container) return;
+    const index = Math.round(container.scrollLeft / container.clientWidth);
+    setActiveImageIndex(index);
+  };
+
   const accordionSections = [
     {
       title: 'About',
-      copy: 'A plush cold-weather zip layer with a high collar, relaxed body, and tactile sherpa pile. Designed as a statement outerwear piece with a warm orange finish.',
+      copy: product.description || 'A premium quality Shiloh Season merchandise item.',
     },
     {
       title: 'Product details',
-      copy: 'Two-way front zip, paneled fleece body, dropped shoulder, side pockets, elasticated cuffs, and tonal woven trims. Shell: recycled polyester fleece.',
+      copy: 'Made with fine materials, double-needle stitching, side-seamed construct, and optimized branding application.',
     },
     {
       title: 'Size & Fit',
-      copy: 'Relaxed fit. Choose your regular size for easy layering or size down for a closer streetwear silhouette.',
+      copy: 'Fits true to size. Choose your regular size for standard wear or size up for an oversized style statement.',
     },
   ];
+
   const toggleProductSection = (title: string) => {
     setOpenProductSections((sections) =>
       sections.includes(title) ? sections.filter((section) => section !== title) : [...sections, title],
@@ -3333,39 +6239,79 @@ function ProductPage({
   };
 
   return (
-    <main className="min-h-screen bg-[#f7f4ee] text-[#151515]">
+    <main className="min-h-screen bg-[#f7f4ee] text-[#151515] pb-36 md:pb-0">
       <HeroHeader />
       <section className="px-4 pb-20 pt-32 sm:px-6 md:px-10 lg:px-14">
-        <div className="mx-auto grid max-w-[1680px] gap-10 lg:grid-cols-[minmax(0,1fr)_460px] lg:items-start">
-          <div className="space-y-4">
-            {galleryImages.map((background, index) => (
+        <div className="mx-auto grid max-w-[1680px] gap-10 md:grid-cols-[minmax(0,1fr)_460px] md:items-start">
+
+          {/* Desktop Gallery */}
+          <div className="hidden md:block space-y-4">
+            {images.map((img: string, index: number) => (
               <figure
-                key={background}
+                key={index}
                 className="relative flex min-h-[82vh] items-center justify-center overflow-hidden bg-[#ebe4d8]"
               >
-                <div className="absolute inset-0" style={{ background }} />
-                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.18),rgba(255,255,255,0)_34%,rgba(0,0,0,0.05))]" />
-                <div className="relative h-[72vh] w-[58%] max-w-[520px] rounded-t-[45%] rounded-b-[18%] bg-[#db731f] shadow-[0_55px_110px_rgba(54,27,10,0.26)]">
-                  <div className="absolute left-1/2 top-0 h-full w-[2px] -translate-x-1/2 bg-black/20" />
-                  <div className="absolute left-[18%] top-[18%] h-[52%] w-[18%] -rotate-6 rounded-full bg-[#f09a48]/60 blur-sm" />
-                  <div className="absolute right-[18%] top-[18%] h-[52%] w-[18%] rotate-6 rounded-full bg-[#b85119]/55 blur-sm" />
-                  <div className="absolute left-1/2 top-[12%] h-20 w-36 -translate-x-1/2 rounded-b-full border-b border-black/20 bg-[#f4bc77]" />
-                  <div className="absolute bottom-[8%] left-1/2 h-12 w-[86%] -translate-x-1/2 rounded-full bg-black/10" />
-                </div>
+                <img
+                  src={img}
+                  alt={product.name}
+                  className="w-full h-full object-cover"
+                />
                 <figcaption className="absolute bottom-6 left-6 text-[11px] uppercase tracking-[0.22em] text-black/45">
-                  {String(index + 1).padStart(2, '0')} / Polar fleece study
+                  {String(index + 1).padStart(2, '0')} / {product.name} detail
                 </figcaption>
               </figure>
             ))}
           </div>
 
-          <aside className="lg:sticky lg:top-28">
+          {/* Mobile Gallery (Swipeable) */}
+          <div className="md:hidden relative w-full overflow-hidden bg-[#ebe4d8]">
+            <div
+              ref={mobileGalleryRef}
+              onScroll={handleMobileGalleryScroll}
+              className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide"
+              style={{ scrollSnapType: 'x mandatory' }}
+            >
+              {images.map((img: string, idx: number) => (
+                <div key={idx} className="w-full flex-shrink-0 snap-center flex justify-center items-center aspect-square md:aspect-[4/3] relative">
+                  <img src={img} alt={`${product.name} - ${idx}`} className="w-full h-full object-cover" />
+                </div>
+              ))}
+            </div>
+            {images.length > 1 && (
+              <>
+                <button
+                  onClick={() => scrollGallery('left')}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 shadow-md text-black transition hover:bg-white"
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={() => scrollGallery('right')}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 shadow-md text-black transition hover:bg-white"
+                  aria-label="Next image"
+                >
+                  <ChevronRight className="h-5 w-5" />
+                </button>
+                <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
+                  {images.map((_: string, idx: number) => (
+                    <span
+                      key={idx}
+                      className={`h-2 w-2 rounded-full transition-all ${activeImageIndex === idx ? 'bg-black w-4' : 'bg-black/30'}`}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+
+          <aside className="md:sticky md:top-28">
             <div className="border border-black/10 bg-[#f7f4ee]/88 p-5 backdrop-blur-sm sm:p-7">
               <a href="/merch" className="mb-8 inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-black/50 transition-colors hover:text-black">
-              <ArrowLeft className="h-4 w-4" />
-              Back to shop
-            </a>
-              <p className="text-[11px] uppercase tracking-[0.28em] text-black/45">Home / Outerwear / Fleece</p>
+                <ArrowLeft className="h-4 w-4" />
+                Back to shop
+              </a>
+              <p className="text-[11px] uppercase tracking-[0.28em] text-black/45">Home / Shiloh Shop / 2026</p>
               <div className="mt-5 flex items-start justify-between gap-5">
                 <h1 className="max-w-sm text-[2.6rem] font-light leading-[0.98] tracking-[-0.045em] text-black sm:text-5xl">
                   {displayProductName}
@@ -3373,44 +6319,53 @@ function ProductPage({
                 <p className="pt-2 text-sm text-black/70">{selectedPriceLabel}</p>
               </div>
               <p className="mt-6 max-w-sm text-sm leading-6 text-black/60">
-                A plush sherpa zip jacket with an oversized collar, generous hand feel, and a vivid orange fleece finish.
+                {product.description}
               </p>
 
-              <div className="mt-9 border-t border-black/10 pt-6">
-                <p className="mb-3 text-xs uppercase tracking-[0.22em] text-black/50">Color: {selectedColor}</p>
-                <div className="flex gap-3">
-                  {colorOptions.map((color) => (
-                    <button
-                      key={color.name}
-                      type="button"
-                      onClick={() => setSelectedColor(color.name)}
-                      className={`h-7 w-7 rounded-full border transition ${
-                        selectedColor === color.name ? 'border-black p-1' : 'border-black/20 p-0'
-                      }`}
-                      aria-label={`Select ${color.name}`}
-                    >
-                      <span className={`block h-full w-full rounded-full ${color.className}`} />
-                    </button>
-                  ))}
+              {/* Desktop Color swatches */}
+              {product.colors && product.colors.length > 0 && (
+                <div className="hidden md:block mt-9 border-t border-black/10 pt-6">
+                  <p className="mb-3 text-xs uppercase tracking-[0.22em] text-black/50">Color: {selectedColor}</p>
+                  <div className="flex gap-3">
+                    {colorOptions.map((color) => (
+                      <button
+                        key={color.name}
+                        type="button"
+                        onClick={() => setSelectedColor(color.name)}
+                        className={`h-7 w-7 rounded-full border transition ${selectedColor === color.name ? 'border-black p-0.5' : 'border-black/20 p-0'
+                          }`}
+                        aria-label={`Select ${color.name}`}
+                      >
+                        <span
+                          className="block h-full w-full rounded-full"
+                          style={{ background: color.className }}
+                        />
+                      </button>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
-              <label className="mt-7 block">
-                <span className="mb-3 block text-xs uppercase tracking-[0.22em] text-black/50">Size</span>
-                <select
-                  value={selectedSize}
-                  onChange={(event) => setSelectedSize(event.target.value)}
-                  className="h-12 w-full border border-black/20 bg-transparent px-4 text-sm uppercase tracking-[0.12em] text-black outline-none transition focus:border-black"
-                >
-                  {sizeOptions.map((size) => (
-                    <option key={size} value={size}>
-                      {size}
-                    </option>
-                  ))}
-                </select>
-              </label>
+              {/* Desktop Size dropdown */}
+              {sizeOptions.length > 0 && (
+                <label className="hidden md:block mt-7">
+                  <span className="mb-3 block text-xs uppercase tracking-[0.22em] text-black/50">Size</span>
+                  <select
+                    value={selectedSize}
+                    onChange={(event) => setSelectedSize(event.target.value)}
+                    className="h-12 w-full border border-black/20 bg-transparent px-4 text-sm uppercase tracking-[0.12em] text-black outline-none transition focus:border-black"
+                  >
+                    {sizeOptions.map((size) => (
+                      <option key={size} value={size}>
+                        {size}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              )}
 
-              <div className="mt-5 flex items-stretch gap-3">
+              {/* Desktop Qty + Add to bag */}
+              <div className="hidden md:flex mt-5 items-stretch gap-3">
                 <div className="flex h-12 shrink-0 items-center border border-black/20">
                   <button
                     type="button"
@@ -3432,7 +6387,7 @@ function ProductPage({
                 </div>
                 <button
                   type="button"
-                  onClick={() => onAddToCart(product.slug, selectedQuantity, selectedVariant?.id, { size: selectedSize, color: selectedColor })}
+                  onClick={() => onAddToCart(product.slug, selectedQuantity, selectedVariantId, { size: selectedSize, color: selectedColor })}
                   className="h-12 flex-1 bg-black px-6 text-xs font-semibold uppercase tracking-[0.22em] text-white transition-colors hover:bg-[#d86f1f]"
                 >
                   Add to Bag
@@ -3446,7 +6401,7 @@ function ProductPage({
                 </button>
               </div>
 
-              <p className="mt-4 text-xs leading-5 text-black/50">
+              <p className="mt-4 text-xs leading-5 text-black/50 hidden md:block">
                 Free returns within 14 days. Ships from the official UebertAngel.org checkout once merchandise opens.
               </p>
 
@@ -3460,9 +6415,8 @@ function ProductPage({
                     >
                       {section.title}
                       <Plus
-                        className={`h-4 w-4 transition-transform ${
-                          openProductSections.includes(section.title) ? 'rotate-45' : ''
-                        }`}
+                        className={`h-4 w-4 transition-transform ${openProductSections.includes(section.title) ? 'rotate-45' : ''
+                          }`}
                       />
                     </button>
                     {openProductSections.includes(section.title) ? (
@@ -3475,6 +6429,154 @@ function ProductPage({
           </aside>
         </div>
       </section>
+
+      {/* Mobile-only Sponsor Banner to avoid overlap with sticky footer */}
+      <div className="md:hidden px-4 pb-8">
+        <div className="rounded-2xl border border-[#d86f1f]/20 bg-white/50 backdrop-blur-sm p-6 text-center shadow-sm">
+          <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-[#d86f1f]">Support Shiloh 2026</h4>
+          <p className="mt-2 text-xs leading-relaxed text-black/60">
+            Every sponsorship helps bring someone to Shiloh. Be a part of the blessing.
+          </p>
+          <button
+            type="button"
+            onClick={onOpenSponsor}
+            className="mt-4 w-full rounded-full bg-black py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition active:bg-[#d86f1f]"
+          >
+            Bring Someone to Shiloh
+          </button>
+        </div>
+      </div>
+
+      {/* Pinned Sticky Mobile Footer */}
+      <div className="fixed bottom-0 left-0 right-0 z-[90] bg-[#f7f4ee]/85 border-t border-black/10 px-4 py-4 pb-[calc(env(safe-area-inset-bottom)+12px)] backdrop-blur-md md:hidden flex flex-col gap-3">
+        <AnimatePresence mode="wait">
+          {!isAddedSuccess ? (
+            <motion.div
+              key="selector"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              className="flex flex-col gap-3 w-full"
+            >
+              {/* Row 1: Swatches (Color + Size) */}
+              <div className="flex items-center justify-between gap-4">
+                {/* Colors */}
+                {product.colors && product.colors.length > 0 && (
+                  <div className="flex flex-col gap-1 text-left">
+                    <span className="text-[9px] uppercase tracking-[0.15em] text-black/50 font-bold">Color: {selectedColor}</span>
+                    <div className="flex gap-2">
+                      {colorOptions.map((color) => (
+                        <button
+                          key={color.name}
+                          type="button"
+                          onClick={() => setSelectedColor(color.name)}
+                          className={`h-7 w-7 rounded-full border transition-all ${selectedColor === color.name ? 'border-black p-0.5 scale-105 shadow-sm' : 'border-black/20 p-0'
+                            }`}
+                          aria-label={`Select color ${color.name}`}
+                        >
+                          <span
+                            className="block h-full w-full rounded-full"
+                            style={{ background: color.className }}
+                          />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Sizes Dropdown for Mobile Space Optimization */}
+                {sizeOptions.length > 0 && (
+                  <div className="flex flex-col gap-1 text-right items-end ml-auto">
+                    <span className="text-[9px] uppercase tracking-[0.15em] text-black/50 font-bold font-semibold">Size</span>
+                    <select
+                      value={selectedSize}
+                      onChange={(e) => setSelectedSize(e.target.value)}
+                      className="h-8 min-w-[4.5rem] border border-black/20 bg-white/70 px-2 rounded text-[10px] font-bold uppercase tracking-wider text-black outline-none"
+                    >
+                      {sizeOptions.map((size) => (
+                        <option key={size} value={size}>
+                          {size}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+              </div>
+
+              {/* Row 2: Qty Selector + Add to Cart Button */}
+              <div className="flex items-center gap-3">
+                {/* Qty */}
+                <div className="flex h-11 items-center border border-black/20 rounded-lg overflow-hidden bg-white/40 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => updateSelectedQuantity(selectedQuantity - 1)}
+                    className="flex h-full w-10 items-center justify-center text-black/55 hover:text-black"
+                    aria-label="Decrease quantity"
+                  >
+                    <Minus className="h-3.5 w-3.5" />
+                  </button>
+                  <span className="min-w-6 text-center text-xs font-semibold text-black">{selectedQuantity}</span>
+                  <button
+                    type="button"
+                    onClick={() => updateSelectedQuantity(selectedQuantity + 1)}
+                    className="flex h-full w-10 items-center justify-center text-black/55 hover:text-black"
+                    aria-label="Increase quantity"
+                  >
+                    <Plus className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+
+                {/* Liquid Glass Navy Blue Add to Bag Button */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    onAddToCart(product.slug, selectedQuantity, selectedVariantId, { size: selectedSize, color: selectedColor });
+                    setIsAddedSuccess(true);
+                  }}
+                  className="flex-1 h-11 bg-gradient-to-b from-[#0b1a30]/85 to-[#040c17]/95 border border-white/20 backdrop-blur-[10px] text-white text-xs font-bold uppercase tracking-[0.2em] flex items-center justify-center transition-all duration-200 active:scale-[0.98] rounded-lg shadow-[0_4px_15px_rgba(11,26,48,0.25),inset_0_1px_0_rgba(255,255,255,0.15)]"
+                >
+                  Add to Bag — {selectedPriceLabel}
+                </button>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="success"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+              className="flex flex-col gap-3 w-full text-center py-2"
+            >
+              <div className="flex items-center justify-center gap-2">
+                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-green-500 text-white">
+                  <Check className="h-3 w-3" strokeWidth={3} />
+                </div>
+                <span className="text-sm font-semibold text-black">Added to Bag!</span>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsAddedSuccess(false)}
+                  className="flex-1 h-11 border border-black/20 bg-white/50 text-black text-xs font-semibold uppercase tracking-[0.15em] rounded-lg transition active:bg-black/5"
+                >
+                  Keep Shopping
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    window.dispatchEvent(new CustomEvent('open-cart'));
+                  }}
+                  className="flex-1 h-11 bg-black text-white text-xs font-semibold uppercase tracking-[0.15em] rounded-lg transition active:bg-black/80"
+                >
+                  View Cart
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
 
       <section className="px-4 pb-24 sm:px-6 md:px-10 lg:px-14">
         <div className="mx-auto max-w-[1680px] border-t border-black/10 pt-10">
@@ -3512,7 +6614,6 @@ function ProductPage({
         </div>
       </section>
 
-      {cart.length > 0 && <FloatingCart cart={cart} onUpdateQuantity={onUpdateQuantity} onRemove={onRemoveFromCart} />}
       <Footer />
     </main>
   );
@@ -3618,9 +6719,8 @@ const scheduleSoftwareVideo =
 function ScheduleLabel({ children, align = 'center' }: { children: string; align?: 'center' | 'start' }) {
   return (
     <div
-      className={`flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.22em] text-white/70 ${
-        align === 'center' ? 'justify-center' : 'justify-start'
-      }`}
+      className={`flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.22em] text-white/70 ${align === 'center' ? 'justify-center' : 'justify-start'
+        }`}
     >
       <Sparkle className="h-3 w-3" strokeWidth={1.5} />
       <span>{children}</span>
@@ -3787,14 +6887,35 @@ export default function App() {
   const normalizedPathname = pathname.replace(/\/+$/, '') || '/';
   const isJourneyPage = normalizedPathname === '/journey';
   const isVipPage = normalizedPathname === '/vip';
-  const isMerchPage = normalizedPathname === '/merch';
-  const productSlug = normalizedPathname.startsWith('/merch/') ? normalizedPathname.replace('/merch/', '').split('/')[0] : '';
+  const isMerchPage = normalizedPathname === '/merch' || normalizedPathname === '/shop';
+  const productSlug = normalizedPathname.startsWith('/merch/')
+    ? normalizedPathname.replace('/merch/', '').split('/')[0]
+    : normalizedPathname.startsWith('/shop/')
+      ? normalizedPathname.replace('/shop/', '').split('/')[0]
+      : '';
   const merchProduct = productSlug ? merchProducts.find((product) => product.slug === productSlug) : undefined;
   const isProductPage = Boolean(productSlug);
   const isPartnersPage = normalizedPathname === '/partners';
   const isSchedulePage = normalizedPathname === '/schedule';
   const isPassesPage = normalizedPathname === '/passes';
   const isContactPage = normalizedPathname === '/contact';
+
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [cartOpen, setCartOpen] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    const handleOpenCart = () => setCartOpen(true);
+    window.addEventListener('open-cart', handleOpenCart);
+    return () => window.removeEventListener('open-cart', handleOpenCart);
+  }, []);
 
   useEffect(() => {
     const updatePathname = () => setPathname(window.location.pathname);
@@ -3805,6 +6926,7 @@ export default function App() {
 
   useEffect(() => {
     window.localStorage.setItem('shiloh-merch-cart', JSON.stringify(cart));
+    window.dispatchEvent(new CustomEvent('cart-updated', { detail: cart }));
   }, [cart]);
 
   useEffect(() => {
@@ -3952,6 +7074,7 @@ export default function App() {
           onAddToCart={addToCart}
           onUpdateQuantity={updateCartQuantity}
           onRemoveFromCart={removeFromCart}
+          onOpenSponsor={() => setSponsorOpen(true)}
         />
       ) : isMerchPage ? (
         <MerchPage
@@ -3980,12 +7103,21 @@ export default function App() {
       )}
       <FloatingSponsorButton
         onClick={() => setSponsorOpen(true)}
-        visible={!isLoading && sponsorVisible && !registrationOpen && !sponsorOpen && !sowOpen}
+        visible={!isLoading && sponsorVisible && !registrationOpen && !sponsorOpen && !sowOpen && !isMobile}
       />
       <RegistrationModal open={registrationOpen} onClose={() => setRegistrationOpen(false)} type={registrationType} />
       <SponsorModal open={sponsorOpen} onClose={() => setSponsorOpen(false)} />
       <SowModal open={sowOpen} onClose={() => setSowOpen(false)} />
       <CelebrationBurst active={celebrating} />
+      {cart.length > 0 && (
+        <FloatingCart
+          cart={cart}
+          onUpdateQuantity={updateCartQuantity}
+          onRemove={removeFromCart}
+          open={cartOpen}
+          setOpen={setCartOpen}
+        />
+      )}
     </>
   );
 }
