@@ -427,7 +427,7 @@ type HeaderNavItem =
   }
   | { label: string; action: 'sow' | 'sponsor'; href?: never; children?: never };
 
-function HeroHeader({ sticky = true }: { sticky?: boolean }) {
+function HeroHeader({ sticky = true, pageType }: { sticky?: boolean; pageType?: 'shop' | 'product' | '' }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileSubmenu, setMobileSubmenu] = useState<string | null>(null);
   const [cartCount, setCartCount] = useState(() => {
@@ -516,7 +516,10 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
   };
 
   return (
-    <header className={`${sticky ? 'fixed' : 'absolute'} inset-x-0 top-0 z-40 flex justify-center px-3`}>
+    <header
+      className={`${sticky ? 'fixed' : 'absolute'} inset-x-0 top-0 z-40 flex justify-center px-3`}
+      data-page={pageType || ''}
+    >
       <AnimatePresence>
         {menuOpen && (
           <motion.button
@@ -531,7 +534,7 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
           />
         )}
       </AnimatePresence>
-      <nav className="relative z-20 grid w-full max-w-none grid-cols-[1fr_auto_auto] items-center gap-x-3 rounded-b-[1.75rem] bg-black px-6 py-3.5 text-[#E1E0CC] shadow-[0_16px_40px_rgba(0,0,0,0.35)] md:flex md:w-[min(1160px,calc(100vw-3rem))] md:max-w-[calc(100vw-1.5rem)] md:justify-between md:gap-7 md:rounded-b-3xl md:px-7 md:py-2 md:text-white xl:w-[min(1240px,calc(100vw-4rem))] xl:px-8 2xl:w-[min(1880px,calc(100vw-8rem))] 2xl:px-10">
+      <nav className="relative z-20 grid w-full max-w-none grid-cols-[auto_1fr_auto] items-center gap-x-2 rounded-b-[1.75rem] bg-black px-4 py-2 text-[#E1E0CC] shadow-[0_16px_40px_rgba(0,0,0,0.35)] md:flex md:w-[min(1160px,calc(100vw-3rem))] md:max-w-[calc(100vw-1.5rem)] md:justify-between md:gap-7 md:rounded-b-3xl md:px-7 md:py-2 md:text-white xl:w-[min(1240px,calc(100vw-4rem))] xl:px-8 2xl:w-[min(1880px,calc(100vw-8rem))] 2xl:px-10">
         <a href="/" aria-label="Shiloh home" className="order-1 flex min-w-0 shrink-0 items-center gap-3 md:col-span-1 md:gap-3">
           <span className="flex flex-col text-left leading-[0.78] text-[#E1E0CC]">
             <span className="text-[18px] font-extrabold uppercase tracking-[0.2em] md:text-xs md:tracking-[0.22em]">Shiloh</span>
@@ -549,7 +552,7 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
           onClick={() => {
             window.dispatchEvent(new CustomEvent('open-cart'));
           }}
-          className="order-2 ml-auto md:hidden flex items-center justify-center relative w-12 h-12 text-[#E1E0CC] active:scale-95 transition-transform"
+          className="order-4 hidden md:flex items-center justify-center relative w-12 h-12 text-[#E1E0CC] active:scale-95 transition-transform"
           aria-label="Open cart"
         >
           <ShoppingCart className="h-6 w-6" />
@@ -616,11 +619,11 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
             </div>
           ))}
         </div>
-        <div className="hidden md:flex md:order-3 md:shrink-0 md:items-center md:justify-center md:gap-2">
+        <div className="header-cta-wrapper order-2 ml-auto flex shrink-0 items-center justify-center gap-1 md:order-3 md:ml-0 md:gap-2">
           <button
             type="button"
             onClick={openSponsorModal}
-            className="group inline-flex min-h-[3.75rem] min-w-0 items-center justify-center rounded-sm border border-white/15 bg-white/10 px-3 text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 hover:bg-white/15 md:min-h-[3rem] md:min-w-[9.3rem] md:rounded-full md:border-white/20 md:px-4"
+            className="mobile-cta-btn bring-someone-btn group inline-flex min-h-[2.75rem] min-w-0 items-center justify-center rounded-full border border-white/15 bg-white/10 px-2.5 text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 hover:bg-white/15 md:min-h-[3rem] md:min-w-[9.3rem] md:px-4"
           >
             <span className="flex flex-col items-center text-center leading-none">
               <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-primary/60 md:text-[9px]">
@@ -632,7 +635,7 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
           <button
             type="button"
             data-registration-type="conference"
-            className="group inline-flex min-h-[3.75rem] min-w-0 items-center justify-center rounded-sm bg-[#E1E0CC] px-3 text-black shadow-[0_8px_20px_rgba(225,224,204,0.16)] transition-all duration-300 hover:bg-white md:min-h-0 md:gap-2 md:rounded-full md:border md:border-white/25 md:bg-white/10 md:py-1 md:pl-3 md:pr-1 md:text-[#E1E0CC] md:shadow-none md:backdrop-blur-xl md:hover:bg-white/15 md:hover:gap-3"
+            className="mobile-cta-btn youre-coming-btn group inline-flex min-h-[2.75rem] min-w-0 items-center justify-center rounded-full border border-white/20 bg-[#E1E0CC] px-2.5 text-black shadow-[0_8px_20px_rgba(225,224,204,0.16)] transition-all duration-300 hover:bg-white md:min-h-0 md:gap-2 md:bg-white/10 md:py-1 md:pl-3 md:pr-1 md:text-[#E1E0CC] md:shadow-none md:backdrop-blur-xl md:hover:bg-white/15 md:hover:gap-3"
           >
             <span className="flex flex-col items-start leading-none">
               <span className="text-[12px] font-semibold uppercase tracking-[0.12em] text-black/55 md:text-[9px] md:text-primary/60">
@@ -658,7 +661,7 @@ function HeroHeader({ sticky = true }: { sticky?: boolean }) {
               return !current;
             });
           }}
-          className="order-3 -mr-2 ml-2 flex h-12 w-12 shrink-0 flex-col items-center justify-center gap-1.5 rounded-full text-[#E1E0CC] transition-transform duration-300 hover:scale-105 md:hidden"
+          className="order-3 -mr-1 ml-1 flex h-10 w-10 shrink-0 flex-col items-center justify-center gap-1.5 rounded-full text-[#E1E0CC] transition-transform duration-300 hover:scale-105 md:hidden"
           aria-label="Toggle menu"
           aria-expanded={menuOpen}
         >
@@ -2494,6 +2497,49 @@ function FloatingSponsorButton({ onClick, visible }: { onClick: () => void; visi
         </motion.div>
       )}
     </AnimatePresence>
+  );
+}
+
+/* ─── Mobile Sticky Bottom Actions ──────────────────────────────────────────
+ * Shown ONLY on mobile (≤767px) and ONLY on non-shop / non-product pages.
+ * Uses the same Liquid Glass aesthetic as the global button treatment.
+ * ──────────────────────────────────────────────────────────────────────────── */
+function MobileStickyActions({
+  onOpenSponsor,
+  pageType,
+}: {
+  onOpenSponsor: () => void;
+  pageType?: 'shop' | 'product' | '';
+}) {
+  if (pageType === 'shop' || pageType === 'product') return null;
+  return (
+    <div
+      id="mobile-sticky-actions"
+      className="mobile-sticky-bar pointer-events-none fixed inset-x-0 bottom-0 z-[90] flex items-end justify-center gap-2 px-4 pb-[max(env(safe-area-inset-bottom),0.75rem)] pt-3 md:hidden"
+    >
+      {/* Liquid glass background strip */}
+      <div className="absolute inset-0 rounded-t-2xl border-t border-white/10 bg-black/55 backdrop-blur-xl" />
+      {/* Bring Someone to Shiloh */}
+      <button
+        type="button"
+        onClick={onOpenSponsor}
+        className="mobile-sticky-btn bring-someone-sticky pointer-events-auto relative flex-1 overflow-hidden rounded-full border border-white/20 bg-[#061923]/80 px-4 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.22em] text-[#E1E0CC] backdrop-blur-xl transition-all duration-300 active:scale-[0.97]"
+        aria-label="Bring someone to Shiloh"
+      >
+        <span className="absolute inset-x-0 top-0 h-[40%] rounded-t-full bg-gradient-to-b from-white/20 to-transparent pointer-events-none" />
+        Bring Someone to Shiloh
+      </button>
+      {/* Let Us Know You're Coming */}
+      <button
+        type="button"
+        data-registration-type="conference"
+        className="mobile-sticky-btn youre-coming-sticky pointer-events-auto relative flex-1 overflow-hidden rounded-full border border-[#E1E0CC]/30 bg-[#E1E0CC] px-4 py-3 text-center text-[11px] font-semibold uppercase tracking-[0.22em] text-black transition-all duration-300 active:scale-[0.97]"
+        aria-label="Let us know you are coming to Shiloh"
+      >
+        <span className="absolute inset-x-0 top-0 h-[40%] rounded-t-full bg-gradient-to-b from-white/40 to-transparent pointer-events-none" />
+        You&apos;re Coming
+      </button>
+    </div>
   );
 }
 
@@ -5944,17 +5990,20 @@ function MerchPage({
   onUpdateQuantity: (cartKey: string, quantity: number) => void;
   onRemoveFromCart: (cartKey: string) => void;
 }) {
-  const products = merchProducts.filter((p) => p.category === 'SHILOH 2026');
+  const products = merchProducts;
   const heroVideos = [
     'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a1045a7c363506b9a9a3020.mp4',
     'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a1041affe2210f89e3c3a87.mp4',
     'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a1044d7a33d272edabd7f44.mp4',
     'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a104a1db656b3edc43f0d93.mp4',
   ];
+  const [activeTab, setActiveTab] = useState<'Shiloh' | 'GoodNewsWorld Merch'>('Shiloh');
   const [activeSlide, setActiveSlide] = useState(0);
   const [paused, setPaused] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const heroContent = useStretchInView<HTMLDivElement>(0.2);
   const bestSellers = useStretchInView<HTMLDivElement>(0.15);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (paused) return;
@@ -5964,6 +6013,21 @@ function MerchPage({
     return () => window.clearInterval(timer);
   }, [heroVideos.length, paused]);
 
+  const updateScrollProgress = () => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+    const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+    setScrollProgress(maxScroll > 0 ? carousel.scrollLeft / maxScroll : 0);
+  };
+
+  const handleCarouselWheel = (event: React.WheelEvent<HTMLDivElement>) => {
+    const carousel = carouselRef.current;
+    if (!carousel || Math.abs(event.deltaY) <= Math.abs(event.deltaX)) return;
+    event.preventDefault();
+    carousel.scrollLeft += event.deltaY;
+    updateScrollProgress();
+  };
+
   return (
     <main
       className="min-h-screen bg-black text-white"
@@ -5972,7 +6036,7 @@ function MerchPage({
           '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
       }}
     >
-      <HeroHeader />
+      <HeroHeader pageType="shop" />
       <section className="relative flex min-h-screen flex-col overflow-hidden lg:flex-row">
         <div className="relative flex min-h-[60vh] w-full items-end overflow-hidden px-6 pb-12 pt-32 lg:min-h-0 lg:w-1/2 lg:px-10 lg:pb-16">
           <img
@@ -5983,24 +6047,26 @@ function MerchPage({
           <div className="absolute inset-0 bg-black/30" />
           <div
             ref={heroContent.ref}
-            className={`relative z-10 max-w-xl transform transition-all duration-1000 ${heroContent.isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-              }`}
+            className={`relative z-10 max-w-xl transform transition-all duration-1000 ${
+              heroContent.isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+            }`}
           >
             <h1 className="mb-6 font-serif text-5xl font-normal italic leading-[0.92] tracking-[-0.045em] text-primary drop-shadow-lg sm:text-6xl md:text-7xl lg:text-[clamp(4.5rem,7vw,8rem)]">
               Shiloh Shop 2026
             </h1>
             <p className="mb-10 max-w-md text-sm text-white/80 md:text-base">
-              Official Shiloh Merchandise. Premium apparel and exclusive conference merchandise.
+              Official Shiloh Merchandise Coming Soon. Please check back later for apparel, ceremonial wear, and
+              exclusive conference merchandise.
             </p>
             <div className="flex flex-wrap items-center gap-3">
               <a href="#shop" className="btn-primary inline-flex rounded-full bg-white px-10 py-4 text-sm text-black">
-                Shop Now
+                Know More
               </a>
               <a
                 href="#shop"
                 className="liquid-glass inline-flex rounded-full bg-white/10 px-10 py-4 text-sm font-medium text-white shadow-[0_16px_42px_rgba(0,0,0,0.24)] transition-transform duration-300 hover:-translate-y-0.5"
               >
-                View All
+                Get now
               </a>
             </div>
           </div>
@@ -6009,8 +6075,9 @@ function MerchPage({
           {heroVideos.map((video, index) => (
             <video
               key={video}
-              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${activeSlide === index ? 'opacity-100' : 'opacity-0'
-                }`}
+              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
+                activeSlide === index ? 'opacity-100' : 'opacity-0'
+              }`}
               src={video}
               autoPlay
               loop
@@ -6026,8 +6093,9 @@ function MerchPage({
                   type="button"
                   onClick={() => setActiveSlide(index)}
                   aria-label={`Show slide ${index + 1}`}
-                  className={`h-2 w-2 rounded-full transition-all ${activeSlide === index ? 'scale-125 bg-white' : 'bg-white/50'
-                    }`}
+                  className={`glass-exclude h-2 w-2 rounded-full transition-all ${
+                    activeSlide === index ? 'scale-125 bg-white' : 'bg-white/50'
+                  }`}
                 />
               ))}
             </div>
@@ -6043,68 +6111,96 @@ function MerchPage({
         </div>
       </section>
 
-      <section id="shop" className="relative overflow-hidden bg-[#F9F4F0] px-4 py-14 text-black sm:px-6 sm:py-20 lg:px-10">
+      <section id="shop" className="relative overflow-hidden bg-[#F9F4F0] px-4 py-12 text-black sm:px-6 sm:py-16 lg:px-10">
         <div
           ref={bestSellers.ref}
-          className={`transform transition-all duration-700 ${bestSellers.isVisible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
-            }`}
+          aria-hidden="false"
+          className={`transform transition-transform duration-800 ${
+            bestSellers.isVisible ? 'translate-y-0' : 'translate-y-6'
+          }`}
         >
-          {/* Section heading */}
-          <div className="mb-10 flex items-end justify-between">
-            <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-black/40">Official Collection</p>
-              <h2 className="mt-2 font-serif text-4xl font-light italic tracking-tight text-black sm:text-5xl">
-                Shiloh 2026
-              </h2>
-            </div>
-            <p className="hidden text-xs text-black/40 sm:block">{products.length} items</p>
+          <div className="mb-8 flex flex-wrap items-center gap-5 sm:gap-8">
+            {(['Shiloh', 'GoodNewsWorld Merch'] as const).map((tab) => (
+              <button
+                key={tab}
+                type="button"
+                onClick={() => setActiveTab(tab)}
+                className={`flex items-center gap-3 text-2xl font-medium transition-colors sm:text-4xl md:text-5xl ${
+                  activeTab === tab ? 'text-[#1a1a1a]' : 'text-gray-400 hover:text-gray-600'
+                }`}
+              >
+                {activeTab === tab && <span className="animate-scale-in h-5 w-5 rounded-full bg-[#1a1a1a] sm:h-6 sm:w-6" />}
+                {tab}
+              </button>
+            ))}
           </div>
 
-          {/* Product Grid */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {products.map((product, index) => (
-              <a
-                key={product.slug}
-                href={`/merch/${product.slug}`}
-                className={`group flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 ${bestSellers.isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-                  }`}
-                style={{ transitionDelay: `${100 + index * 60}ms` }}
-                aria-label={`View ${product.name}`}
-              >
-                {/* Curved Product Image */}
-                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-t-2xl bg-[#ebe4d8]">
-                  {product.image ? (
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${product.accent}`}>
-                      <product.icon className="h-14 w-14 text-white" strokeWidth={1.5} />
-                    </div>
-                  )}
-                </div>
-
-                {/* Card Footer: Name left, Price + View right */}
-                <div className="flex items-center justify-between gap-3 px-4 py-4">
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate font-serif text-base italic font-light leading-tight text-black">
-                      {product.name}
-                    </p>
-                    {product.subcategory && (
-                      <p className="mt-0.5 text-[10px] uppercase tracking-wider text-black/40">{product.subcategory}</p>
+          {/* Horizontal-scroll carousel — touch-optimised for left/right swipe */}
+          <div
+            ref={carouselRef}
+            onWheel={handleCarouselWheel}
+            onScroll={updateScrollProgress}
+            className="scrollbar-hide shop-carousel flex overflow-x-auto overflow-y-hidden"
+            style={{ touchAction: 'pan-x' }}
+          >
+            {products
+              .filter((p) => (activeTab === 'Shiloh' ? p.category === 'SHILOH 2026' : p.category === 'GOODNEWSWORLD'))
+              .map((product, index) => (
+                <article
+                  key={`${activeTab}-${product.name}`}
+                  className={`shop-product-card group -ml-[1px] flex w-[260px] shrink-0 flex-col border border-[#1f4068] first:ml-0 sm:w-[280px] md:w-[300px] lg:w-[calc(25%-1px)] ${
+                    bestSellers.isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+                  } transition-all duration-500`}
+                  style={{ transitionDelay: `${200 + index * 80}ms` }}
+                >
+                  <div className="flex h-12 flex-col justify-center px-4">
+                    <p className="card-footer-sub text-xs font-medium uppercase tracking-wider">{product.category ?? 'SHILOH SHOP'}</p>
+                    {product.subcategory && <p className="card-footer-sub mt-0.5 text-xs uppercase">{product.subcategory}</p>}
+                  </div>
+                  <a
+                    href={`/merch/${product.slug}`}
+                    className="mx-4 aspect-[3/4] overflow-hidden rounded-xl bg-[#0d2137]"
+                    aria-label={`View ${product.name}`}
+                  >
+                    {product.image ? (
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${product.accent}`}>
+                        <product.icon className="h-12 w-12 text-white" strokeWidth={1.5} />
+                      </div>
                     )}
+                  </a>
+                  <div className="flex min-h-28 flex-col items-center justify-center px-4 text-center">
+                    <a href={`/merch/${product.slug}`} className="card-footer-text text-sm transition-colors hover:opacity-70">
+                      {product.name}
+                    </a>
+                    <div className="mt-2 flex items-center gap-2 text-sm">
+                      {product.oldPriceLabel && <span className="card-footer-sub line-through">{product.oldPriceLabel}</span>}
+                      <span className="card-footer-price">{product.priceLabel}</span>
+                    </div>
+                    <a
+                      href={`/merch/${product.slug}`}
+                      className="card-view-pill mt-4 rounded-full border px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] transition-colors"
+                    >
+                      View Item
+                    </a>
                   </div>
-                  <div className="flex shrink-0 flex-col items-end gap-1.5">
-                    <span className="font-serif text-sm italic text-black/80">{product.priceLabel}</span>
-                    <span className="rounded-full border border-black/15 px-3 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-black transition-colors group-hover:bg-black group-hover:text-white group-hover:border-black">
-                      View
-                    </span>
-                  </div>
-                </div>
-              </a>
-            ))}
+                </article>
+              ))}
+          </div>
+
+          {/* Scroll progress indicator */}
+          <div className="mx-auto mt-8 max-w-[280px] sm:mt-10">
+            <div className="h-[2px] overflow-hidden rounded-full bg-gray-300">
+              <div
+                className="h-full w-[30%] rounded-full bg-[#1a1a1a] transition-transform duration-150"
+                style={{ transform: `translateX(${scrollProgress * (100 / 0.3)}%)` }}
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -6164,7 +6260,7 @@ function ProductPage({
   if (!product) {
     return (
       <main className="min-h-screen bg-black text-primary">
-        <HeroHeader />
+        <HeroHeader pageType="product" />
         <section className="px-4 pb-24 pt-36 sm:px-6 md:px-10">
           <div className="mx-auto max-w-3xl rounded-3xl border border-white/10 bg-white/[0.055] p-8 text-center">
             <p className="text-xs font-semibold uppercase tracking-[0.34em] text-primary/45">Merch</p>
@@ -6240,7 +6336,7 @@ function ProductPage({
 
   return (
     <main className="min-h-screen bg-[#f7f4ee] text-[#151515] pb-36 md:pb-0">
-      <HeroHeader />
+      <HeroHeader pageType="product" />
       <section className="px-4 pb-20 pt-32 sm:px-6 md:px-10 lg:px-14">
         <div className="mx-auto grid max-w-[1680px] gap-10 md:grid-cols-[minmax(0,1fr)_460px] md:items-start">
 
@@ -7105,11 +7201,17 @@ export default function App() {
         onClick={() => setSponsorOpen(true)}
         visible={!isLoading && sponsorVisible && !registrationOpen && !sponsorOpen && !sowOpen && !isMobile}
       />
+      {/* Mobile sticky bottom CTA bar — only on non-shop/product pages */}
+      <MobileStickyActions
+        onOpenSponsor={() => setSponsorOpen(true)}
+        pageType={isProductPage ? 'product' : isMerchPage ? 'shop' : ''}
+      />
       <RegistrationModal open={registrationOpen} onClose={() => setRegistrationOpen(false)} type={registrationType} />
       <SponsorModal open={sponsorOpen} onClose={() => setSponsorOpen(false)} />
       <SowModal open={sowOpen} onClose={() => setSowOpen(false)} />
       <CelebrationBurst active={celebrating} />
-      {cart.length > 0 && (
+      {/* FloatingCart — desktop only, no floating cart on mobile */}
+      {cart.length > 0 && !isMobile && (
         <FloatingCart
           cart={cart}
           onUpdateQuantity={updateCartQuantity}
