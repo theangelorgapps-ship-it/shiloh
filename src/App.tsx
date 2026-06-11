@@ -6034,12 +6034,25 @@ function MerchPage({
               exclusive conference merchandise.
             </p>
             <div className="flex flex-wrap items-center gap-3">
-              <a href="#shop" className="btn-primary inline-flex rounded-full bg-white px-10 py-4 text-sm text-black">
+              <a
+                href="#shop"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="btn-primary inline-flex rounded-full bg-white px-10 py-4 text-sm font-medium text-black transition-transform duration-300 hover:-translate-y-0.5 hover:bg-white/90"
+              >
                 Know More
               </a>
               <a
-                href="#shop"
-                className="liquid-glass inline-flex rounded-full bg-white/10 px-10 py-4 text-sm font-medium text-white shadow-[0_16px_42px_rgba(0,0,0,0.24)] transition-transform duration-300 hover:-translate-y-0.5"
+                href="/merch/shiloh-season-blue-logo-t-shirt"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.history.pushState({}, '', '/merch/shiloh-season-blue-logo-t-shirt');
+                  window.dispatchEvent(new PopStateEvent('popstate'));
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="inline-flex rounded-full border border-white/20 bg-white/10 px-10 py-4 text-sm font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/20 shadow-md"
               >
                 Get now
               </a>
@@ -6311,6 +6324,21 @@ function ProductPage({
     <main className="min-h-screen bg-[#f7f4ee] text-[#151515] pb-36 md:pb-0">
       <HeroHeader pageType="product" />
       <section className="px-4 pb-20 pt-32 sm:px-6 md:px-10 lg:px-14">
+        <div className="mx-auto max-w-[1680px] mb-8">
+          <a
+            href="/merch"
+            onClick={(e) => {
+              e.preventDefault();
+              window.history.pushState({}, '', '/merch');
+              window.dispatchEvent(new PopStateEvent('popstate'));
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-black/50 transition-colors hover:text-black"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to shop
+          </a>
+        </div>
         <div className="mx-auto grid max-w-[1680px] gap-10 md:grid-cols-[minmax(0,1fr)_460px] md:items-start">
 
           {/* Desktop Gallery */}
@@ -6318,7 +6346,7 @@ function ProductPage({
             {images.map((img: string, index: number) => (
               <figure
                 key={index}
-                className="relative flex min-h-[82vh] items-center justify-center overflow-hidden bg-[#ebe4d8]"
+                className="relative flex min-h-[82vh] items-center justify-center overflow-hidden bg-[#ebe4d8] rounded-3xl"
               >
                 <img
                   src={img}
@@ -6333,7 +6361,7 @@ function ProductPage({
           </div>
 
           {/* Mobile Gallery (Swipeable) */}
-          <div className="md:hidden relative w-full overflow-hidden bg-[#ebe4d8]">
+          <div className="md:hidden relative w-full overflow-hidden bg-[#ebe4d8] rounded-2xl">
             <div
               ref={mobileGalleryRef}
               onScroll={handleMobileGalleryScroll}
@@ -6376,10 +6404,6 @@ function ProductPage({
 
           <aside className="md:sticky md:top-28">
             <div className="border border-black/10 bg-[#f7f4ee]/88 p-5 backdrop-blur-sm sm:p-7">
-              <a href="/merch" className="mb-8 inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-black/50 transition-colors hover:text-black">
-                <ArrowLeft className="h-4 w-4" />
-                Back to shop
-              </a>
               <p className="text-[11px] uppercase tracking-[0.28em] text-black/45">Home / Shiloh Shop / 2026</p>
               <div className="mt-5 flex items-start justify-between gap-5">
                 <h1 className="max-w-sm text-[2.6rem] font-light leading-[0.98] tracking-[-0.045em] text-black sm:text-5xl">
