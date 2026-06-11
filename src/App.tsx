@@ -6339,7 +6339,7 @@ function ProductPage({
         <div className="mx-auto grid max-w-[1680px] gap-10 md:grid-cols-[minmax(0,1fr)_460px] md:items-start">
 
           {/* Desktop Gallery */}
-          <div className="hidden md:block space-y-4">
+          <div className="hidden md:block space-y-4 md:sticky md:top-32 md:max-h-[calc(100vh-160px)] md:overflow-y-auto scrollbar-hide">
             {images.map((img: string, index: number) => (
               <figure
                 key={index}
@@ -6399,7 +6399,7 @@ function ProductPage({
             )}
           </div>
 
-          <aside className="md:sticky md:top-28">
+          <aside className="">
             <div className="border border-black/10 bg-[#f7f4ee]/88 p-5 backdrop-blur-sm sm:p-7">
               <p className="text-[11px] uppercase tracking-[0.28em] text-black/45">Home / Shiloh Shop / 2026</p>
               <div className="mt-5 flex items-start justify-between gap-5">
@@ -6412,83 +6412,86 @@ function ProductPage({
                 {product.description}
               </p>
 
-              {/* Desktop Color swatches */}
-              {product.colors && product.colors.length > 0 && (
-                <div className="hidden md:block mt-9 border-t border-black/10 pt-6">
-                  <p className="mb-3 text-xs uppercase tracking-[0.22em] text-black/50">Color: {selectedColor}</p>
-                  <div className="flex gap-3">
-                    {colorOptions.map((color) => (
-                      <button
-                        key={color.name}
-                        type="button"
-                        onClick={() => setSelectedColor(color.name)}
-                        className={`h-7 w-7 rounded-full border transition ${selectedColor === color.name ? 'border-black p-0.5' : 'border-black/20 p-0'
-                          }`}
-                        aria-label={`Select ${color.name}`}
-                      >
-                        <span
-                          className="block h-full w-full rounded-full"
-                          style={{ background: color.className }}
-                        />
-                      </button>
-                    ))}
+              {/* Desktop Sticky Actions Panel */}
+              <div className="hidden md:block md:sticky md:bottom-6 md:bg-[#f7f4ee]/95 md:backdrop-blur-md md:py-6 md:border-t md:border-black/10 md:z-10 mt-9">
+                {/* Desktop Color swatches */}
+                {product.colors && product.colors.length > 0 && (
+                  <div className="mb-6">
+                    <p className="mb-3 text-xs uppercase tracking-[0.22em] text-black/50">Color: {selectedColor}</p>
+                    <div className="flex gap-3">
+                      {colorOptions.map((color) => (
+                        <button
+                          key={color.name}
+                          type="button"
+                          onClick={() => setSelectedColor(color.name)}
+                          className={`h-7 w-7 rounded-full border transition ${selectedColor === color.name ? 'border-black p-0.5' : 'border-black/20 p-0'
+                            }`}
+                          aria-label={`Select ${color.name}`}
+                        >
+                          <span
+                            className="block h-full w-full rounded-full"
+                            style={{ background: color.className }}
+                          />
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {/* Desktop Size dropdown */}
-              {sizeOptions.length > 0 && (
-                <label className="hidden md:block mt-7">
-                  <span className="mb-3 block text-xs uppercase tracking-[0.22em] text-black/50">Size</span>
-                  <select
-                    value={selectedSize}
-                    onChange={(event) => setSelectedSize(event.target.value)}
-                    className="h-12 w-full border border-black/20 bg-transparent px-4 text-sm uppercase tracking-[0.12em] text-black outline-none transition focus:border-black"
-                  >
-                    {sizeOptions.map((size) => (
-                      <option key={size} value={size}>
-                        {size}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              )}
+                {/* Desktop Size dropdown */}
+                {sizeOptions.length > 0 && (
+                  <label className="block mb-6">
+                    <span className="mb-3 block text-xs uppercase tracking-[0.22em] text-black/50">Size</span>
+                    <select
+                      value={selectedSize}
+                      onChange={(event) => setSelectedSize(event.target.value)}
+                      className="h-12 w-full border border-black/20 bg-transparent px-4 text-sm uppercase tracking-[0.12em] text-black outline-none transition focus:border-black"
+                    >
+                      {sizeOptions.map((size) => (
+                        <option key={size} value={size}>
+                          {size}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                )}
 
-              {/* Desktop Qty + Add to bag */}
-              <div className="hidden md:flex mt-5 items-stretch gap-3">
-                <div className="flex h-12 shrink-0 items-center border border-black/20">
+                {/* Desktop Qty + Add to bag */}
+                <div className="flex items-stretch gap-3">
+                  <div className="flex h-12 shrink-0 items-center border border-black/20">
+                    <button
+                      type="button"
+                      onClick={() => updateSelectedQuantity(selectedQuantity - 1)}
+                      className="flex h-full w-11 items-center justify-center text-black/55 transition-colors hover:text-black"
+                      aria-label={`Decrease ${displayProductName} quantity`}
+                    >
+                      <Minus className="h-4 w-4" />
+                    </button>
+                    <span className="min-w-8 text-center text-sm text-black">{selectedQuantity}</span>
+                    <button
+                      type="button"
+                      onClick={() => updateSelectedQuantity(selectedQuantity + 1)}
+                      className="flex h-full w-11 items-center justify-center text-black/55 transition-colors hover:text-black"
+                      aria-label={`Increase ${displayProductName} quantity`}
+                    >
+                      <Plus className="h-4 w-4" />
+                    </button>
+                  </div>
                   <button
                     type="button"
-                    onClick={() => updateSelectedQuantity(selectedQuantity - 1)}
-                    className="flex h-full w-11 items-center justify-center text-black/55 transition-colors hover:text-black"
-                    aria-label={`Decrease ${displayProductName} quantity`}
+                    onClick={() => onAddToCart(product.slug, selectedQuantity, selectedVariantId, { size: selectedSize, color: selectedColor })}
+                    className="h-12 flex-1 bg-black px-6 text-xs font-semibold uppercase tracking-[0.22em] text-white transition-colors hover:bg-[#d86f1f]"
                   >
-                    <Minus className="h-4 w-4" />
+                    Add to Bag
                   </button>
-                  <span className="min-w-8 text-center text-sm text-black">{selectedQuantity}</span>
                   <button
                     type="button"
-                    onClick={() => updateSelectedQuantity(selectedQuantity + 1)}
-                    className="flex h-full w-11 items-center justify-center text-black/55 transition-colors hover:text-black"
-                    aria-label={`Increase ${displayProductName} quantity`}
+                    className="flex h-12 w-12 items-center justify-center border border-black/20 text-black transition-colors hover:border-black"
+                    aria-label="Save product"
                   >
-                    <Plus className="h-4 w-4" />
+                    <Heart className="h-4 w-4" />
                   </button>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => onAddToCart(product.slug, selectedQuantity, selectedVariantId, { size: selectedSize, color: selectedColor })}
-                  className="h-12 flex-1 bg-black px-6 text-xs font-semibold uppercase tracking-[0.22em] text-white transition-colors hover:bg-[#d86f1f]"
-                >
-                  Add to Bag
-                </button>
-                <button
-                  type="button"
-                  className="flex h-12 w-12 items-center justify-center border border-black/20 text-black transition-colors hover:border-black"
-                  aria-label="Save product"
-                >
-                  <Heart className="h-4 w-4" />
-                </button>
               </div>
 
               <p className="mt-4 text-xs leading-5 text-black/50 hidden md:block">
