@@ -6107,20 +6107,17 @@ function MerchPage({
             bestSellers.isVisible ? 'translate-y-0' : 'translate-y-6'
           }`}
         >
-          <div className="mb-8 flex flex-wrap items-center gap-5 sm:gap-8">
-            {(['Shiloh', 'GoodNewsWorld Merch'] as const).map((tab) => (
-              <button
-                key={tab}
-                type="button"
-                onClick={() => setActiveTab(tab)}
-                className={`flex items-center gap-3 text-2xl font-medium transition-colors sm:text-4xl md:text-5xl ${
-                  activeTab === tab ? 'text-[#1a1a1a]' : 'text-gray-400 hover:text-gray-600'
-                }`}
-              >
-                {activeTab === tab && <span className="animate-scale-in h-5 w-5 rounded-full bg-[#1a1a1a] sm:h-6 sm:w-6" />}
-                {tab}
-              </button>
-            ))}
+          {/* Section heading */}
+          <div className="mb-10 flex items-end justify-between">
+            <div>
+              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-black/40">Official Collection</p>
+              <h2 className="mt-2 font-serif text-4xl font-light italic tracking-tight text-black sm:text-5xl">
+                Shiloh 2026
+              </h2>
+            </div>
+            <p className="hidden text-xs text-black/40 sm:block">
+              {products.filter((p) => p.category === 'SHILOH 2026').length} items
+            </p>
           </div>
 
           {/* Horizontal-scroll carousel — touch-optimised for left/right swipe */}
@@ -6132,7 +6129,7 @@ function MerchPage({
             style={{ touchAction: 'pan-x' }}
           >
             {products
-              .filter((p) => (activeTab === 'Shiloh' ? p.category === 'SHILOH 2026' : p.category === 'GOODNEWSWORLD'))
+              .filter((p) => p.category === 'SHILOH 2026')
               .map((product, index) => (
                 <a
                   key={`${activeTab}-${product.name}`}
