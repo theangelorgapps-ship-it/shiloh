@@ -6311,235 +6311,265 @@ function ProductPage({
   };
 
   return (
-    <main className="min-h-screen bg-[#f7f4ee] text-[#151515] pb-44 md:pb-32">
+    <main className="min-h-screen bg-[#FDFBF7] text-[#1a1a1a] pb-28">
       <HeroHeader pageType="product" />
-      <section className="px-4 pb-20 pt-32 sm:px-6 md:px-10 lg:px-14">
-        <div className="mx-auto max-w-[1680px] mb-8">
-          <a
-            href="/merch"
-            onClick={(e) => {
-              e.preventDefault();
-              window.history.pushState({}, '', '/merch');
-              window.dispatchEvent(new PopStateEvent('popstate'));
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-black/50 transition-colors hover:text-black"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to shop
-          </a>
-        </div>
-        <div className="mx-auto grid max-w-[1680px] gap-10 md:grid-cols-[minmax(0,1fr)_460px] md:items-start">
-
-          {/* Desktop Gallery */}
-          <div className="hidden md:block space-y-4 md:sticky md:top-32 md:max-h-[calc(100vh-160px)] md:overflow-y-auto scrollbar-hide">
-            {images.map((img: string, index: number) => (
-              <figure
-                key={index}
-                className="relative flex min-h-[82vh] items-center justify-center overflow-hidden bg-[#ebe4d8] rounded-3xl"
-              >
-                <img
-                  src={img}
-                  alt={product.name}
-                  className="w-full h-full object-cover"
-                  referrerPolicy="no-referrer"
-                />
-                <figcaption className="absolute bottom-6 left-6 text-[11px] uppercase tracking-[0.22em] text-black/45">
-                  {String(index + 1).padStart(2, '0')} / {product.name} detail
-                </figcaption>
-              </figure>
-            ))}
+      
+      <section className="px-4 pb-20 pt-32 sm:px-6 md:px-12 lg:px-20">
+        <div className="mx-auto max-w-[1400px]">
+          {/* Breadcrumb / Navigation */}
+          <div className="mb-12 flex items-center gap-4" style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900, fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.2em', color: 'rgba(0,0,0,0.4)' }}>
+            <a
+              href="/merch"
+              onClick={(e) => {
+                e.preventDefault();
+                window.history.pushState({}, '', '/merch');
+                window.dispatchEvent(new PopStateEvent('popstate'));
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="hover:text-black transition-colors"
+            >
+              Shop
+            </a>
+            <span>/</span>
+            <span style={{ color: '#1a1a1a' }}>{product.name}</span>
           </div>
 
-          {/* Mobile Gallery (Swipeable) */}
-          <div className="md:hidden relative w-full overflow-hidden bg-[#ebe4d8] rounded-2xl">
-            <div
-              ref={mobileGalleryRef}
-              onScroll={handleMobileGalleryScroll}
-              className="flex overflow-x-auto snap-x snap-mandatory scrollbar-hide"
-              style={{ scrollSnapType: 'x mandatory' }}
-            >
-              {images.map((img: string, idx: number) => (
-                <div key={idx} className="w-full flex-shrink-0 snap-center flex justify-center items-center aspect-square md:aspect-[4/3] relative">
-                  <img src={img} alt={`${product.name} - ${idx}`} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+          <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
+            {/* Gallery Column */}
+            <div className="space-y-4">
+              {images.map((img, idx) => (
+                <div key={idx} className="aspect-[4/5] w-full overflow-hidden rounded-2xl bg-[#F0EBE4] shadow-sm">
+                  <img src={img} alt={product.name} className="h-full w-full object-cover" />
                 </div>
               ))}
             </div>
-            {images.length > 1 && (
-              <>
-                <button
-                  onClick={() => scrollGallery('left')}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 shadow-md text-black transition hover:bg-white"
-                  aria-label="Previous image"
+
+            {/* Info Column */}
+            <div className="lg:sticky lg:top-32 lg:h-fit">
+              <h1
+                className="text-[3rem] leading-[0.95] tracking-[-0.03em] text-[#1a1a1a] sm:text-[3.6rem]"
+                style={{ fontFamily: "'Instrument Serif', Georgia, serif", fontStyle: 'normal', fontWeight: 400 }}
+              >
+                {product.name}
+              </h1>
+              <p
+                className="mt-4 text-base text-black/60"
+                style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+              >
+                {selectedPriceLabel}
+              </p>
+              {product.description && (
+                <p
+                  className="mt-5 max-w-sm text-[0.85rem] leading-[1.8] text-black/55"
+                  style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 800 }}
                 >
-                  <ChevronLeft className="h-5 w-5" />
-                </button>
-                <button
-                  onClick={() => scrollGallery('right')}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 flex h-10 w-10 items-center justify-center rounded-full bg-white/80 shadow-md text-black transition hover:bg-white"
-                  aria-label="Next image"
-                >
-                  <ChevronRight className="h-5 w-5" />
-                </button>
-                <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
-                  {images.map((_: string, idx: number) => (
-                    <span
-                      key={idx}
-                      className={`h-2 w-2 rounded-full transition-all ${activeImageIndex === idx ? 'bg-black w-4' : 'bg-black/30'}`}
-                    />
-                  ))}
+                  {product.description}
+                </p>
+              )}
+
+              <div className="mt-8 border-t border-black/8 pt-8">
+                <div className="grid gap-8">
+                  {/* Color Selector */}
+                  {product.colors && product.colors.length > 0 && (
+                    <div>
+                      <h3 className="mb-4 text-[10px] uppercase tracking-[0.2em] text-black/40" style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}>Color — {selectedColor}</h3>
+                      <div className="flex gap-2">
+                        {colorOptions.map((c) => (
+                          <button
+                            key={c.name}
+                            onClick={() => setSelectedColor(c.name)}
+                            className={`h-10 w-10 rounded-full border transition ${selectedColor === c.name ? 'border-black ring-1 ring-black ring-offset-2' : 'border-transparent'}`}
+                            style={{ background: c.className }}
+                            aria-label={c.name}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Size Selector */}
+                  {sizeOptions.length > 0 && (
+                    <div>
+                      <h3 className="mb-4 text-[10px] uppercase tracking-[0.2em] text-black/40" style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}>Size — {selectedSize}</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {sizeOptions.map((s) => (
+                          <button
+                            key={s}
+                            onClick={() => setSelectedSize(s)}
+                            className={`flex h-10 min-w-[3rem] items-center justify-center rounded border px-3 text-[11px] font-medium uppercase tracking-wider transition ${selectedSize === s ? 'border-black bg-black text-white' : 'border-black/10 bg-white hover:border-black'}`}
+                          >
+                            {s}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
-              </>
-            )}
-          </div>
-
-          <aside className="">
-            <div className="border border-black/10 bg-[#f7f4ee]/88 p-5 backdrop-blur-sm sm:p-7">
-              <p className="text-[11px] uppercase tracking-[0.28em] text-black/45">Home / Shiloh Shop / 2026</p>
-              <div className="mt-5 flex items-start justify-between gap-5">
-                <h1 className="max-w-sm text-[2.6rem] font-light leading-[0.98] tracking-[-0.045em] text-black sm:text-5xl">
-                  {displayProductName}
-                </h1>
-                <p className="pt-2 text-sm text-black/70">{selectedPriceLabel}</p>
               </div>
-              <p className="mt-6 max-w-sm text-sm leading-6 text-black/60">
-                {product.description}
-              </p>
 
-              <p className="mt-6 text-xs leading-5 text-black/50 hidden md:block">
-                Free returns within 14 days. Ships from the official UebertAngel.org checkout once merchandise opens.
-              </p>
-
-              <div className="mt-8 border-t border-black/10">
+              {/* Accordion */}
+              <div className="mt-10 border-t border-black/8">
                 {accordionSections.map((section) => (
-                  <div key={section.title} className="border-b border-black/10">
+                  <div key={section.title} className="border-b border-black/8">
                     <button
                       type="button"
                       onClick={() => toggleProductSection(section.title)}
-                      className="flex w-full items-center justify-between py-5 text-left text-xs font-semibold uppercase tracking-[0.2em]"
+                      className="flex w-full items-center justify-between py-5 text-left"
                     >
-                      {section.title}
+                      <span
+                        className="text-[10px] uppercase tracking-[0.24em] text-black"
+                        style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+                      >
+                        {section.title}
+                      </span>
                       <Plus
-                        className={`h-4 w-4 transition-transform ${openProductSections.includes(section.title) ? 'rotate-45' : ''
-                          }`}
+                        className={`h-3.5 w-3.5 text-black/40 transition-transform duration-300 ${
+                          openProductSections.includes(section.title) ? 'rotate-45' : ''
+                        }`}
                       />
                     </button>
-                    {openProductSections.includes(section.title) ? (
-                      <p className="pb-5 text-sm leading-6 text-black/60">{section.copy}</p>
-                    ) : null}
+                    {openProductSections.includes(section.title) && (
+                      <p
+                        className="pb-5 text-[0.82rem] leading-[1.8] text-black/50"
+                        style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 800 }}
+                      >
+                        {section.copy}
+                      </p>
+                    )}
                   </div>
                 ))}
               </div>
             </div>
-          </aside>
+          </div>
         </div>
       </section>
 
-
-
-      {/* Pinned Sticky Mobile/Tablet/PC Footer */}
-      <div className="fixed bottom-0 left-0 right-0 z-[90] bg-[#f7f4ee]/85 border-t border-black/10 px-4 py-4 pb-[calc(env(safe-area-inset-bottom)+12px)] backdrop-blur-md md:py-5 md:px-8 shadow-[0_-8px_30px_rgba(0,0,0,0.04)]">
-        <div className="mx-auto w-full max-w-[1680px]">
+      {/* Refined Sticky Footer */}
+      <div
+        className="fixed bottom-0 left-0 right-0 z-[90] border-t border-black/[0.07] px-4 py-4 pb-[calc(env(safe-area-inset-bottom)+12px)] backdrop-blur-xl md:py-5 md:px-10 lg:px-20"
+        style={{ background: 'rgba(253,251,247,0.93)' }}
+      >
+        <div className="mx-auto w-full max-w-[1400px]">
           <AnimatePresence mode="wait">
             {!isAddedSuccess ? (
               <motion.div
                 key="selector"
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.18 }}
                 className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between w-full"
               >
-                {/* 1. Left-hand Product Info (Only on MD+) */}
-                <div className="hidden md:flex items-center gap-3 min-w-[200px] max-w-[320px]">
+                {/* Left: product info (desktop) */}
+                <div className="hidden lg:flex items-center gap-4 min-w-[220px]">
                   <img
-                    src={images[0] || ""}
+                    src={images[0] || ''}
                     alt={product.name}
-                    className="w-12 h-12 rounded-xl object-cover bg-[#ebe4d8] border border-black/5"
+                    className="h-12 w-12 rounded-xl object-cover bg-[#ede8df] border border-black/5"
                     referrerPolicy="no-referrer"
                   />
-                  <div className="flex flex-col text-left">
-                    <span className="text-xs font-semibold text-black leading-tight line-clamp-1">{displayProductName}</span>
-                    <span className="text-[11px] text-black/50 mt-0.5">{selectedPriceLabel}</span>
+                  <div>
+                    <p
+                      className="text-[0.95rem] leading-snug text-black line-clamp-1"
+                      style={{ fontFamily: "'Instrument Serif', Georgia, serif", fontStyle: 'normal', fontWeight: 400 }}
+                    >
+                      {displayProductName}
+                    </p>
+                    <p
+                      className="text-[10px] text-black/45 mt-0.5"
+                      style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+                    >
+                      {selectedPriceLabel}
+                    </p>
                   </div>
                 </div>
 
-                {/* 2. Middle Selection Swatches (Color + Size) */}
+                {/* Middle: Color + Size selectors */}
                 <div className="flex flex-1 flex-row items-center justify-between md:justify-center gap-4 md:gap-8">
-                  {/* Colors */}
                   {product.colors && product.colors.length > 0 && (
-                    <div className="flex items-center gap-2 text-left">
-                      <span className="text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-black/50 font-bold whitespace-nowrap">Color: {selectedColor}</span>
+                    <div className="flex items-center gap-2">
+                      <span
+                        className="text-[9px] uppercase tracking-[0.18em] text-black/40 whitespace-nowrap"
+                        style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+                      >
+                        {selectedColor}
+                      </span>
                       <div className="flex gap-1.5">
                         {colorOptions.map((color) => (
                           <button
                             key={color.name}
                             type="button"
                             onClick={() => setSelectedColor(color.name)}
-                            className={`h-7 w-7 rounded-full border transition-all ${selectedColor === color.name ? 'border-black p-0.5 scale-105 shadow-sm' : 'border-black/20 p-0'
-                              }`}
+                            className={`h-7 w-7 rounded-full border transition-all ${
+                              selectedColor === color.name
+                                ? 'border-black ring-1 ring-black ring-offset-1'
+                                : 'border-black/15'
+                            }`}
+                            style={{ background: color.className }}
                             aria-label={`Select color ${color.name}`}
-                          >
-                            <span
-                              className="block h-full w-full rounded-full"
-                              style={{ background: color.className }}
-                            />
-                          </button>
+                          />
                         ))}
                       </div>
                     </div>
                   )}
 
-                  {/* Sizes Dropdown */}
                   {sizeOptions.length > 0 && (
-                    <div className="flex items-center gap-2 text-right ml-auto md:ml-0">
-                      <span className="text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-black/50 font-bold font-semibold whitespace-nowrap">Size</span>
+                    <div className="flex items-center gap-2 ml-auto md:ml-0">
+                      <span
+                        className="text-[9px] uppercase tracking-[0.18em] text-black/40 whitespace-nowrap"
+                        style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+                      >
+                        Size
+                      </span>
                       <select
                         value={selectedSize}
                         onChange={(e) => setSelectedSize(e.target.value)}
-                        className="h-8 md:h-9 min-w-[4.5rem] md:min-w-[5.5rem] border border-black/20 bg-white/70 px-2 rounded-lg text-[10px] md:text-xs font-bold uppercase tracking-wider text-black outline-none focus:border-black/50"
+                        className="h-9 min-w-[4.5rem] border border-black/10 bg-transparent px-2 rounded-md text-[10px] uppercase tracking-wider text-black outline-none focus:border-black/30 transition"
+                        style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
                       >
                         {sizeOptions.map((size) => (
-                          <option key={size} value={size}>
-                            {size}
-                          </option>
+                          <option key={size} value={size}>{size}</option>
                         ))}
                       </select>
                     </div>
                   )}
                 </div>
 
-                {/* 3. Right-hand Actions (Qty + Add to Bag Button) */}
-                <div className="flex items-center gap-3 shrink-0 w-full md:w-auto">
-                  {/* Qty */}
-                  <div className="flex h-11 items-center border border-black/20 rounded-lg overflow-hidden bg-white/40 shrink-0">
+                {/* Right: Qty + CTA */}
+                <div className="flex items-center gap-2.5 shrink-0 w-full md:w-auto">
+                  <div className="flex h-11 items-center border border-black/10 rounded-md overflow-hidden bg-white/60 shrink-0">
                     <button
                       type="button"
                       onClick={() => updateSelectedQuantity(selectedQuantity - 1)}
-                      className="flex h-full w-10 items-center justify-center text-black/55 hover:text-black"
+                      className="flex h-full w-10 items-center justify-center text-black/35 hover:text-black transition"
                       aria-label="Decrease quantity"
                     >
-                      <Minus className="h-3.5 w-3.5" />
+                      <Minus className="h-3 w-3" />
                     </button>
-                    <span className="min-w-6 text-center text-xs font-semibold text-black">{selectedQuantity}</span>
+                    <span
+                      className="min-w-[1.5rem] text-center text-xs text-black"
+                      style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+                    >
+                      {selectedQuantity}
+                    </span>
                     <button
                       type="button"
                       onClick={() => updateSelectedQuantity(selectedQuantity + 1)}
-                      className="flex h-full w-10 items-center justify-center text-black/55 hover:text-black"
+                      className="flex h-full w-10 items-center justify-center text-black/35 hover:text-black transition"
                       aria-label="Increase quantity"
                     >
-                      <Plus className="h-3.5 w-3.5" />
+                      <Plus className="h-3 w-3" />
                     </button>
                   </div>
 
-                  {/* Add to Bag Button */}
                   <button
                     type="button"
                     onClick={() => {
                       onAddToCart(product.slug, selectedQuantity, selectedVariantId, { size: selectedSize, color: selectedColor });
                       setIsAddedSuccess(true);
                     }}
-                    className="flex-1 md:flex-initial md:px-8 h-11 bg-[#0b1a30] text-white text-xs font-bold uppercase tracking-[0.2em] flex items-center justify-center transition-all duration-200 active:scale-[0.98] rounded-lg shadow-md hover:bg-[#142642] whitespace-nowrap"
+                    className="flex-1 md:flex-initial md:px-10 h-11 bg-[#111] text-white flex items-center justify-center rounded-md transition hover:bg-black active:scale-[0.98] whitespace-nowrap"
+                    style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900, fontSize: '11px', letterSpacing: '0.22em', textTransform: 'uppercase' }}
                   >
                     Add to Bag — {selectedPriceLabel}
                   </button>
@@ -6548,34 +6578,39 @@ function ProductPage({
             ) : (
               <motion.div
                 key="success"
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.2 }}
-                className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between w-full text-center py-2 md:py-0"
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.18 }}
+                className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between w-full"
               >
-                <div className="flex items-center justify-center gap-2 md:justify-start">
-                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-green-500 text-white">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white">
                     <Check className="h-3 w-3" strokeWidth={3} />
                   </div>
-                  <span className="text-sm font-semibold text-black">Added to Bag!</span>
+                  <span
+                    className="text-[1rem] text-black"
+                    style={{ fontFamily: "'Instrument Serif', Georgia, serif", fontStyle: 'normal' }}
+                  >
+                    Added to your bag
+                  </span>
                 </div>
                 <div className="flex gap-2 w-full md:w-auto">
                   <button
                     type="button"
                     onClick={() => setIsAddedSuccess(false)}
-                    className="flex-1 md:flex-none h-11 px-6 border border-black/20 bg-white/50 text-black text-xs font-semibold uppercase tracking-[0.15em] rounded-lg transition active:bg-black/5"
+                    className="flex-1 md:flex-none h-11 px-6 border border-black/10 bg-transparent text-black rounded-md transition hover:border-black/25"
+                    style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900, fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase' }}
                   >
                     Keep Shopping
                   </button>
                   <button
                     type="button"
-                    onClick={() => {
-                      window.dispatchEvent(new CustomEvent('open-cart'));
-                    }}
-                    className="flex-1 md:flex-none h-11 px-6 bg-black text-white text-xs font-semibold uppercase tracking-[0.15em] rounded-lg transition active:bg-black/80"
+                    onClick={() => window.dispatchEvent(new CustomEvent('open-cart'))}
+                    className="flex-1 md:flex-none h-11 px-6 bg-[#111] text-white rounded-md transition hover:bg-black"
+                    style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900, fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase' }}
                   >
-                    View Cart
+                    View Bag
                   </button>
                 </div>
               </motion.div>
@@ -6583,42 +6618,6 @@ function ProductPage({
           </AnimatePresence>
         </div>
       </div>
-
-      <section className="px-4 pb-24 sm:px-6 md:px-10 lg:px-14">
-        <div className="mx-auto max-w-[1680px] border-t border-black/10 pt-10">
-          <p className="text-xs uppercase tracking-[0.28em] text-black/45">Size chart</p>
-          <div className="mt-6 overflow-x-auto">
-            <table className="w-full min-w-[620px] border-collapse text-left text-sm">
-              <thead>
-                <tr className="border-b border-black/20 text-xs uppercase tracking-[0.18em] text-black/45">
-                  <th className="py-4 font-normal">Size</th>
-                  <th className="py-4 font-normal">Chest</th>
-                  <th className="py-4 font-normal">Length</th>
-                  <th className="py-4 font-normal">Sleeve</th>
-                  <th className="py-4 font-normal">Recommended fit</th>
-                </tr>
-              </thead>
-              <tbody className="text-black/70">
-                {[
-                  ['XS', '36 in', '25 in', '23 in', 'Close fit'],
-                  ['S', '38 in', '26 in', '24 in', 'Regular'],
-                  ['M', '40 in', '27 in', '25 in', 'Relaxed'],
-                  ['L', '43 in', '28 in', '26 in', 'Oversized'],
-                  ['XL', '46 in', '29 in', '27 in', 'Oversized layer'],
-                ].map((row) => (
-                  <tr key={row[0]} className="border-b border-black/10">
-                    {row.map((cell) => (
-                      <td key={cell} className="py-4">
-                        {cell}
-                      </td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
 
       <Footer />
     </main>
