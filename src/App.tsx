@@ -6318,7 +6318,7 @@ function ProductPage({
   };
 
   return (
-    <main className="min-h-screen bg-[#f7f4ee] text-[#151515] pb-36 md:pb-0">
+    <main className="min-h-screen bg-[#f7f4ee] text-[#151515] pb-44 md:pb-32">
       <HeroHeader pageType="product" />
       <section className="px-4 pb-20 pt-32 sm:px-6 md:px-10 lg:px-14">
         <div className="mx-auto max-w-[1680px] mb-8">
@@ -6412,89 +6412,7 @@ function ProductPage({
                 {product.description}
               </p>
 
-              {/* Desktop Sticky Actions Panel */}
-              <div className="hidden md:block md:sticky md:bottom-6 md:bg-[#f7f4ee]/95 md:backdrop-blur-md md:py-6 md:border-t md:border-black/10 md:z-10 mt-9">
-                {/* Desktop Color swatches */}
-                {product.colors && product.colors.length > 0 && (
-                  <div className="mb-6">
-                    <p className="mb-3 text-xs uppercase tracking-[0.22em] text-black/50">Color: {selectedColor}</p>
-                    <div className="flex gap-3">
-                      {colorOptions.map((color) => (
-                        <button
-                          key={color.name}
-                          type="button"
-                          onClick={() => setSelectedColor(color.name)}
-                          className={`h-7 w-7 rounded-full border transition ${selectedColor === color.name ? 'border-black p-0.5' : 'border-black/20 p-0'
-                            }`}
-                          aria-label={`Select ${color.name}`}
-                        >
-                          <span
-                            className="block h-full w-full rounded-full"
-                            style={{ background: color.className }}
-                          />
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Desktop Size dropdown */}
-                {sizeOptions.length > 0 && (
-                  <label className="block mb-6">
-                    <span className="mb-3 block text-xs uppercase tracking-[0.22em] text-black/50">Size</span>
-                    <select
-                      value={selectedSize}
-                      onChange={(event) => setSelectedSize(event.target.value)}
-                      className="h-12 w-full border border-black/20 bg-transparent px-4 text-sm uppercase tracking-[0.12em] text-black outline-none transition focus:border-black"
-                    >
-                      {sizeOptions.map((size) => (
-                        <option key={size} value={size}>
-                          {size}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                )}
-
-                {/* Desktop Qty + Add to bag */}
-                <div className="flex items-stretch gap-3">
-                  <div className="flex h-12 shrink-0 items-center border border-black/20">
-                    <button
-                      type="button"
-                      onClick={() => updateSelectedQuantity(selectedQuantity - 1)}
-                      className="flex h-full w-11 items-center justify-center text-black/55 transition-colors hover:text-black"
-                      aria-label={`Decrease ${displayProductName} quantity`}
-                    >
-                      <Minus className="h-4 w-4" />
-                    </button>
-                    <span className="min-w-8 text-center text-sm text-black">{selectedQuantity}</span>
-                    <button
-                      type="button"
-                      onClick={() => updateSelectedQuantity(selectedQuantity + 1)}
-                      className="flex h-full w-11 items-center justify-center text-black/55 transition-colors hover:text-black"
-                      aria-label={`Increase ${displayProductName} quantity`}
-                    >
-                      <Plus className="h-4 w-4" />
-                    </button>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => onAddToCart(product.slug, selectedQuantity, selectedVariantId, { size: selectedSize, color: selectedColor })}
-                    className="h-12 flex-1 bg-black px-6 text-xs font-semibold uppercase tracking-[0.22em] text-white transition-colors hover:bg-[#d86f1f]"
-                  >
-                    Add to Bag
-                  </button>
-                  <button
-                    type="button"
-                    className="flex h-12 w-12 items-center justify-center border border-black/20 text-black transition-colors hover:border-black"
-                    aria-label="Save product"
-                  >
-                    <Heart className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-
-              <p className="mt-4 text-xs leading-5 text-black/50 hidden md:block">
+              <p className="mt-6 text-xs leading-5 text-black/50 hidden md:block">
                 Free returns within 14 days. Ships from the official UebertAngel.org checkout once merchandise opens.
               </p>
 
@@ -6523,152 +6441,152 @@ function ProductPage({
         </div>
       </section>
 
-      {/* Mobile-only Sponsor Banner to avoid overlap with sticky footer */}
-      <div className="md:hidden px-4 pb-8">
-        <div className="rounded-2xl border border-[#d86f1f]/20 bg-white/50 backdrop-blur-sm p-6 text-center shadow-sm">
-          <h4 className="text-xs font-bold uppercase tracking-[0.2em] text-[#d86f1f]">Support Shiloh 2026</h4>
-          <p className="mt-2 text-xs leading-relaxed text-black/60">
-            Every sponsorship helps bring someone to Shiloh. Be a part of the blessing.
-          </p>
-          <button
-            type="button"
-            onClick={onOpenSponsor}
-            className="mt-4 w-full rounded-full bg-black py-3 text-xs font-semibold uppercase tracking-[0.2em] text-white transition active:bg-[#d86f1f]"
-          >
-            Bring Someone to Shiloh
-          </button>
-        </div>
-      </div>
 
-      {/* Pinned Sticky Mobile Footer */}
-      <div className="fixed bottom-0 left-0 right-0 z-[90] bg-[#f7f4ee]/85 border-t border-black/10 px-4 py-4 pb-[calc(env(safe-area-inset-bottom)+12px)] backdrop-blur-md md:hidden flex flex-col gap-3">
-        <AnimatePresence mode="wait">
-          {!isAddedSuccess ? (
-            <motion.div
-              key="selector"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2 }}
-              className="flex flex-col gap-3 w-full"
-            >
-              {/* Row 1: Swatches (Color + Size) */}
-              <div className="flex items-center justify-between gap-4">
-                {/* Colors */}
-                {product.colors && product.colors.length > 0 && (
-                  <div className="flex flex-col gap-1 text-left">
-                    <span className="text-[9px] uppercase tracking-[0.15em] text-black/50 font-bold">Color: {selectedColor}</span>
-                    <div className="flex gap-2">
-                      {colorOptions.map((color) => (
-                        <button
-                          key={color.name}
-                          type="button"
-                          onClick={() => setSelectedColor(color.name)}
-                          className={`h-7 w-7 rounded-full border transition-all ${selectedColor === color.name ? 'border-black p-0.5 scale-105 shadow-sm' : 'border-black/20 p-0'
-                            }`}
-                          aria-label={`Select color ${color.name}`}
-                        >
-                          <span
-                            className="block h-full w-full rounded-full"
-                            style={{ background: color.className }}
-                          />
-                        </button>
-                      ))}
+
+      {/* Pinned Sticky Mobile/Tablet/PC Footer */}
+      <div className="fixed bottom-0 left-0 right-0 z-[90] bg-[#f7f4ee]/85 border-t border-black/10 px-4 py-4 pb-[calc(env(safe-area-inset-bottom)+12px)] backdrop-blur-md md:py-5 md:px-8 shadow-[0_-8px_30px_rgba(0,0,0,0.04)]">
+        <div className="mx-auto w-full max-w-[1680px]">
+          <AnimatePresence mode="wait">
+            {!isAddedSuccess ? (
+              <motion.div
+                key="selector"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between w-full"
+              >
+                {/* 1. Left-hand Product Info (Only on MD+) */}
+                <div className="hidden md:flex items-center gap-3 min-w-[200px] max-w-[320px]">
+                  <img
+                    src={images[0] || ""}
+                    alt={product.name}
+                    className="w-12 h-12 rounded-xl object-cover bg-[#ebe4d8] border border-black/5"
+                  />
+                  <div className="flex flex-col text-left">
+                    <span className="text-xs font-semibold text-black leading-tight line-clamp-1">{displayProductName}</span>
+                    <span className="text-[11px] text-black/50 mt-0.5">{selectedPriceLabel}</span>
+                  </div>
+                </div>
+
+                {/* 2. Middle Selection Swatches (Color + Size) */}
+                <div className="flex flex-1 flex-row items-center justify-between md:justify-center gap-4 md:gap-8">
+                  {/* Colors */}
+                  {product.colors && product.colors.length > 0 && (
+                    <div className="flex items-center gap-2 text-left">
+                      <span className="text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-black/50 font-bold whitespace-nowrap">Color: {selectedColor}</span>
+                      <div className="flex gap-1.5">
+                        {colorOptions.map((color) => (
+                          <button
+                            key={color.name}
+                            type="button"
+                            onClick={() => setSelectedColor(color.name)}
+                            className={`h-7 w-7 rounded-full border transition-all ${selectedColor === color.name ? 'border-black p-0.5 scale-105 shadow-sm' : 'border-black/20 p-0'
+                              }`}
+                            aria-label={`Select color ${color.name}`}
+                          >
+                            <span
+                              className="block h-full w-full rounded-full"
+                              style={{ background: color.className }}
+                            />
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {/* Sizes Dropdown for Mobile Space Optimization */}
-                {sizeOptions.length > 0 && (
-                  <div className="flex flex-col gap-1 text-right items-end ml-auto">
-                    <span className="text-[9px] uppercase tracking-[0.15em] text-black/50 font-bold font-semibold">Size</span>
-                    <select
-                      value={selectedSize}
-                      onChange={(e) => setSelectedSize(e.target.value)}
-                      className="h-8 min-w-[4.5rem] border border-black/20 bg-white/70 px-2 rounded text-[10px] font-bold uppercase tracking-wider text-black outline-none"
+                  {/* Sizes Dropdown */}
+                  {sizeOptions.length > 0 && (
+                    <div className="flex items-center gap-2 text-right ml-auto md:ml-0">
+                      <span className="text-[9px] md:text-[10px] uppercase tracking-[0.15em] text-black/50 font-bold font-semibold whitespace-nowrap">Size</span>
+                      <select
+                        value={selectedSize}
+                        onChange={(e) => setSelectedSize(e.target.value)}
+                        className="h-8 md:h-9 min-w-[4.5rem] md:min-w-[5.5rem] border border-black/20 bg-white/70 px-2 rounded-lg text-[10px] md:text-xs font-bold uppercase tracking-wider text-black outline-none focus:border-black/50"
+                      >
+                        {sizeOptions.map((size) => (
+                          <option key={size} value={size}>
+                            {size}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                </div>
+
+                {/* 3. Right-hand Actions (Qty + Add to Bag Button) */}
+                <div className="flex items-center gap-3 shrink-0 w-full md:w-auto">
+                  {/* Qty */}
+                  <div className="flex h-11 items-center border border-black/20 rounded-lg overflow-hidden bg-white/40 shrink-0">
+                    <button
+                      type="button"
+                      onClick={() => updateSelectedQuantity(selectedQuantity - 1)}
+                      className="flex h-full w-10 items-center justify-center text-black/55 hover:text-black"
+                      aria-label="Decrease quantity"
                     >
-                      {sizeOptions.map((size) => (
-                        <option key={size} value={size}>
-                          {size}
-                        </option>
-                      ))}
-                    </select>
+                      <Minus className="h-3.5 w-3.5" />
+                    </button>
+                    <span className="min-w-6 text-center text-xs font-semibold text-black">{selectedQuantity}</span>
+                    <button
+                      type="button"
+                      onClick={() => updateSelectedQuantity(selectedQuantity + 1)}
+                      className="flex h-full w-10 items-center justify-center text-black/55 hover:text-black"
+                      aria-label="Increase quantity"
+                    >
+                      <Plus className="h-3.5 w-3.5" />
+                    </button>
                   </div>
-                )}
-              </div>
 
-              {/* Row 2: Qty Selector + Add to Cart Button */}
-              <div className="flex items-center gap-3">
-                {/* Qty */}
-                <div className="flex h-11 items-center border border-black/20 rounded-lg overflow-hidden bg-white/40 shrink-0">
+                  {/* Add to Bag Button */}
                   <button
                     type="button"
-                    onClick={() => updateSelectedQuantity(selectedQuantity - 1)}
-                    className="flex h-full w-10 items-center justify-center text-black/55 hover:text-black"
-                    aria-label="Decrease quantity"
+                    onClick={() => {
+                      onAddToCart(product.slug, selectedQuantity, selectedVariantId, { size: selectedSize, color: selectedColor });
+                      setIsAddedSuccess(true);
+                    }}
+                    className="flex-1 md:flex-initial md:px-8 h-11 bg-[#0b1a30] text-white text-xs font-bold uppercase tracking-[0.2em] flex items-center justify-center transition-all duration-200 active:scale-[0.98] rounded-lg shadow-md hover:bg-[#142642] whitespace-nowrap"
                   >
-                    <Minus className="h-3.5 w-3.5" />
+                    Add to Bag — {selectedPriceLabel}
                   </button>
-                  <span className="min-w-6 text-center text-xs font-semibold text-black">{selectedQuantity}</span>
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="success"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between w-full text-center py-2 md:py-0"
+              >
+                <div className="flex items-center justify-center gap-2 md:justify-start">
+                  <div className="flex h-5 w-5 items-center justify-center rounded-full bg-green-500 text-white">
+                    <Check className="h-3 w-3" strokeWidth={3} />
+                  </div>
+                  <span className="text-sm font-semibold text-black">Added to Bag!</span>
+                </div>
+                <div className="flex gap-2 w-full md:w-auto">
                   <button
                     type="button"
-                    onClick={() => updateSelectedQuantity(selectedQuantity + 1)}
-                    className="flex h-full w-10 items-center justify-center text-black/55 hover:text-black"
-                    aria-label="Increase quantity"
+                    onClick={() => setIsAddedSuccess(false)}
+                    className="flex-1 md:flex-none h-11 px-6 border border-black/20 bg-white/50 text-black text-xs font-semibold uppercase tracking-[0.15em] rounded-lg transition active:bg-black/5"
                   >
-                    <Plus className="h-3.5 w-3.5" />
+                    Keep Shopping
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      window.dispatchEvent(new CustomEvent('open-cart'));
+                    }}
+                    className="flex-1 md:flex-none h-11 px-6 bg-black text-white text-xs font-semibold uppercase tracking-[0.15em] rounded-lg transition active:bg-black/80"
+                  >
+                    View Cart
                   </button>
                 </div>
-
-                {/* Solid Navy Blue Add to Bag Button */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    onAddToCart(product.slug, selectedQuantity, selectedVariantId, { size: selectedSize, color: selectedColor });
-                    setIsAddedSuccess(true);
-                  }}
-                  className="flex-1 h-11 bg-[#0b1a30] text-white text-xs font-bold uppercase tracking-[0.2em] flex items-center justify-center transition-all duration-200 active:scale-[0.98] rounded-lg shadow-md hover:bg-[#142642]"
-                >
-                  Add to Bag — {selectedPriceLabel}
-                </button>
-              </div>
-            </motion.div>
-          ) : (
-            <motion.div
-              key="success"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.2 }}
-              className="flex flex-col gap-3 w-full text-center py-2"
-            >
-              <div className="flex items-center justify-center gap-2">
-                <div className="flex h-5 w-5 items-center justify-center rounded-full bg-green-500 text-white">
-                  <Check className="h-3 w-3" strokeWidth={3} />
-                </div>
-                <span className="text-sm font-semibold text-black">Added to Bag!</span>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => setIsAddedSuccess(false)}
-                  className="flex-1 h-11 border border-black/20 bg-white/50 text-black text-xs font-semibold uppercase tracking-[0.15em] rounded-lg transition active:bg-black/5"
-                >
-                  Keep Shopping
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    window.dispatchEvent(new CustomEvent('open-cart'));
-                  }}
-                  className="flex-1 h-11 bg-black text-white text-xs font-semibold uppercase tracking-[0.15em] rounded-lg transition active:bg-black/80"
-                >
-                  View Cart
-                </button>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
 
       <section className="px-4 pb-24 sm:px-6 md:px-10 lg:px-14">
@@ -7196,13 +7114,13 @@ export default function App() {
       )}
       <FloatingSponsorButton
         onClick={() => setSponsorOpen(true)}
-        visible={!isLoading && sponsorVisible && !registrationOpen && !sponsorOpen && !sowOpen && (!isMobile || (!isMerchPage && !isProductPage))}
+        visible={!isLoading && sponsorVisible && !registrationOpen && !sponsorOpen && !sowOpen && !isProductPage && (!isMobile || !isMerchPage)}
       />
       <RegistrationModal open={registrationOpen} onClose={() => setRegistrationOpen(false)} type={registrationType} />
       <SponsorModal open={sponsorOpen} onClose={() => setSponsorOpen(false)} />
       <SowModal open={sowOpen} onClose={() => setSowOpen(false)} />
       <CelebrationBurst active={celebrating} />
-      {cart.length > 0 && (
+      {cart.length > 0 && !isProductPage && (
         <FloatingCart
           cart={cart}
           onUpdateQuantity={updateCartQuantity}
