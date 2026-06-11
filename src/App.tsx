@@ -785,6 +785,7 @@ function LoadingScreen() {
           src={heroLogo}
           alt="Shiloh logo"
           className="h-20 w-auto"
+          referrerPolicy="no-referrer"
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.8, ease: customEase }}
@@ -998,7 +999,7 @@ function JourneyCarouselSection() {
           transition={{ duration: 0.45, ease: customEase }}
         >
           <div className="min-h-[300px] overflow-hidden md:min-h-[560px]">
-            <img src={activeEvent.image} alt="" className="h-full w-full object-cover" />
+            <img src={activeEvent.image} alt="" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
           </div>
           <div className="flex flex-col justify-center bg-white px-6 py-10 text-black sm:px-10 md:px-14">
             <p className="mb-6 text-xs font-light uppercase tracking-[0.45em] text-black/40">{activeEvent.date}</p>
@@ -1096,7 +1097,7 @@ function FortMoriahMapSection() {
           <div className="order-1 overflow-hidden rounded-[1.5rem] border border-black/10 bg-black shadow-[0_24px_80px_rgba(0,0,0,0.08)] lg:order-2">
             <div className="relative aspect-[4/3] overflow-hidden md:aspect-[16/10]">
               <div className="absolute left-1/2 top-1/2 aspect-[6034/4525] w-[118%] -translate-x-1/2 -translate-y-1/2">
-                <img src={fortMoriahMap} alt="Fort Moriah map" className="h-full w-full object-cover" />
+                <img src={fortMoriahMap} alt="Fort Moriah map" className="h-full w-full object-cover" referrerPolicy="no-referrer" />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0)_0%,rgba(255,255,255,0.04)_56%,rgba(255,255,255,0.35)_100%)]" />
                 {mapLocations.map((location, index) => (
                   <button
@@ -2313,7 +2314,7 @@ function Footer() {
         <div className="grid gap-10 lg:grid-cols-[1.15fr_1fr_0.9fr] lg:items-start">
           <div>
             <a href="/" className="mb-5 inline-flex items-center gap-4">
-              <img src={logo} alt="Shiloh logo" className="h-12 w-12 rounded-full object-contain" />
+              <img src={logo} alt="Shiloh logo" className="h-12 w-12 rounded-full object-contain" referrerPolicy="no-referrer" />
               <span>
                 <span className="block text-[11px] font-extrabold uppercase tracking-[0.34em] text-primary">Shiloh</span>
                 <span className="mt-1 block font-serif text-xl italic leading-none text-primary/78">Season 26</span>
@@ -6007,6 +6008,7 @@ function MerchPage({
             src="https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a1049b7df1cb25b061ad6b0.jpg"
             alt="Shiloh shop visual"
             className="absolute inset-0 h-full w-full object-cover"
+            referrerPolicy="no-referrer"
           />
           <div className="absolute inset-0 bg-black/30" />
           <div
@@ -6060,6 +6062,7 @@ function MerchPage({
               loop
               muted
               playsInline
+              {...({ referrerPolicy: 'no-referrer' } as any)}
             />
           ))}
           <div className="absolute bottom-6 right-6 z-20 flex items-center gap-3">
@@ -6136,6 +6139,7 @@ function MerchPage({
                         src={product.image}
                         alt={product.name}
                         className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        referrerPolicy="no-referrer"
                       />
                     ) : (
                       <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${product.accent}`}>
@@ -6338,6 +6342,7 @@ function ProductPage({
                   src={img}
                   alt={product.name}
                   className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
                 />
                 <figcaption className="absolute bottom-6 left-6 text-[11px] uppercase tracking-[0.22em] text-black/45">
                   {String(index + 1).padStart(2, '0')} / {product.name} detail
@@ -6356,7 +6361,7 @@ function ProductPage({
             >
               {images.map((img: string, idx: number) => (
                 <div key={idx} className="w-full flex-shrink-0 snap-center flex justify-center items-center aspect-square md:aspect-[4/3] relative">
-                  <img src={img} alt={`${product.name} - ${idx}`} className="w-full h-full object-cover" />
+                  <img src={img} alt={`${product.name} - ${idx}`} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                 </div>
               ))}
             </div>
@@ -6451,6 +6456,7 @@ function ProductPage({
                     src={images[0] || ""}
                     alt={product.name}
                     className="w-12 h-12 rounded-xl object-cover bg-[#ebe4d8] border border-black/5"
+                    referrerPolicy="no-referrer"
                   />
                   <div className="flex flex-col text-left">
                     <span className="text-xs font-semibold text-black leading-tight line-clamp-1">{displayProductName}</span>
@@ -6678,7 +6684,7 @@ function PartnersPage() {
               >
                 <div className="flex aspect-[4/3] items-center justify-center overflow-hidden bg-[linear-gradient(135deg,rgba(216,169,69,0.28),rgba(255,255,255,0.06))]">
                   {product.image ? (
-                    <img src={product.image} alt="" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                    <img src={product.image} alt="" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" referrerPolicy="no-referrer" />
                   ) : (
                     <Sparkle className="h-12 w-12 text-[#d8a945]" strokeWidth={1.5} />
                   )}
