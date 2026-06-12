@@ -6567,17 +6567,18 @@ function ProductPage({
                 </div>
               </div>
 
-              {/* ─── DESKTOP (lg+): Single-row, no swatches ─── */}
-              <div className="hidden lg:flex items-center justify-between px-20 py-4 pb-[calc(env(safe-area-inset-bottom)+8px)] max-w-[1400px] mx-auto">
+              {/* ─── DESKTOP (lg+): Full single-row with swatches ─── */}
+              <div className="hidden lg:flex items-center justify-between gap-6 px-10 xl:px-20 py-4 pb-[calc(env(safe-area-inset-bottom)+8px)] max-w-[1400px] mx-auto">
+
                 {/* Left: product thumbnail + name/price */}
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 shrink-0 min-w-0 max-w-[240px]">
                   <img
                     src={images[0] || ''}
                     alt={product.name}
                     className="h-12 w-12 rounded-xl object-cover bg-[#ede8df] border border-black/5 shrink-0"
                     referrerPolicy="no-referrer"
                   />
-                  <div>
+                  <div className="min-w-0">
                     <p
                       className="text-[1rem] leading-snug text-black line-clamp-1"
                       style={{ fontFamily: "'Instrument Serif', Georgia, serif", fontStyle: 'normal', fontWeight: 400 }}
@@ -6593,8 +6594,69 @@ function ProductPage({
                   </div>
                 </div>
 
+                {/* Centre: Colour swatches + Size pills */}
+                <div className="flex flex-1 items-center justify-center gap-8 min-w-0 overflow-hidden">
+
+                  {/* Colour swatches */}
+                  {colorOptions.length > 0 && (
+                    <div className="flex items-center gap-3 shrink-0">
+                      <span
+                        className="text-[9px] uppercase tracking-[0.22em] text-black/40 whitespace-nowrap"
+                        style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+                      >
+                        {selectedColor}
+                      </span>
+                      <div className="flex gap-2">
+                        {colorOptions.map((color) => (
+                          <button
+                            key={color.name}
+                            type="button"
+                            onClick={() => setSelectedColor(color.name)}
+                            className={`h-7 w-7 shrink-0 rounded-full border-2 transition-all ${
+                              selectedColor === color.name
+                                ? 'border-black shadow-sm scale-110'
+                                : 'border-transparent hover:border-black/30'
+                            }`}
+                            style={{ background: color.className }}
+                            aria-label={`Select colour ${color.name}`}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Size pills */}
+                  {sizeOptions.length > 0 && (
+                    <div className="flex items-center gap-3 shrink-0">
+                      <span
+                        className="text-[9px] uppercase tracking-[0.22em] text-black/40 whitespace-nowrap"
+                        style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+                      >
+                        Size
+                      </span>
+                      <div className="flex gap-1.5 overflow-x-auto scrollbar-hide max-w-[320px]">
+                        {sizeOptions.map((s) => (
+                          <button
+                            key={s}
+                            type="button"
+                            onClick={() => setSelectedSize(s)}
+                            className={`shrink-0 h-8 min-w-[2.4rem] px-2 rounded border text-[10px] uppercase tracking-wider transition ${
+                              selectedSize === s
+                                ? 'bg-black border-black text-white'
+                                : 'bg-white/60 border-black/15 text-black hover:border-black'
+                            }`}
+                            style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+                          >
+                            {s}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 {/* Right: Qty + CTA */}
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 shrink-0">
                   <div className="flex h-11 items-center border border-black/10 rounded-md bg-white/60 overflow-hidden">
                     <button
                       type="button"
