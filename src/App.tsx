@@ -6466,31 +6466,23 @@ function ProductPage({
               {/* ─── MOBILE / TABLET (< lg): 3-row layout ─── */}
               <div className="lg:hidden px-4 pt-3 pb-[calc(env(safe-area-inset-bottom)+12px)] space-y-2.5">
 
-                {/* Row 1 — Colour Swatches */}
+                {/* Row 1 — Colour Swatches (no label) */}
                 {colorOptions.length > 0 && (
-                  <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide">
-                    <span
-                      className="shrink-0 text-[9px] uppercase tracking-[0.22em] text-black/40 whitespace-nowrap"
-                      style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
-                    >
-                      {selectedColor}
-                    </span>
-                    <div className="flex gap-2">
-                      {colorOptions.map((color) => (
-                        <button
-                          key={color.name}
-                          type="button"
-                          onClick={() => setSelectedColor(color.name)}
-                          className={`h-7 w-7 shrink-0 rounded-full border-2 transition-all ${
-                            selectedColor === color.name
-                              ? 'border-black shadow-sm scale-110'
-                              : 'border-transparent'
-                          }`}
-                          style={{ background: color.className }}
-                          aria-label={`Select colour ${color.name}`}
-                        />
-                      ))}
-                    </div>
+                  <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+                    {colorOptions.map((color) => (
+                      <button
+                        key={color.name}
+                        type="button"
+                        onClick={() => setSelectedColor(color.name)}
+                        className={`h-7 w-7 shrink-0 rounded-full border-2 transition-all ${
+                          selectedColor === color.name
+                            ? 'border-black shadow-sm scale-110'
+                            : 'border-transparent'
+                        }`}
+                        style={{ background: color.className }}
+                        aria-label={`Select colour ${color.name}`}
+                      />
+                    ))}
                   </div>
                 )}
 
@@ -6625,7 +6617,7 @@ function ProductPage({
                     </div>
                   )}
 
-                  {/* Size pills */}
+                  {/* Size dropdown */}
                   {sizeOptions.length > 0 && (
                     <div className="flex items-center gap-3 shrink-0">
                       <span
@@ -6634,23 +6626,16 @@ function ProductPage({
                       >
                         Size
                       </span>
-                      <div className="flex gap-1.5 overflow-x-auto scrollbar-hide max-w-[320px]">
+                      <select
+                        value={selectedSize}
+                        onChange={(e) => setSelectedSize(e.target.value)}
+                        className="h-9 min-w-[5rem] border border-black/15 bg-white/70 rounded-md px-2 pr-7 text-[10px] uppercase tracking-wider text-black outline-none focus:border-black/40 transition appearance-none cursor-pointer"
+                        style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+                      >
                         {sizeOptions.map((s) => (
-                          <button
-                            key={s}
-                            type="button"
-                            onClick={() => setSelectedSize(s)}
-                            className={`shrink-0 h-8 min-w-[2.4rem] px-2 rounded border text-[10px] uppercase tracking-wider transition ${
-                              selectedSize === s
-                                ? 'bg-black border-black text-white'
-                                : 'bg-white/60 border-black/15 text-black hover:border-black'
-                            }`}
-                            style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
-                          >
-                            {s}
-                          </button>
+                          <option key={s} value={s}>{s}</option>
                         ))}
-                      </div>
+                      </select>
                     </div>
                   )}
                 </div>
