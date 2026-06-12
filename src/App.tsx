@@ -6132,7 +6132,7 @@ function MerchPage({
             ref={carouselRef}
             onWheel={handleCarouselWheel}
             onScroll={updateScrollProgress}
-            className="scrollbar-hide flex gap-0 overflow-x-auto pl-5 sm:pl-8 lg:pl-0 lg:grid lg:grid-cols-4 lg:overflow-x-visible lg:border-t lg:border-black/[0.07]"
+            className="scrollbar-hide flex gap-6 overflow-x-auto px-5 sm:px-8 lg:px-12"
             style={{ touchAction: 'pan-x' }}
           >
             {products
@@ -6152,7 +6152,7 @@ function MerchPage({
                       window.dispatchEvent(new PopStateEvent('popstate'));
                       window.scrollTo({ top: 0, behavior: 'smooth' });
                     }}
-                    className={`group flex w-[72vw] shrink-0 flex-col border-r border-black/[0.07] last:border-r-0 bg-[#F8F6F2] pr-4 sm:w-[52vw] md:w-[40vw] lg:w-auto lg:shrink lg:pr-0 lg:border-l-0 ${
+                    className={`group flex w-[70vw] shrink-0 flex-col bg-[#F8F6F2] sm:w-[46vw] md:w-[34vw] lg:w-[24vw] xl:w-[22vw] max-w-[380px] ${
                       bestSellers.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
                     } transition-all duration-500`}
                     style={{ transitionDelay: `${index * 70}ms` }}
@@ -6213,8 +6213,8 @@ function MerchPage({
               })}
           </div>
 
-          {/* ── Scroll Progress Bar (mobile/tablet only) ── */}
-          <div className="mt-8 px-5 sm:px-8 lg:hidden">
+          {/* ── Scroll Progress Bar ── */}
+          <div className="mt-8 px-5 sm:px-8 lg:px-12">
             <div className="h-px bg-black/10 overflow-hidden">
               <div
                 className="h-full bg-black transition-all duration-150"
@@ -6355,7 +6355,7 @@ function ProductPage({
   };
 
   return (
-    <main className="min-h-screen bg-[#FDFBF7] text-[#1a1a1a] pb-28">
+    <main className="min-h-screen bg-[#FDFBF7] text-[#1a1a1a] pb-64 lg:pb-24">
       <HeroHeader pageType="product" />
       
       <section className="px-4 pb-20 pt-32 sm:px-6 md:px-12 lg:px-20">
@@ -6380,10 +6380,10 @@ function ProductPage({
 
           <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
             {/* Gallery Column */}
-            <div className="space-y-4">
+            <div className="min-w-0 overflow-hidden space-y-4">
               {images.map((img, idx) => (
-                <div key={idx} className="aspect-[4/5] w-full overflow-hidden rounded-2xl bg-[#F0EBE4] shadow-sm">
-                  <img src={img} alt={product.name} className="h-full w-full object-cover" />
+                <div key={idx} className="aspect-[4/5] w-full max-w-full overflow-hidden rounded-2xl bg-[#F0EBE4] shadow-sm" style={{ boxSizing: 'border-box' }}>
+                  <img src={img} alt={product.name} className="h-full w-full max-w-full object-cover block" referrerPolicy="no-referrer" />
                 </div>
               ))}
             </div>
@@ -6411,48 +6411,9 @@ function ProductPage({
                 </p>
               )}
 
-              <div className="mt-8 border-t border-black/8 pt-8">
-                <div className="grid gap-8">
-                  {/* Color Selector */}
-                  {product.colors && product.colors.length > 0 && (
-                    <div>
-                      <h3 className="mb-4 text-[10px] uppercase tracking-[0.2em] text-black/40" style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}>Color — {selectedColor}</h3>
-                      <div className="flex gap-2">
-                        {colorOptions.map((c) => (
-                          <button
-                            key={c.name}
-                            onClick={() => setSelectedColor(c.name)}
-                            className={`h-10 w-10 rounded-full border transition ${selectedColor === c.name ? 'border-black ring-1 ring-black ring-offset-2' : 'border-transparent'}`}
-                            style={{ background: c.className }}
-                            aria-label={c.name}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Size Selector */}
-                  {sizeOptions.length > 0 && (
-                    <div>
-                      <h3 className="mb-4 text-[10px] uppercase tracking-[0.2em] text-black/40" style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}>Size — {selectedSize}</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {sizeOptions.map((s) => (
-                          <button
-                            key={s}
-                            onClick={() => setSelectedSize(s)}
-                            className={`flex h-10 min-w-[3rem] items-center justify-center rounded border px-3 text-[11px] font-medium uppercase tracking-wider transition ${selectedSize === s ? 'border-black bg-black text-white' : 'border-black/10 bg-white hover:border-black'}`}
-                          >
-                            {s}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
 
               {/* Accordion */}
-              <div className="mt-10 border-t border-black/8">
+              <div className="mt-8 border-t border-black/8">
                 {accordionSections.map((section) => (
                   <div key={section.title} className="border-b border-black/8">
                     <button
@@ -6488,33 +6449,137 @@ function ProductPage({
         </div>
       </section>
 
-      {/* Refined Sticky Footer */}
+      {/* ── Sticky Add to Bag ── */}
       <div
-        className="fixed bottom-0 left-0 right-0 z-[90] border-t border-black/[0.07] px-4 py-4 pb-[calc(env(safe-area-inset-bottom)+12px)] backdrop-blur-xl md:py-5 md:px-10 lg:px-20"
-        style={{ background: 'rgba(253,251,247,0.93)' }}
+        className="fixed bottom-0 left-0 right-0 z-[90] border-t border-black/[0.07] backdrop-blur-xl"
+        style={{ background: 'rgba(253,251,247,0.96)' }}
       >
-        <div className="mx-auto w-full max-w-[1400px]">
-          <AnimatePresence mode="wait">
-            {!isAddedSuccess ? (
-              <motion.div
-                key="selector"
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.18 }}
-                className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between w-full"
-              >
-                {/* Left: product info (desktop) */}
-                <div className="hidden lg:flex items-center gap-4 min-w-[220px]">
+        <AnimatePresence mode="wait">
+          {!isAddedSuccess ? (
+            <motion.div
+              key="selector"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.18 }}
+            >
+              {/* ─── MOBILE / TABLET (< lg): 3-row layout ─── */}
+              <div className="lg:hidden px-4 pt-3 pb-[calc(env(safe-area-inset-bottom)+12px)] space-y-2.5">
+
+                {/* Row 1 — Colour Swatches */}
+                {colorOptions.length > 0 && (
+                  <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide">
+                    <span
+                      className="shrink-0 text-[9px] uppercase tracking-[0.22em] text-black/40 whitespace-nowrap"
+                      style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+                    >
+                      {selectedColor}
+                    </span>
+                    <div className="flex gap-2">
+                      {colorOptions.map((color) => (
+                        <button
+                          key={color.name}
+                          type="button"
+                          onClick={() => setSelectedColor(color.name)}
+                          className={`h-7 w-7 shrink-0 rounded-full border-2 transition-all ${
+                            selectedColor === color.name
+                              ? 'border-black shadow-sm scale-110'
+                              : 'border-transparent'
+                          }`}
+                          style={{ background: color.className }}
+                          aria-label={`Select colour ${color.name}`}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Row 2 — Size Swatches (pill buttons, overflow collapses to scroll) */}
+                {sizeOptions.length > 0 && (
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="shrink-0 text-[9px] uppercase tracking-[0.22em] text-black/40"
+                      style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+                    >
+                      Size
+                    </span>
+                    <div className="flex gap-1.5 overflow-x-auto scrollbar-hide">
+                      {sizeOptions.map((s) => (
+                        <button
+                          key={s}
+                          type="button"
+                          onClick={() => setSelectedSize(s)}
+                          className={`shrink-0 h-8 min-w-[2.6rem] px-2 rounded border text-[10px] uppercase tracking-wider transition ${
+                            selectedSize === s
+                              ? 'bg-black border-black text-white'
+                              : 'bg-white/60 border-black/15 text-black hover:border-black'
+                          }`}
+                          style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+                        >
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Row 3 — Qty (left) + Add to Bag (right) */}
+                <div className="flex items-center gap-3">
+                  {/* Qty stepper */}
+                  <div className="flex h-11 w-28 shrink-0 items-center justify-between border border-black/10 rounded-md bg-white/60 overflow-hidden px-1">
+                    <button
+                      type="button"
+                      onClick={() => updateSelectedQuantity(selectedQuantity - 1)}
+                      className="flex h-full w-9 items-center justify-center text-black/35 hover:text-black transition"
+                      aria-label="Decrease quantity"
+                    >
+                      <Minus className="h-3 w-3" />
+                    </button>
+                    <span
+                      className="text-xs text-black"
+                      style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+                    >
+                      {selectedQuantity}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => updateSelectedQuantity(selectedQuantity + 1)}
+                      className="flex h-full w-9 items-center justify-center text-black/35 hover:text-black transition"
+                      aria-label="Increase quantity"
+                    >
+                      <Plus className="h-3 w-3" />
+                    </button>
+                  </div>
+
+                  {/* Add to Bag CTA */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onAddToCart(product.slug, selectedQuantity, selectedVariantId, { size: selectedSize, color: selectedColor });
+                      setIsAddedSuccess(true);
+                    }}
+                    className="flex-1 h-11 bg-[#111] text-white rounded-md flex items-center justify-center gap-2 transition hover:bg-black active:scale-[0.98]"
+                    style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900, fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase' }}
+                  >
+                    Add to Bag
+                    <span className="opacity-60" style={{ fontWeight: 700 }}>— {selectedPriceLabel}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* ─── DESKTOP (lg+): Single-row, no swatches ─── */}
+              <div className="hidden lg:flex items-center justify-between px-20 py-4 pb-[calc(env(safe-area-inset-bottom)+8px)] max-w-[1400px] mx-auto">
+                {/* Left: product thumbnail + name/price */}
+                <div className="flex items-center gap-4">
                   <img
                     src={images[0] || ''}
                     alt={product.name}
-                    className="h-12 w-12 rounded-xl object-cover bg-[#ede8df] border border-black/5"
+                    className="h-12 w-12 rounded-xl object-cover bg-[#ede8df] border border-black/5 shrink-0"
                     referrerPolicy="no-referrer"
                   />
                   <div>
                     <p
-                      className="text-[0.95rem] leading-snug text-black line-clamp-1"
+                      className="text-[1rem] leading-snug text-black line-clamp-1"
                       style={{ fontFamily: "'Instrument Serif', Georgia, serif", fontStyle: 'normal', fontWeight: 400 }}
                     >
                       {displayProductName}
@@ -6528,60 +6593,9 @@ function ProductPage({
                   </div>
                 </div>
 
-                {/* Middle: Color + Size selectors */}
-                <div className="flex flex-1 flex-row items-center justify-between md:justify-center gap-4 md:gap-8">
-                  {product.colors && product.colors.length > 0 && (
-                    <div className="flex items-center gap-2">
-                      <span
-                        className="text-[9px] uppercase tracking-[0.18em] text-black/40 whitespace-nowrap"
-                        style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
-                      >
-                        {selectedColor}
-                      </span>
-                      <div className="flex gap-1.5">
-                        {colorOptions.map((color) => (
-                          <button
-                            key={color.name}
-                            type="button"
-                            onClick={() => setSelectedColor(color.name)}
-                            className={`h-7 w-7 rounded-full border transition-all ${
-                              selectedColor === color.name
-                                ? 'border-black ring-1 ring-black ring-offset-1'
-                                : 'border-black/15'
-                            }`}
-                            style={{ background: color.className }}
-                            aria-label={`Select color ${color.name}`}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {sizeOptions.length > 0 && (
-                    <div className="flex items-center gap-2 ml-auto md:ml-0">
-                      <span
-                        className="text-[9px] uppercase tracking-[0.18em] text-black/40 whitespace-nowrap"
-                        style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
-                      >
-                        Size
-                      </span>
-                      <select
-                        value={selectedSize}
-                        onChange={(e) => setSelectedSize(e.target.value)}
-                        className="h-9 min-w-[4.5rem] border border-black/10 bg-transparent px-2 rounded-md text-[10px] uppercase tracking-wider text-black outline-none focus:border-black/30 transition"
-                        style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
-                      >
-                        {sizeOptions.map((size) => (
-                          <option key={size} value={size}>{size}</option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
-                </div>
-
                 {/* Right: Qty + CTA */}
-                <div className="flex items-center gap-2.5 shrink-0 w-full md:w-auto">
-                  <div className="flex h-11 items-center border border-black/10 rounded-md overflow-hidden bg-white/60 shrink-0">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-11 items-center border border-black/10 rounded-md bg-white/60 overflow-hidden">
                     <button
                       type="button"
                       onClick={() => updateSelectedQuantity(selectedQuantity - 1)}
@@ -6591,7 +6605,7 @@ function ProductPage({
                       <Minus className="h-3 w-3" />
                     </button>
                     <span
-                      className="min-w-[1.5rem] text-center text-xs text-black"
+                      className="min-w-[1.75rem] text-center text-xs text-black"
                       style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
                     >
                       {selectedQuantity}
@@ -6612,24 +6626,26 @@ function ProductPage({
                       onAddToCart(product.slug, selectedQuantity, selectedVariantId, { size: selectedSize, color: selectedColor });
                       setIsAddedSuccess(true);
                     }}
-                    className="flex-1 md:flex-initial md:px-10 h-11 bg-[#111] text-white flex items-center justify-center rounded-md transition hover:bg-black active:scale-[0.98] whitespace-nowrap"
+                    className="h-11 px-10 bg-[#111] text-white rounded-md flex items-center justify-center transition hover:bg-black active:scale-[0.98] whitespace-nowrap"
                     style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900, fontSize: '11px', letterSpacing: '0.22em', textTransform: 'uppercase' }}
                   >
                     Add to Bag — {selectedPriceLabel}
                   </button>
                 </div>
-              </motion.div>
-            ) : (
-              <motion.div
-                key="success"
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.18 }}
-                className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between w-full"
-              >
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="success"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.18 }}
+              className="px-4 py-4 pb-[calc(env(safe-area-inset-bottom)+12px)] lg:px-20 lg:py-5 max-w-[1400px] mx-auto"
+            >
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white">
+                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white">
                     <Check className="h-3 w-3" strokeWidth={3} />
                   </div>
                   <span
@@ -6639,11 +6655,11 @@ function ProductPage({
                     Added to your bag
                   </span>
                 </div>
-                <div className="flex gap-2 w-full md:w-auto">
+                <div className="flex gap-2">
                   <button
                     type="button"
                     onClick={() => setIsAddedSuccess(false)}
-                    className="flex-1 md:flex-none h-11 px-6 border border-black/10 bg-transparent text-black rounded-md transition hover:border-black/25"
+                    className="flex-1 sm:flex-none h-11 px-6 border border-black/10 bg-transparent text-black rounded-md transition hover:border-black/25"
                     style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900, fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase' }}
                   >
                     Keep Shopping
@@ -6651,16 +6667,16 @@ function ProductPage({
                   <button
                     type="button"
                     onClick={() => window.dispatchEvent(new CustomEvent('open-cart'))}
-                    className="flex-1 md:flex-none h-11 px-6 bg-[#111] text-white rounded-md transition hover:bg-black"
+                    className="flex-1 sm:flex-none h-11 px-6 bg-[#111] text-white rounded-md transition hover:bg-black"
                     style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900, fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase' }}
                   >
                     View Bag
                   </button>
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       <Footer />
