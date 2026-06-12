@@ -6091,90 +6091,134 @@ function MerchPage({
         </div>
       </section>
 
-      <section id="shop" className="relative overflow-hidden bg-[#F9F4F0] px-4 py-12 text-black sm:px-6 sm:py-16 lg:px-10">
+      <section id="shop" className="bg-[#F8F6F2] py-16 text-black lg:py-20">
         <div
           ref={bestSellers.ref}
-          aria-hidden="false"
-          className={`transform transition-transform duration-800 ${
-            bestSellers.isVisible ? 'translate-y-0' : 'translate-y-6'
+          className={`transform transition-all duration-700 ${
+            bestSellers.isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
           }`}
         >
-          {/* Section heading */}
-          <div className="mb-10 flex items-end justify-between">
+          {/* ── Section Header ── */}
+          <div className="mb-10 flex items-end justify-between px-5 sm:px-8 lg:px-12">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-black/40">Official Collection</p>
-              <h2 className="mt-2 font-serif text-4xl font-light italic tracking-tight text-black sm:text-5xl">
+              <p
+                className="text-[10px] uppercase tracking-[0.32em] text-black/40"
+                style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+              >
+                Official Collection
+              </p>
+              <h2
+                className="mt-2 text-4xl tracking-tight text-black sm:text-5xl"
+                style={{ fontFamily: "'Instrument Serif', Georgia, serif", fontStyle: 'normal', fontWeight: 400 }}
+              >
                 Shiloh 2026
               </h2>
             </div>
-            <p className="hidden text-xs text-black/40 sm:block">
-              {products.filter((p) => p.category === 'SHILOH 2026').length} items
-            </p>
+            <div className="flex items-center gap-4">
+              <p
+                className="hidden text-[11px] text-black/35 sm:block"
+                style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+              >
+                {products.filter((p) => p.category === 'SHILOH 2026').length} items
+              </p>
+            </div>
           </div>
 
-          {/* Horizontal-scroll carousel — touch-optimised for left/right swipe */}
+          {/* ── Product Grid / Carousel ── */}
+          {/* Desktop: 4-column grid with no horizontal scroll */}
+          {/* Mobile/Tablet: horizontal scroll carousel */}
+          <div className="border-t border-black/[0.08] mb-0" />
           <div
             ref={carouselRef}
             onWheel={handleCarouselWheel}
             onScroll={updateScrollProgress}
-            className="scrollbar-hide shop-carousel flex overflow-x-auto overflow-y-hidden"
+            className="scrollbar-hide flex gap-0 overflow-x-auto pl-5 sm:pl-8 lg:pl-0 lg:grid lg:grid-cols-4 lg:overflow-x-visible lg:border-t lg:border-black/[0.07]"
             style={{ touchAction: 'pan-x' }}
           >
             {products
               .filter((p) => p.category === 'SHILOH 2026')
-              .map((product, index) => (
-                <a
-                  key={`${activeTab}-${product.name}`}
-                  href={`/merch/${product.slug}`}
-                  className={`group -ml-[1px] flex w-[260px] shrink-0 flex-col overflow-hidden rounded-3xl bg-white border border-black/[0.08] shadow-[0_8px_30px_rgb(0,0,0,0.03)] first:ml-0 sm:w-[280px] md:w-[300px] lg:w-[calc(25%-1px)] ${
-                    bestSellers.isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
-                  } transition-all duration-500 hover:shadow-md`}
-                  style={{ transitionDelay: `${200 + index * 80}ms` }}
-                  aria-label={`View ${product.name}`}
-                >
-                  {/* Curved Product Image */}
-                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-t-2xl bg-[#ebe4d8]">
-                    {product.image ? (
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        referrerPolicy="no-referrer"
-                      />
-                    ) : (
-                      <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${product.accent}`}>
-                        <product.icon className="h-14 w-14 text-white" strokeWidth={1.5} />
-                      </div>
-                    )}
-                  </div>
+              .map((product, index) => {
+                // Assign a badge label based on index for visual variety
+                const badges = ['PRE-ORDER', 'PRE-ORDER', 'PRE-ORDER', 'PRE-ORDER', 'PRE-ORDER'];
+                const badge = badges[index] ?? 'NEW';
 
-                  {/* Card Footer: Name left, Price + View right */}
-                  <div className="flex items-center justify-between gap-3 px-4 py-4">
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate font-serif text-base italic font-light leading-tight text-black">
-                        {product.name}
-                      </p>
-                      {product.subcategory && (
-                        <p className="mt-0.5 text-[10px] uppercase tracking-wider text-black/40">{product.subcategory}</p>
+                return (
+                  <a
+                    key={product.slug}
+                    href={`/merch/${product.slug}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.history.pushState({}, '', `/merch/${product.slug}`);
+                      window.dispatchEvent(new PopStateEvent('popstate'));
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className={`group flex w-[72vw] shrink-0 flex-col border-r border-black/[0.07] last:border-r-0 bg-[#F8F6F2] pr-4 sm:w-[52vw] md:w-[40vw] lg:w-auto lg:shrink lg:pr-0 lg:border-l-0 ${
+                      bestSellers.isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+                    } transition-all duration-500`}
+                    style={{ transitionDelay: `${index * 70}ms` }}
+                    aria-label={`View ${product.name}`}
+                  >
+                    {/* ── Card Image Area ── */}
+                    <div className="relative overflow-hidden bg-[#EDEAE5]" style={{ aspectRatio: '4/5' }}>
+                      {/* Badge */}
+                      <span
+                        className="absolute left-4 top-4 z-10 bg-white px-3 py-1 text-[9px] uppercase tracking-[0.22em] text-black"
+                        style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+                      >
+                        {badge}
+                      </span>
+
+                      {product.image ? (
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                          referrerPolicy="no-referrer"
+                        />
+                      ) : (
+                        <div className={`flex h-full w-full items-center justify-center bg-gradient-to-br ${product.accent}`}>
+                          <product.icon className="h-16 w-16 text-white/70" strokeWidth={1} />
+                        </div>
                       )}
                     </div>
-                    <div className="flex shrink-0 flex-col items-end gap-1.5">
-                      <span className="font-serif text-sm italic text-black/80">{product.priceLabel}</span>
-                      <span className="rounded-full border border-black/15 px-3 py-1 text-[9px] font-bold uppercase tracking-[0.18em] text-black transition-colors group-hover:bg-black group-hover:text-white group-hover:border-black">
-                        View
-                      </span>
+
+                    {/* ── Card Info Below Image ── */}
+                    <div className="px-4 pt-4 pb-8 lg:px-5 lg:pt-5">
+                      {/* Name + Price on one line */}
+                      <div className="flex items-baseline gap-2">
+                        <h3
+                          className="flex-1 text-[0.82rem] uppercase leading-snug tracking-[0.08em] text-black"
+                          style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+                        >
+                          {product.name.replace(/^Pre Order - /i, '')}
+                        </h3>
+                        <span
+                          className="shrink-0 text-[0.82rem] uppercase tracking-[0.05em] text-black"
+                          style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+                        >
+                          {product.priceLabel}
+                        </span>
+                      </div>
+
+                      {/* Subcategory / description line */}
+                      <p
+                        className="mt-1 text-[0.75rem] leading-snug text-black/45"
+                        style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+                      >
+                        {product.subcategory || 'Shiloh Season Collection'}
+                      </p>
                     </div>
-                  </div>
-                </a>
-              ))}
+                  </a>
+                );
+              })}
           </div>
 
-          {/* Scroll progress indicator */}
-          <div className="mx-auto mt-8 max-w-[280px] sm:mt-10">
-            <div className="h-[2px] overflow-hidden rounded-full bg-gray-300">
+          {/* ── Scroll Progress Bar (mobile/tablet only) ── */}
+          <div className="mt-8 px-5 sm:px-8 lg:hidden">
+            <div className="h-px bg-black/10 overflow-hidden">
               <div
-                className="h-full w-[30%] rounded-full bg-[#1a1a1a] transition-transform duration-150"
-                style={{ transform: `translateX(${scrollProgress * (100 / 0.3)}%)` }}
+                className="h-full bg-black transition-all duration-150"
+                style={{ width: `${Math.round(scrollProgress * 100)}%` }}
               />
             </div>
           </div>
