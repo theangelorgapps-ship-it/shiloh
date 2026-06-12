@@ -6586,17 +6586,17 @@ function ProductPage({
                   </div>
                 </div>
 
-                {/* Centre: Colour swatches + Size pills */}
-                <div className="flex flex-1 items-center justify-center gap-8 min-w-0 overflow-hidden">
+                {/* Centre: Colour + Size — each stacked vertically (title above, control below) */}
+                <div className="flex flex-1 items-start justify-center gap-10 min-w-0 overflow-hidden">
 
-                  {/* Colour swatches */}
+                  {/* Colour column */}
                   {colorOptions.length > 0 && (
-                    <div className="flex items-center gap-3 shrink-0">
+                    <div className="flex flex-col gap-1.5 shrink-0">
                       <span
-                        className="text-[9px] uppercase tracking-[0.22em] text-black/40 whitespace-nowrap"
+                        className="text-[9px] uppercase tracking-[0.22em] text-black/40"
                         style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
                       >
-                        {selectedColor}
+                        Colour
                       </span>
                       <div className="flex gap-2">
                         {colorOptions.map((color) => (
@@ -6617,11 +6617,11 @@ function ProductPage({
                     </div>
                   )}
 
-                  {/* Size dropdown */}
+                  {/* Size column */}
                   {sizeOptions.length > 0 && (
-                    <div className="flex items-center gap-3 shrink-0">
+                    <div className="flex flex-col gap-1.5 shrink-0">
                       <span
-                        className="text-[9px] uppercase tracking-[0.22em] text-black/40 whitespace-nowrap"
+                        className="text-[9px] uppercase tracking-[0.22em] text-black/40"
                         style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
                       >
                         Size
@@ -6629,7 +6629,7 @@ function ProductPage({
                       <select
                         value={selectedSize}
                         onChange={(e) => setSelectedSize(e.target.value)}
-                        className="h-9 min-w-[5rem] border border-black/15 bg-white/70 rounded-md px-2 pr-7 text-[10px] uppercase tracking-wider text-black outline-none focus:border-black/40 transition appearance-none cursor-pointer"
+                        className="h-8 min-w-[5rem] border border-black/15 bg-white/70 rounded-md px-2 pr-7 text-[10px] uppercase tracking-wider text-black outline-none focus:border-black/40 transition appearance-none cursor-pointer"
                         style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
                       >
                         {sizeOptions.map((s) => (
