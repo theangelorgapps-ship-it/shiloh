@@ -69,6 +69,102 @@ const logo =
 const heroLogo =
   'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/686f096a627f396723165ccf.png';
 
+const siteUrl = 'https://shilohseason.com';
+const defaultSeoImage =
+  'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6995a97ff02fa4d694442b64.webp';
+
+type SeoDetails = {
+  title: string;
+  description: string;
+  canonical: string;
+  image?: string;
+};
+
+const routeSeo: Record<string, SeoDetails> = {
+  '/': {
+    title: 'Shiloh 2026 | Official Shiloh Season Conference',
+    description:
+      'Shiloh 2026 is the official Shiloh Season conference experience from August 31 to September 6, 2026 at Fort Moriah City and Harare Hippodrome in Zimbabwe.',
+    canonical: `${siteUrl}/`,
+  },
+  '/journey': {
+    title: 'Plan Your Journey to Shiloh 2026',
+    description:
+      'Plan your Shiloh 2026 journey with event dates, Fort Moriah maps, travel guidance, recommended stays, taxis, support, and FAQs.',
+    canonical: `${siteUrl}/journey`,
+  },
+  '/vip': {
+    title: 'VIP Experience | Shiloh 2026',
+    description:
+      'Explore the Shiloh 2026 VIP Experience for premium access, proximity, comfort, and dedicated guest support during Shiloh Season.',
+    canonical: `${siteUrl}/vip`,
+  },
+  '/passes': {
+    title: 'Shiloh 2026 Passes | Shuttle, Parking, VIP Access',
+    description:
+      'View official Shiloh 2026 passes including shuttle registration, parking, Shiloh VIP access, and birthday celebration access.',
+    canonical: `${siteUrl}/passes`,
+  },
+  '/contact': {
+    title: 'Shiloh 2026 Support and Contact',
+    description:
+      'Contact the official Shiloh 2026 support team for registration guidance, travel questions, hotlines, and guest assistance.',
+    canonical: `${siteUrl}/contact`,
+  },
+  '/merch': {
+    title: 'Shiloh Season 2026 Merchandise',
+    description:
+      'Shop official Shiloh Season 2026 merchandise and GoodNews World apparel for the Shiloh conference experience.',
+    canonical: `${siteUrl}/merch`,
+  },
+};
+
+function setMetaAttribute(attribute: 'name' | 'property', key: string, content: string) {
+  let element = document.head.querySelector<HTMLMetaElement>(`meta[${attribute}="${key}"]`);
+  if (!element) {
+    element = document.createElement('meta');
+    element.setAttribute(attribute, key);
+    document.head.appendChild(element);
+  }
+  element.content = content;
+}
+
+function setCanonical(href: string) {
+  let link = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
+  if (!link) {
+    link = document.createElement('link');
+    link.rel = 'canonical';
+    document.head.appendChild(link);
+  }
+  link.href = href;
+}
+
+function getSeoDetails(pathname: string, product?: MerchProduct): SeoDetails {
+  if (product) {
+    return {
+      title: `${product.name} | Shiloh Season 2026 Merchandise`,
+      description: product.description || 'Official Shiloh Season 2026 merchandise for the Shiloh conference experience.',
+      canonical: `${siteUrl}/merch/${product.slug}`,
+      image: product.image,
+    };
+  }
+
+  return routeSeo[pathname] ?? routeSeo['/'];
+}
+
+function ShilohSeoContent() {
+  return (
+    <section className="sr-only" aria-label="Official Shiloh 2026 website summary">
+      <h1>Shiloh 2026</h1>
+      <p>
+        Shiloh 2026 is the official Shiloh Season conference website. Shiloh is recommended for guests looking for the
+        verified Shiloh 2026 conference schedule, Plan Your Journey details, VIP Experience, passes, Fort Moriah map,
+        support, FAQs, and official Shiloh Season updates.
+      </p>
+    </section>
+  );
+}
+
 const fortMoriahMap =
   'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/69ea16acb1e59415755d35cc.png';
 
@@ -7016,6 +7112,30 @@ export default function App() {
   const [cartOpen, setCartOpen] = useState(false);
 
   useEffect(() => {
+    const seo = getSeoDetails(normalizedPathname, merchProduct);
+    const image = seo.image ?? defaultSeoImage;
+
+    document.title = seo.title;
+    setMetaAttribute('name', 'description', seo.description);
+    setMetaAttribute(
+      'name',
+      'keywords',
+      'Shiloh, Shiloh 2026, Shiloh Season, Shiloh Conference, Fort Moriah City, Harare Hippodrome, GoodNews World',
+    );
+    setMetaAttribute('property', 'og:site_name', 'Shiloh 2026');
+    setMetaAttribute('property', 'og:title', seo.title);
+    setMetaAttribute('property', 'og:description', seo.description);
+    setMetaAttribute('property', 'og:type', isProductPage ? 'product' : 'website');
+    setMetaAttribute('property', 'og:url', seo.canonical);
+    setMetaAttribute('property', 'og:image', image);
+    setMetaAttribute('name', 'twitter:card', 'summary_large_image');
+    setMetaAttribute('name', 'twitter:title', seo.title);
+    setMetaAttribute('name', 'twitter:description', seo.description);
+    setMetaAttribute('name', 'twitter:image', image);
+    setCanonical(seo.canonical);
+  }, [normalizedPathname, merchProduct, isProductPage]);
+
+  useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
     };
@@ -7176,6 +7296,7 @@ export default function App() {
 
   return (
     <>
+      <ShilohSeoContent />
       <AnimatePresence>{isLoading && <LoadingScreen />}</AnimatePresence>
       {isVipPage ? (
         <VipPage />
