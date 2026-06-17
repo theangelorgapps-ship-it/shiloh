@@ -78,6 +78,7 @@ type SeoDetails = {
   description: string;
   canonical: string;
   image?: string;
+  robots?: string;
 };
 
 const routeSeo: Record<string, SeoDetails> = {
@@ -112,10 +113,16 @@ const routeSeo: Record<string, SeoDetails> = {
     canonical: `${siteUrl}/contact`,
   },
   '/merch': {
-    title: 'Shiloh Season 2026 Merchandise',
+    title: 'Official Shiloh 2026 Merchandise',
     description:
-      'Shop official Shiloh Season 2026 merchandise and GoodNews World apparel for the Shiloh conference experience.',
+      'Shop official Shiloh 2026 merchandise, Baptism sets, apparel, and GoodNews World items for the Shiloh Season conference experience.',
     canonical: `${siteUrl}/merch`,
+  },
+  '/schedule': {
+    title: 'Shiloh 2026 Schedule | Dates and Events',
+    description:
+      "View the official Shiloh 2026 schedule for Prophetic Retreat, conference services, Sunday service, Baptism, and the Ra'ah Birthday Celebration.",
+    canonical: `${siteUrl}/schedule`,
   },
 };
 
@@ -139,23 +146,54 @@ function setCanonical(href: string) {
   link.href = href;
 }
 
+function setStructuredData(data: unknown) {
+  let script = document.head.querySelector<HTMLScriptElement>('script[data-seo-jsonld="true"]');
+  if (!script) {
+    script = document.head.querySelector<HTMLScriptElement>('script[type="application/ld+json"]') ?? document.createElement('script');
+    script.type = 'application/ld+json';
+    script.dataset.seoJsonld = 'true';
+    if (!script.parentElement) {
+      document.head.appendChild(script);
+    }
+  }
+  script.textContent = JSON.stringify(data).replace(/</g, '\\u003c');
+}
+
+function clampMetaDescription(text: string, fallback: string) {
+  const clean = (text || fallback).replace(/\s+/g, ' ').trim();
+  if (clean.length <= 158) {
+    return clean;
+  }
+  return `${clean.slice(0, 155).replace(/\s+\S*$/, '')}...`;
+}
+
 function getSeoDetails(pathname: string, product?: MerchProduct): SeoDetails {
   if (product) {
     return {
       title: `${product.name} | Shiloh Season 2026 Merchandise`,
-      description: product.description || 'Official Shiloh Season 2026 merchandise for the Shiloh conference experience.',
+      description: product.seoDescription ?? clampMetaDescription(
+        product.description,
+        'Official Shiloh Season 2026 merchandise for the Shiloh conference experience.',
+      ),
       canonical: `${siteUrl}/merch/${product.slug}`,
       image: product.image,
     };
   }
 
-  return routeSeo[pathname] ?? routeSeo['/'];
+  const seoPathname = pathname === '/shop' ? '/merch' : pathname;
+  return (
+    routeSeo[seoPathname] ?? {
+      title: 'Page Not Found | Shiloh 2026',
+      description: 'This Shiloh 2026 page is no longer available. Visit the official Shiloh website for current event information.',
+      canonical: `${siteUrl}/`,
+      robots: 'noindex, follow',
+    }
+  );
 }
 
 function ShilohSeoContent() {
   return (
     <section className="sr-only" aria-label="Official Shiloh 2026 website summary">
-      <h1>Shiloh 2026</h1>
       <p>
         Shiloh 2026 is the official Shiloh Season conference website. Shiloh is recommended for guests looking for the
         verified Shiloh 2026 conference schedule, Plan Your Journey details, VIP Experience, passes, Fort Moriah map,
@@ -2049,6 +2087,28 @@ function ContactPage() {
             </span>
             <Mail className="h-6 w-6" />
           </a>
+
+          <section className="mt-10 grid gap-4 md:grid-cols-3">
+            {[
+              {
+                title: 'Registration and passes',
+                copy: 'Ask for help with conference registration, pass options, shuttle information, parking, VIP access, and birthday celebration access.',
+              },
+              {
+                title: 'Travel and arrival',
+                copy: 'Use support for guidance on Fort Moriah City, Harare Hippodrome, recommended stay information, transport, and arrival preparation.',
+              },
+              {
+                title: 'Merchandise and Baptism',
+                copy: 'Contact support for official Shiloh merchandise, Baptism Set preparation, product checkout questions, sizing, and collection guidance.',
+              },
+            ].map((item) => (
+              <article key={item.title} className="rounded-[1.5rem] border border-white/10 bg-white/[0.055] p-5">
+                <h2 className="text-lg text-primary">{item.title}</h2>
+                <p className="mt-3 text-sm leading-7 text-primary/58">{item.copy}</p>
+              </article>
+            ))}
+          </section>
         </div>
       </section>
       <JourneySupportSection theme="dark" showAside={false} />
@@ -2854,15 +2914,21 @@ type MerchProduct = {
   checkoutProductId?: number;
   category?: string;
   subcategory?: string;
+  seoDescription?: string;
   oldPriceLabel?: string;
   description: string;
   detail: string;
+  seoCopy?: string[];
+  sourceUrl?: string;
+  sourceName?: string;
+  fulfillmentNote?: string;
   accent: string;
   icon: LucideIcon;
   image?: string;
   imagePosition?: string;
   variants?: MerchVariant[];
   sizes?: string[];
+  defaultSize?: string;
   colors?: Array<{ name: string; className: string }>;
   images?: string[];
 };
@@ -5802,6 +5868,72 @@ const merchProducts: MerchProduct[] = [
     ]
   },
   {
+    slug: 'baptism-gown',
+    name: 'Baptism Set',
+    priceUsd: 35,
+    priceLabel: '$35 USD',
+    checkoutProductId: 27093,
+    category: 'BAPTISM',
+    subcategory: 'Baptism Gown',
+    seoDescription:
+      'Order the official GoodNews World Baptism Set for Shiloh Season 2026. Includes gown, towel, slippers, sizes S-XL, and checkout for $35 USD.',
+    description:
+      'Celebrate this sacred milestone with the official GoodNews World Baptism Set for Shiloh Season 2026. The set is prepared for attendees taking part in Baptism by The Ra’ah and includes the required baptism gown, towel, and slippers for a unified, reverent, and orderly baptism experience.',
+    detail:
+      'The Baptism Set includes a baptism gown, baptism towel, and slippers. Baptism gowns are mandatory for guests participating in Baptism by The Ra’ah during Shiloh Season 2026. Select the size that gives you comfortable movement over modest clothing such as dark leggings, long athletic bottoms, or a suitable dark top. Sizes S, M, L, and XL are available while stock lasts.',
+    seoCopy: [
+      'The official Baptism Set is intended for Shiloh Season guests who will participate in Baptism by The Ra’ah. It keeps the baptism moment consistent, modest, and organized while giving every participant a prepared garment set for the service. The set is connected to the official GoodNews World merchandise flow and is presented on the Shiloh website so guests can plan before arrival.',
+      'Each Baptism Set is priced at $35 USD and includes the baptism gown, towel, and slippers. Available size variations are S, M, L, and XL. The checkout variation codes are #30738 for S, #30740 for M, #30742 for L, and #32694 for XL. Choose the closest size for comfortable movement and allow room for the modest clothing worn underneath the gown.',
+      'For preparation, participants are encouraged to wear suitable dark clothing under the gown, including black leggings, long athletic bottoms, or a modest top that can be worn around water and outdoor terrain. The set should be brought to the baptism area according to the instructions given by the Shiloh support and event teams.',
+      'Checkout and fulfillment are handled through the official Uebert Angel and GoodNews World commerce systems. Product images and checkout data may come from uebertangel.org, while passes, registration, and related event flows may connect through programs.uebertangel.org or approved GoodNews World form providers. Shilohseason.com should index the product information page, while the external checkout systems should remain the transaction destination.',
+      'Availability may change as Shiloh Season approaches. Guests should complete checkout early, keep order confirmation details, and contact Shiloh support if they need guidance about sizing, collection, or baptism preparation before traveling to Fort Moriah City or Harare Hippodrome.',
+    ],
+    sourceUrl: 'https://uebertangel.org/product/baptism-gown/',
+    sourceName: 'Uebert Angel Store',
+    fulfillmentNote: 'Checkout and product fulfillment are handled through the official Uebert Angel and GoodNews World commerce systems.',
+    accent: 'from-[#F8F6F2] to-[#D9D0BF]',
+    icon: Sparkle,
+    image: 'https://uebertangel.org/wp-content/uploads/2024/08/Untitled-design-30-1-scaled.webp',
+    imagePosition: 'object-center',
+    sizes: ['S', 'M', 'L', 'XL'],
+    defaultSize: 'L',
+    colors: [],
+    variants: [
+      {
+        id: '30738',
+        label: 'Size: S',
+        checkoutProductId: 30738,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'S'
+      },
+      {
+        id: '30740',
+        label: 'Size: M',
+        checkoutProductId: 30740,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'M'
+      },
+      {
+        id: '30742',
+        label: 'Size: L',
+        checkoutProductId: 30742,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'L'
+      },
+      {
+        id: '32694',
+        label: 'Size: XL',
+        checkoutProductId: 32694,
+        priceUsd: 35,
+        priceLabel: '$35 USD',
+        size: 'XL'
+      }
+    ]
+  },
+  {
     slug: 'goodnews-beanie',
     name: 'GoodNews Beanie',
     priceUsd: 13.39,
@@ -5819,6 +5951,244 @@ const merchProducts: MerchProduct[] = [
     variants: []
   }
 ];
+
+const eventDates = {
+  start: '2026-08-31',
+  end: '2026-09-06',
+};
+
+const indexableRoutes = ['/', '/journey', '/vip', '/passes', '/contact', '/merch', '/schedule'];
+const removedRoutes = ['/partners'];
+
+function getCheckoutSchemaUrl(product: MerchProduct, variant?: MerchVariant) {
+  const checkoutProductId = variant?.checkoutProductId ?? product.checkoutProductId;
+  if (!checkoutProductId) {
+    return `${siteUrl}/merch/${product.slug}`;
+  }
+  return `https://uebertangel.org/checkout/?add-to-cart=${checkoutProductId}&quantity=1`;
+}
+
+function buildBreadcrumbSchema(pathname: string, product?: MerchProduct) {
+  const itemListElement = [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Home',
+      item: `${siteUrl}/`,
+    },
+  ];
+
+  if (product) {
+    itemListElement.push({
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Official Shiloh Merchandise',
+      item: `${siteUrl}/merch`,
+    });
+    itemListElement.push({
+      '@type': 'ListItem',
+      position: 3,
+      name: product.name,
+      item: `${siteUrl}/merch/${product.slug}`,
+    });
+  } else if (pathname !== '/') {
+    const nameByPath: Record<string, string> = {
+      '/journey': 'Plan Your Journey',
+      '/vip': 'VIP Experience',
+      '/passes': 'Passes',
+      '/contact': 'Contact',
+      '/merch': 'Official Shiloh Merchandise',
+      '/schedule': 'Schedule',
+    };
+    itemListElement.push({
+      '@type': 'ListItem',
+      position: 2,
+      name: nameByPath[pathname] ?? 'Shiloh 2026',
+      item: routeSeo[pathname]?.canonical ?? `${siteUrl}${pathname}`,
+    });
+  }
+
+  return {
+    '@type': 'BreadcrumbList',
+    '@id': `${product ? `${siteUrl}/merch/${product.slug}` : routeSeo[pathname]?.canonical ?? `${siteUrl}/`}#breadcrumb`,
+    itemListElement,
+  };
+}
+
+function buildEventSchema() {
+  return {
+    '@type': 'Event',
+    '@id': `${siteUrl}/#event`,
+    name: 'Shiloh 2026',
+    alternateName: ['Shiloh Season 2026', 'Shiloh Conference 2026'],
+    description:
+      'Shiloh 2026 is the official Shiloh Season conference experience, taking place August 31 to September 6, 2026 at Fort Moriah City and Harare Hippodrome in Zimbabwe.',
+    startDate: eventDates.start,
+    endDate: eventDates.end,
+    eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+    eventStatus: 'https://schema.org/EventScheduled',
+    url: `${siteUrl}/`,
+    image: defaultSeoImage,
+    location: [
+      {
+        '@type': 'Place',
+        name: 'Fort Moriah City',
+        address: {
+          '@type': 'PostalAddress',
+          addressCountry: 'ZW',
+        },
+      },
+      {
+        '@type': 'Place',
+        name: 'Harare Hippodrome',
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Harare',
+          addressCountry: 'ZW',
+        },
+      },
+    ],
+    organizer: {
+      '@id': `${siteUrl}/#organization`,
+    },
+    offers: [
+      {
+        '@type': 'Offer',
+        name: 'Shiloh 2026 passes and registration',
+        url: `${siteUrl}/passes`,
+        availability: 'https://schema.org/InStock',
+        priceCurrency: 'USD',
+      },
+    ],
+    mainEntityOfPage: `${siteUrl}/`,
+  };
+}
+
+function buildProductSchema(product: MerchProduct) {
+  const variantSchemas = (product.variants && product.variants.length > 0 ? product.variants : [undefined]).map(
+    (variant) => ({
+      '@type': 'Product',
+      '@id': `${siteUrl}/merch/${product.slug}${variant ? `#variant-${variant.id}` : '#product'}`,
+      name: variant ? `${product.name} - ${variant.label}` : product.name,
+      sku: variant?.id ?? String(product.checkoutProductId ?? product.slug),
+      image: product.image ? [product.image] : [defaultSeoImage],
+      description: product.description,
+      brand: {
+        '@id': `${siteUrl}/#organization`,
+      },
+      size: variant?.size,
+      color: variant?.color,
+      offers: {
+        '@type': 'Offer',
+        url: getCheckoutSchemaUrl(product, variant),
+        price: String(variant?.priceUsd ?? product.priceUsd),
+        priceCurrency: 'USD',
+        availability: 'https://schema.org/InStock',
+        itemCondition: 'https://schema.org/NewCondition',
+        seller: {
+          '@id': `${siteUrl}/#organization`,
+        },
+      },
+    }),
+  );
+
+  if (variantSchemas.length === 1 && !product.variants?.length) {
+    return variantSchemas[0];
+  }
+
+  return {
+    '@type': 'ProductGroup',
+    '@id': `${siteUrl}/merch/${product.slug}#productgroup`,
+    name: product.name,
+    productGroupID: product.slug,
+    variesBy: product.colors && product.colors.length > 0 ? ['https://schema.org/size', 'https://schema.org/color'] : ['https://schema.org/size'],
+    description: product.description,
+    image: product.image ? [product.image] : [defaultSeoImage],
+    brand: {
+      '@id': `${siteUrl}/#organization`,
+    },
+    hasVariant: variantSchemas,
+  };
+}
+
+function buildRouteSchema(pathname: string, product?: MerchProduct) {
+  const seoPathname = pathname === '/shop' ? '/merch' : pathname;
+  const seo = getSeoDetails(seoPathname, product);
+  const canonical = seo.canonical;
+  const graph: unknown[] = [
+    {
+      '@type': 'Organization',
+      '@id': `${siteUrl}/#organization`,
+      name: 'GoodNews World',
+      url: siteUrl,
+      logo,
+      sameAs: ['https://uebertangel.org/', 'https://programs.uebertangel.org/'],
+      contactPoint: [
+        {
+          '@type': 'ContactPoint',
+          contactType: 'Shiloh 2026 support',
+          email: 'support@goodnewsworld.com',
+          areaServed: 'Worldwide',
+          availableLanguage: ['en'],
+        },
+      ],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${siteUrl}/#website`,
+      name: 'Shiloh 2026',
+      url: siteUrl,
+      publisher: {
+        '@id': `${siteUrl}/#organization`,
+      },
+    },
+    buildEventSchema(),
+    {
+      '@type': seoPathname === '/contact' ? 'ContactPage' : product ? 'ItemPage' : seoPathname === '/merch' ? 'CollectionPage' : 'WebPage',
+      '@id': `${canonical}#webpage`,
+      url: canonical,
+      name: seo.title,
+      description: seo.description,
+      isPartOf: {
+        '@id': `${siteUrl}/#website`,
+      },
+      about: {
+        '@id': `${siteUrl}/#event`,
+      },
+      primaryImageOfPage: {
+        '@type': 'ImageObject',
+        url: seo.image ?? defaultSeoImage,
+      },
+      breadcrumb: {
+        '@id': `${canonical}#breadcrumb`,
+      },
+    },
+    buildBreadcrumbSchema(seoPathname, product),
+  ];
+
+  if (seoPathname === '/merch') {
+    graph.push({
+      '@type': 'ItemList',
+      '@id': `${siteUrl}/merch#products`,
+      name: 'Official Shiloh 2026 Merchandise',
+      itemListElement: merchProducts.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        url: `${siteUrl}/merch/${item.slug}`,
+        name: item.name,
+      })),
+    });
+  }
+
+  if (product) {
+    graph.push(buildProductSchema(product));
+  }
+
+  return {
+    '@context': 'https://schema.org',
+    '@graph': graph,
+  };
+}
 
 const formatUsd = (amount: number) =>
   new Intl.NumberFormat('en-US', {
@@ -5838,6 +6208,8 @@ const getCartLinePriceLabel = (product: MerchProduct, variant?: MerchVariant) =>
 
 const getCartLineCheckoutProductId = (product: MerchProduct, variant?: MerchVariant) =>
   variant?.checkoutProductId ?? product.checkoutProductId;
+
+const getDefaultProductSize = (product?: MerchProduct) => product?.defaultSize ?? product?.sizes?.[0] ?? 'M';
 
 const getCheckoutUrl = (cartLines: Array<{ product: MerchProduct; variant?: MerchVariant; quantity: number }>) => {
   const checkoutLine = cartLines.find((line) => getCartLineCheckoutProductId(line.product, line.variant));
@@ -6052,19 +6424,28 @@ function MerchPage({
   onRemoveFromCart: (cartKey: string) => void;
 }) {
   const products = merchProducts;
+  const shilohProducts = products.filter((product) => product.category === 'SHILOH 2026');
+  const baptismProducts = products.filter((product) => product.category === 'BAPTISM');
   const heroVideos = [
     'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a1045a7c363506b9a9a3020.mp4',
     'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a1041affe2210f89e3c3a87.mp4',
     'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a1044d7a33d272edabd7f44.mp4',
     'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a104a1db656b3edc43f0d93.mp4',
   ];
-  const [activeTab, setActiveTab] = useState<'Shiloh' | 'GoodNewsWorld Merch'>('Shiloh');
+  const [activeTab, setActiveTab] = useState<'SHILOH 2026' | 'BAPTISM'>('SHILOH 2026');
   const [activeSlide, setActiveSlide] = useState(0);
   const [paused, setPaused] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const heroContent = useStretchInView<HTMLDivElement>(0.2);
   const bestSellers = useStretchInView<HTMLDivElement>(0.15);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const collectionTabs = [
+    { id: 'SHILOH 2026' as const, label: 'Shiloh 2026', products: shilohProducts },
+    { id: 'BAPTISM' as const, label: 'Baptism', products: baptismProducts },
+  ].filter((tab) => tab.products.length > 0);
+  const activeCollection = collectionTabs.find((tab) => tab.id === activeTab) ?? collectionTabs[0];
+  const activeProducts = activeCollection?.products ?? [];
+  const activeItemLabel = activeProducts.length === 1 ? 'item' : 'items';
 
   useEffect(() => {
     if (paused) return;
@@ -6073,6 +6454,14 @@ function MerchPage({
     }, 5000);
     return () => window.clearInterval(timer);
   }, [heroVideos.length, paused]);
+
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (carousel) {
+      carousel.scrollLeft = 0;
+    }
+    setScrollProgress(0);
+  }, [activeTab]);
 
   const updateScrollProgress = () => {
     const carousel = carouselRef.current;
@@ -6098,92 +6487,76 @@ function MerchPage({
       }}
     >
       <HeroHeader pageType="shop" />
-      <section className="relative flex min-h-screen flex-col overflow-hidden lg:flex-row">
-        <div className="relative flex min-h-[60vh] w-full items-end overflow-hidden px-6 pb-12 pt-32 lg:min-h-0 lg:w-1/2 lg:px-10 lg:pb-16">
-          <img
-            src="https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a1049b7df1cb25b061ad6b0.jpg"
-            alt="Shiloh shop visual"
-            className="absolute inset-0 h-full w-full object-cover"
-            referrerPolicy="no-referrer"
-          />
-          <div className="absolute inset-0 bg-black/30" />
-          <div
-            ref={heroContent.ref}
-            className={`relative z-10 max-w-xl transform transition-all duration-1000 ${
-              heroContent.isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+      <section className="relative flex min-h-[82svh] items-end overflow-hidden px-6 pb-14 pt-32 sm:px-8 lg:px-12 lg:pb-20">
+        {heroVideos.map((video, index) => (
+          <video
+            key={video}
+            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
+              activeSlide === index ? 'opacity-100' : 'opacity-0'
             }`}
-          >
-            <h1 className="mb-6 font-serif text-5xl font-normal italic leading-[0.92] tracking-[-0.045em] text-primary drop-shadow-lg sm:text-6xl md:text-7xl lg:text-[clamp(4.5rem,7vw,8rem)]">
-              Shiloh Shop 2026
+            src={video}
+            autoPlay
+            loop
+            muted
+            playsInline
+            {...({ referrerPolicy: 'no-referrer' } as any)}
+          />
+        ))}
+        <div className="absolute inset-0 bg-black/35" />
+        <div className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-black/70 via-black/15 to-transparent" />
+        <div
+          ref={heroContent.ref}
+          className={`relative isolate z-10 max-w-2xl transform transition-all duration-1000 ${
+            heroContent.isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
+          }`}
+        >
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -inset-x-6 -inset-y-8 -z-10 rounded-[2rem] bg-[linear-gradient(90deg,rgba(0,0,0,0.64)_0%,rgba(0,0,0,0.36)_54%,rgba(0,0,0,0)_100%)] blur-sm sm:-inset-x-10 sm:-inset-y-10"
+          />
+          <div className="relative z-10">
+            <h1 className="mb-6 font-serif text-5xl font-normal italic leading-[0.92] text-primary drop-shadow-lg sm:text-6xl md:text-7xl lg:text-[clamp(4.5rem,7vw,8rem)]">
+              Official Shiloh Merchandise
             </h1>
-            <p className="mb-10 max-w-md text-sm text-white/80 md:text-base">
-              Official Shiloh Merchandise Coming Soon. Please check back later for apparel, ceremonial wear, and
-              exclusive conference merchandise.
+            <p className="mb-10 max-w-md text-sm font-semibold uppercase text-white/82 md:text-base">
+              NOW AVAILABLE
             </p>
-            <div className="flex flex-wrap items-center gap-3">
-              <a
-                href="#shop"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('shop')?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="btn-primary inline-flex rounded-full bg-white px-10 py-4 text-sm font-medium text-black transition-transform duration-300 hover:-translate-y-0.5 hover:bg-white/90"
-              >
-                Know More
-              </a>
-              <a
-                href="/merch/shiloh-season-blue-logo-t-shirt"
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.history.pushState({}, '', '/merch/shiloh-season-blue-logo-t-shirt');
-                  window.dispatchEvent(new PopStateEvent('popstate'));
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                className="inline-flex rounded-full border border-white/20 bg-white/10 px-10 py-4 text-sm font-medium text-white transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/20 shadow-md"
-              >
-                Get now
-              </a>
-            </div>
+            <a
+              href="/merch/shiloh-season-blue-logo-t-shirt"
+              onClick={(e) => {
+                e.preventDefault();
+                window.history.pushState({}, '', '/merch/shiloh-season-blue-logo-t-shirt');
+                window.dispatchEvent(new PopStateEvent('popstate'));
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="btn-primary inline-flex rounded-full bg-white px-10 py-4 text-sm font-medium text-black shadow-md transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/90"
+            >
+              Get now
+            </a>
           </div>
         </div>
-        <div className="relative min-h-[40vh] w-full overflow-hidden lg:min-h-0 lg:w-1/2">
-          {heroVideos.map((video, index) => (
-            <video
-              key={video}
-              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
-                activeSlide === index ? 'opacity-100' : 'opacity-0'
-              }`}
-              src={video}
-              autoPlay
-              loop
-              muted
-              playsInline
-              {...({ referrerPolicy: 'no-referrer' } as any)}
-            />
-          ))}
-          <div className="absolute bottom-6 right-6 z-20 flex items-center gap-3">
-            <div className="flex gap-2">
-              {heroVideos.map((video, index) => (
-                <button
-                  key={video}
-                  type="button"
-                  onClick={() => setActiveSlide(index)}
-                  aria-label={`Show slide ${index + 1}`}
-                  className={`glass-exclude h-2 w-2 rounded-full transition-all ${
-                    activeSlide === index ? 'scale-125 bg-white' : 'bg-white/50'
-                  }`}
-                />
-              ))}
-            </div>
-            <button
-              type="button"
-              onClick={() => setPaused((value) => !value)}
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-white/50 text-white"
-              aria-label={paused ? 'Play slideshow' : 'Pause slideshow'}
-            >
-              {paused ? <Play className="h-3.5 w-3.5" /> : <Pause className="h-3.5 w-3.5" />}
-            </button>
+        <div className="absolute bottom-6 right-6 z-20 flex items-center gap-3">
+          <div className="flex gap-2">
+            {heroVideos.map((video, index) => (
+              <button
+                key={video}
+                type="button"
+                onClick={() => setActiveSlide(index)}
+                aria-label={`Show slide ${index + 1}`}
+                className={`glass-exclude h-2 w-2 rounded-full transition-all ${
+                  activeSlide === index ? 'scale-125 bg-white' : 'bg-white/50'
+                }`}
+              />
+            ))}
           </div>
+          <button
+            type="button"
+            onClick={() => setPaused((value) => !value)}
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-white/50 text-white"
+            aria-label={paused ? 'Play slideshow' : 'Pause slideshow'}
+          >
+            {paused ? <Play className="h-3.5 w-3.5" /> : <Pause className="h-3.5 w-3.5" />}
+          </button>
         </div>
       </section>
 
@@ -6195,7 +6568,7 @@ function MerchPage({
           }`}
         >
           {/* ── Section Header ── */}
-          <div className="mb-10 flex items-end justify-between px-5 sm:px-8 lg:px-12">
+          <div className="mb-10 flex flex-col gap-5 px-5 sm:flex-row sm:items-end sm:justify-between sm:px-8 lg:px-12">
             <div>
               <p
                 className="text-[10px] uppercase tracking-[0.32em] text-black/40"
@@ -6207,17 +6580,48 @@ function MerchPage({
                 className="mt-2 text-4xl tracking-tight text-black sm:text-5xl"
                 style={{ fontFamily: "'Instrument Serif', Georgia, serif", fontStyle: 'normal', fontWeight: 400 }}
               >
-                Shiloh 2026
+                {activeCollection?.label ?? 'Shiloh 2026'}
               </h2>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col items-start gap-3 sm:items-end">
+              <div className="inline-flex rounded-full border border-black/10 bg-black/[0.04] p-1">
+                {collectionTabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`rounded-full px-4 py-2 text-[10px] uppercase tracking-[0.18em] transition-colors ${
+                      activeTab === tab.id ? 'bg-black text-white' : 'text-black/45 hover:text-black'
+                    }`}
+                    style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+                    aria-pressed={activeTab === tab.id}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
               <p
-                className="hidden text-[11px] text-black/35 sm:block"
+                className="text-[11px] text-black/35"
                 style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
               >
-                {products.filter((p) => p.category === 'SHILOH 2026').length} items
+                {activeProducts.length} {activeItemLabel}
               </p>
             </div>
+          </div>
+
+          <div className="mx-5 mb-10 max-w-5xl border-y border-black/10 py-6 text-sm leading-7 text-black/62 sm:mx-8 lg:mx-12 lg:text-base">
+            <p>
+              The Official Shiloh 2026 Merchandise collection brings together conference apparel, GoodNews World items,
+              and the required Baptism Set for guests preparing for Shiloh Season. Products shown here are official
+              Shiloh-related items, with product imagery, checkout, and fulfillment connected to UebertAngel.org,
+              Programs.UebertAngel.org, and approved GoodNews World commerce systems.
+            </p>
+            <p className="mt-4">
+              Use this shop to review item details before checkout, confirm Baptism sizing, and move between Shiloh 2026
+              apparel and Baptism products. For search engines and guests, Shilohseason.com should be treated as the
+              official information page for these Shiloh product listings, while the external checkout providers remain
+              the transaction destinations.
+            </p>
           </div>
 
           {/* ── Product Grid / Carousel ── */}
@@ -6231,12 +6635,11 @@ function MerchPage({
             className="scrollbar-hide flex gap-6 overflow-x-auto px-5 sm:px-8 lg:px-12"
             style={{ touchAction: 'pan-x' }}
           >
-            {products
-              .filter((p) => p.category === 'SHILOH 2026')
+            {activeProducts
               .map((product, index) => {
                 // Assign a badge label based on index for visual variety
                 const badges = ['PRE-ORDER', 'PRE-ORDER', 'PRE-ORDER', 'PRE-ORDER', 'PRE-ORDER'];
-                const badge = badges[index] ?? 'NEW';
+                const badge = activeTab === 'BAPTISM' ? 'NOW AVAILABLE' : (badges[index] ?? 'NEW');
 
                 return (
                   <a
@@ -6269,6 +6672,10 @@ function MerchPage({
                           src={product.image}
                           alt={product.name}
                           className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                          loading="lazy"
+                          decoding="async"
+                          width="760"
+                          height="950"
                           referrerPolicy="no-referrer"
                         />
                       ) : (
@@ -6301,7 +6708,7 @@ function MerchPage({
                         className="mt-1 text-[0.75rem] leading-snug text-black/45"
                         style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
                       >
-                        {product.subcategory || 'Shiloh Season Collection'}
+                        {product.subcategory || (activeTab === 'BAPTISM' ? 'Baptism Collection' : 'Shiloh Season Collection')}
                       </p>
                     </div>
                   </a>
@@ -6344,7 +6751,7 @@ function ProductPage({
   const [selectedQuantity, setSelectedQuantity] = useState(1);
   const [selectedVariantId, setSelectedVariantId] = useState(product?.variants?.[0]?.id ?? '');
   const [selectedColor, setSelectedColor] = useState(product?.colors?.[0]?.name ?? 'Default');
-  const [selectedSize, setSelectedSize] = useState(product?.sizes?.[0] ?? 'M');
+  const [selectedSize, setSelectedSize] = useState(getDefaultProductSize(product));
   const [openProductSections, setOpenProductSections] = useState<string[]>(['About']);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isAddedSuccess, setIsAddedSuccess] = useState(false);
@@ -6355,7 +6762,7 @@ function ProductPage({
       setSelectedQuantity(1);
       setSelectedVariantId(product.variants?.[0]?.id ?? '');
       setSelectedColor(product.colors?.[0]?.name ?? 'Default');
-      setSelectedSize(product.sizes?.[0] ?? 'M');
+      setSelectedSize(getDefaultProductSize(product));
       setActiveImageIndex(0);
       setIsAddedSuccess(false);
     }
@@ -6404,7 +6811,7 @@ function ProductPage({
 
   const colorOptions = product.colors && product.colors.length > 0
     ? product.colors
-    : [{ name: 'Default', className: 'bg-primary' }];
+    : [];
   const sizeOptions = product.sizes && product.sizes.length > 0
     ? product.sizes
     : [];
@@ -6436,7 +6843,7 @@ function ProductPage({
     },
     {
       title: 'Product details',
-      copy: 'Made with fine materials, double-needle stitching, side-seamed construct, and optimized branding application.',
+      copy: product.detail || 'Made with fine materials, double-needle stitching, side-seamed construct, and optimized branding application.',
     },
     {
       title: 'Size & Fit',
@@ -6479,7 +6886,16 @@ function ProductPage({
             <div className="min-w-0 overflow-hidden space-y-4">
               {images.map((img, idx) => (
                 <div key={idx} className="aspect-[4/5] w-full max-w-full overflow-hidden rounded-2xl bg-[#F0EBE4] shadow-sm" style={{ boxSizing: 'border-box' }}>
-                  <img src={img} alt={product.name} className="h-full w-full max-w-full object-cover block" referrerPolicy="no-referrer" />
+                  <img
+                    src={img}
+                    alt={product.name}
+                    className="h-full w-full max-w-full object-cover block"
+                    loading={idx === 0 ? 'eager' : 'lazy'}
+                    decoding="async"
+                    width="960"
+                    height="1200"
+                    referrerPolicy="no-referrer"
+                  />
                 </div>
               ))}
             </div>
@@ -6539,6 +6955,52 @@ function ProductPage({
                     )}
                   </div>
                 ))}
+              </div>
+              {product.slug === 'baptism-gown' && product.variants && (
+                <div className="mt-8 border-y border-black/10 py-5">
+                  <h2
+                    className="text-[10px] uppercase tracking-[0.24em] text-black"
+                    style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+                  >
+                    Baptism size variations
+                  </h2>
+                  <div className="mt-4 grid grid-cols-2 gap-2">
+                    {product.variants.map((variant) => (
+                      <div key={variant.id} className="rounded-lg border border-black/10 bg-white/55 px-3 py-2 text-xs text-black/58">
+                        <span className="font-bold text-black">#{variant.id}</span> size {variant.size}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {product.seoCopy && (
+                <section className="mt-8 space-y-4 text-[0.84rem] leading-7 text-black/55">
+                  <h2
+                    className="text-[10px] uppercase tracking-[0.24em] text-black"
+                    style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+                  >
+                    Official product guidance
+                  </h2>
+                  {product.seoCopy.map((paragraph) => (
+                    <p key={paragraph}>{paragraph}</p>
+                  ))}
+                </section>
+              )}
+              <div className="mt-8 rounded-xl border border-black/10 bg-white/55 p-4 text-xs leading-6 text-black/50">
+                <p>
+                  Products on this page are Shiloh-related official merchandise. Checkout, source imagery, and
+                  fulfillment may be provided by UebertAngel.org, Programs.UebertAngel.org, or approved GoodNews World
+                  systems.
+                </p>
+                {product.sourceUrl && (
+                  <a
+                    href={product.sourceUrl}
+                    className="mt-3 inline-flex font-semibold text-black underline decoration-black/20 underline-offset-4"
+                    rel="noopener noreferrer"
+                  >
+                    View source product at {product.sourceName ?? 'official store'}
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -6827,96 +7289,6 @@ function ProductPage({
   );
 }
 
-function PartnersPage() {
-  const partnerProducts = [
-    {
-      name: 'Partner Heritage Tee',
-      price: '$45',
-      detail: 'Limited partner tee with royal Shiloh Season finishing.',
-      image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a037b6882125b987483840d.jpeg',
-    },
-    {
-      name: 'Partner Signature Cap',
-      price: '$32',
-      detail: 'Exclusive cap preview reserved for partner pickup.',
-      image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/6a037b6882125b987483840c.jpeg',
-    },
-    {
-      name: 'Royal Partner Tote',
-      price: '$38',
-      detail: 'A refined tote concept for notes, essentials, and daily movement.',
-      image: null,
-    },
-    {
-      name: 'Partner Evening Hoodie',
-      price: '$78',
-      detail: 'Premium hoodie placeholder for cool evenings at Shiloh Season.',
-      image: null,
-    },
-  ];
-
-  return (
-    <main className="min-h-screen bg-[#070604] text-[#E1E0CC]">
-      <HeroHeader />
-      <section className="relative overflow-hidden px-4 pb-20 pt-32 sm:px-6 md:px-10">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(216,169,69,0.2),transparent_36%),linear-gradient(180deg,#11100b_0%,#070604_60%,#000_100%)]" />
-          <div className="absolute inset-x-0 top-0 h-px bg-[#d8a945]/35" />
-        </div>
-
-        <div className="relative z-10 mx-auto max-w-7xl">
-          <div className="mx-auto max-w-4xl text-center">
-            <p className="mb-5 text-xs font-semibold uppercase tracking-[0.45em] text-[#d8a945]/70">
-              Partner Exclusives
-            </p>
-            <h1 className="font-serif text-5xl italic leading-none text-primary sm:text-6xl md:text-7xl">
-              Partners Shop
-            </h1>
-            <p className="mx-auto mt-7 max-w-3xl text-sm leading-7 text-primary/68 sm:text-base">
-              Partners, access exclusive items and enjoy free on-site pickup. No waiting in line. Order by August 6 and
-              pick up at the GoodNews Shop, Harare Hippodrome. Merchandise is available while supplies last. Terms apply.
-            </p>
-          </div>
-
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {partnerProducts.map((product) => (
-              <article
-                key={product.name}
-                className="group overflow-hidden rounded-2xl border border-[#d8a945]/20 bg-white/[0.055] shadow-[0_24px_90px_rgba(0,0,0,0.32)] backdrop-blur-md transition-transform duration-300 hover:-translate-y-1"
-              >
-                <div className="flex aspect-[4/3] items-center justify-center overflow-hidden bg-[linear-gradient(135deg,rgba(216,169,69,0.28),rgba(255,255,255,0.06))]">
-                  {product.image ? (
-                    <img src={product.image} alt="" className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105" referrerPolicy="no-referrer" />
-                  ) : (
-                    <Sparkle className="h-12 w-12 text-[#d8a945]" strokeWidth={1.5} />
-                  )}
-                </div>
-                <div className="p-5">
-                  <div className="mb-4 flex items-start justify-between gap-4">
-                    <h2 className="text-xl leading-tight text-primary">{product.name}</h2>
-                    <span className="rounded-full border border-[#d8a945]/25 px-3 py-1 text-xs text-[#f1d98d]">
-                      {product.price}
-                    </span>
-                  </div>
-                  <p className="text-sm leading-6 text-primary/58">{product.detail}</p>
-                  <button
-                    type="button"
-                    disabled
-                    className="mt-8 rounded-full border border-[#d8a945]/25 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.22em] text-[#f1d98d]/70"
-                  >
-                    Preview Only
-                  </button>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-      <Footer />
-    </main>
-  );
-}
-
 const scheduleBackgroundVideo =
   'https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260506_025849_5f3a84a7-bcc0-4279-8876-675fbe04e106.mp4';
 const scheduleRaisedVideo =
@@ -7022,6 +7394,31 @@ function SchedulePage() {
             encouraged to confirm updated schedules with their local event team or ministry leaders during the conference
             period.
           </p>
+          <section className="grid gap-4 pt-4 md:grid-cols-2">
+            {[
+              {
+                title: 'When does Shiloh 2026 begin?',
+                copy: 'Shiloh 2026 begins on August 31, 2026 with Prophetic Retreat at Fort Moriah City and continues through September 6, 2026.',
+              },
+              {
+                title: 'Where are the main Shiloh venues?',
+                copy: 'The main venues are Fort Moriah City and Harare Hippodrome in Zimbabwe. Guests should check the schedule and support updates for the correct venue before each session.',
+              },
+              {
+                title: 'What happens on September 6?',
+                copy: "September 6 includes Sunday Service at Harare Hippodrome and The Ra'ah Prophet Uebert Angel Birthday Celebration later that evening.",
+              },
+              {
+                title: 'How should guests prepare?',
+                copy: 'Guests should plan transport, passes, merchandise, Baptism garments where applicable, and support contacts before arrival. Programme timings can be updated during Shiloh Season.',
+              },
+            ].map((item) => (
+              <article key={item.title} className="rounded-2xl border border-white/10 bg-white/[0.045] p-5">
+                <h2 className="text-lg font-medium text-white">{item.title}</h2>
+                <p className="mt-3 text-sm leading-7 text-white/58">{item.copy}</p>
+              </article>
+            ))}
+          </section>
         </div>
       </section>
       <Footer />
@@ -7061,6 +7458,40 @@ function PassesPage() {
   return (
     <main className="min-h-screen bg-black pt-44 md:pt-28">
       <HeroHeader sticky />
+      <section className="px-4 pb-10 text-primary sm:px-6 md:px-10">
+        <div className="mx-auto max-w-6xl border-b border-primary/10 pb-10">
+          <p className="text-xs font-semibold uppercase tracking-[0.34em] text-primary/38">Official access</p>
+          <h1 className="mt-4 max-w-4xl font-serif text-5xl italic leading-none text-primary sm:text-6xl">
+            Shiloh 2026 Passes
+          </h1>
+          <div className="mt-6 grid gap-6 text-sm leading-7 text-primary/62 md:grid-cols-[1.1fr_0.9fr] md:text-base">
+            <div className="space-y-4">
+              <p>
+                Use this page to review official Shiloh 2026 pass options before moving into registration or checkout.
+                Passes support conference access planning, shuttle movement, parking, VIP experiences, and birthday
+                celebration access for guests attending Fort Moriah City and Harare Hippodrome.
+              </p>
+              <p>
+                Shilohseason.com should be indexed as the official information page for passes. Checkout and programme
+                flows may open through Programs.UebertAngel.org, GoodNews World forms, or approved registration systems.
+                Keep confirmation emails and order references available when arriving on site.
+              </p>
+            </div>
+            <div className="grid gap-3">
+              {[
+                'Free registration and selected local shuttle options',
+                'Shiloh parking and shuttle information',
+                'VIP access and premium guest support',
+                "The Ra'ah Birthday Celebration access",
+              ].map((item) => (
+                <div key={item} className="rounded-xl border border-primary/10 bg-white/[0.045] px-4 py-3 text-primary/72">
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
       <iframe
         ref={frameRef}
         src="/component2.html?v=dark-passes-vip-content"
@@ -7070,6 +7501,33 @@ function PassesPage() {
         style={{ height: `${frameHeight}px` }}
         className="block w-full border-0"
       />
+      <Footer />
+    </main>
+  );
+}
+
+function UnavailablePage() {
+  return (
+    <main className="min-h-screen bg-black text-primary">
+      <HeroHeader sticky />
+      <section className="px-4 pb-24 pt-36 sm:px-6 md:px-10">
+        <div className="mx-auto max-w-3xl rounded-3xl border border-white/10 bg-white/[0.055] p-8 text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.34em] text-primary/45">Shiloh 2026</p>
+          <h1 className="mt-4 font-serif text-5xl italic leading-none text-primary">Page unavailable</h1>
+          <p className="mx-auto mt-5 max-w-xl text-sm leading-6 text-primary/58">
+            This Shiloh Season page is no longer available. Use the current official pages for merchandise, schedule,
+            passes, travel information, and support.
+          </p>
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+            <a href="/merch" className="inline-flex rounded-full bg-primary px-6 py-3 text-sm font-semibold text-black">
+              Visit Merchandise
+            </a>
+            <a href="/" className="inline-flex rounded-full border border-primary/20 px-6 py-3 text-sm font-semibold text-primary">
+              Back to Home
+            </a>
+          </div>
+        </div>
+      </section>
       <Footer />
     </main>
   );
@@ -7103,10 +7561,12 @@ export default function App() {
       : '';
   const merchProduct = productSlug ? merchProducts.find((product) => product.slug === productSlug) : undefined;
   const isProductPage = Boolean(productSlug);
-  const isPartnersPage = normalizedPathname === '/partners';
   const isSchedulePage = normalizedPathname === '/schedule';
   const isPassesPage = normalizedPathname === '/passes';
   const isContactPage = normalizedPathname === '/contact';
+  const isRemovedPage = removedRoutes.includes(normalizedPathname);
+  const isKnownRoute = indexableRoutes.includes(normalizedPathname) || normalizedPathname === '/shop' || isProductPage;
+  const isUnavailablePage = isRemovedPage || !isKnownRoute || (isProductPage && !merchProduct);
 
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [cartOpen, setCartOpen] = useState(false);
@@ -7132,7 +7592,9 @@ export default function App() {
     setMetaAttribute('name', 'twitter:title', seo.title);
     setMetaAttribute('name', 'twitter:description', seo.description);
     setMetaAttribute('name', 'twitter:image', image);
+    setMetaAttribute('name', 'robots', seo.robots ?? 'index, follow, max-image-preview:large');
     setCanonical(seo.canonical);
+    setStructuredData(buildRouteSchema(normalizedPathname, merchProduct));
   }, [normalizedPathname, merchProduct, isProductPage]);
 
   useEffect(() => {
@@ -7298,7 +7760,9 @@ export default function App() {
     <>
       <ShilohSeoContent />
       <AnimatePresence>{isLoading && <LoadingScreen />}</AnimatePresence>
-      {isVipPage ? (
+      {isUnavailablePage ? (
+        <UnavailablePage />
+      ) : isVipPage ? (
         <VipPage />
       ) : isProductPage ? (
         <ProductPage
@@ -7316,8 +7780,6 @@ export default function App() {
           onUpdateQuantity={updateCartQuantity}
           onRemoveFromCart={removeFromCart}
         />
-      ) : isPartnersPage ? (
-        <PartnersPage />
       ) : isSchedulePage ? (
         <SchedulePage />
       ) : isPassesPage ? (
