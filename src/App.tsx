@@ -121,7 +121,7 @@ const routeSeo: Record<string, SeoDetails> = {
   '/schedule': {
     title: 'Shiloh 2026 Schedule | Dates and Events',
     description:
-      "View the official Shiloh 2026 schedule for Prophetic Retreat, conference services, Sunday service, Baptism, and the Ra'ah Birthday Celebration.",
+      "View the official Shiloh 2026 schedule for Prophetic Retreat, conference services, Baptism, and the Ra'ah Birthday Celebration.",
     canonical: `${siteUrl}/schedule`,
   },
 };
@@ -1856,14 +1856,14 @@ const vipPassOptions = [
   {
     label: 'Prophetic Retreat',
     date: '31 Aug - 3 Sep',
-    price: '£4000',
+    price: '$ 5300',
     tag: 'Retreat',
     href: 'https://programs.uebertangel.org/product/2026/',
     summary:
       'A retreat pass shaped for focused teaching, spiritual preparation, and hosted retreat support.',
     features: [
       'Prophetic Retreat access from 31 August to 3 September.',
-      'Single occupancy needs and registration support for delegates preparing for the retreat.',
+      'Includes private room accommodation from August 31 – September 3, 2026. Accommodation beyond September 3 is not included and must be arranged separately.',
       'Teaching moments, spiritual alignment, and guided preparation at Fort Moriah City.',
       'A dedicated pass for retreat guests who want clarity before arrival.',
     ],
@@ -1914,6 +1914,7 @@ const vipPassOptions = [
       'A complete hosted experience for delegates who want premium access across every defining Shiloh Season moment.',
     features: [
       'Full VIP access to the Prophetic Retreat, Shiloh Conference, Sunday Service, and the Ra’ah Birthday Celebration.',
+      'Includes private room accommodation from August 31 – September 3, 2026. Accommodation beyond September 3 is not included and must be arranged separately.',
       'Reserved seating across major gatherings with priority arrival and hosted entry support.',
       'Official VIP transport coordination between selected partner hotels and Shiloh venues throughout the season.',
       'Access to private VIP lounges with complimentary refreshments and hospitality services.',
@@ -2405,7 +2406,19 @@ function FeatureCard({
           {card.items.map((item) => (
             <li key={item} className="flex gap-3 text-sm leading-snug text-gray-400">
               <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-              <span>{item}</span>
+              <span>
+                {item === 'Baptism garments are available separately through the Shiloh Shop.' ? (
+                  <>
+                    Baptism garments are available separately through the{' '}
+                    <a href="/merch/baptism-gown" className="font-semibold text-primary underline decoration-primary/35 underline-offset-4">
+                      Shiloh Shop
+                    </a>
+                    .
+                  </>
+                ) : (
+                  item
+                )}
+              </span>
             </li>
           ))}
         </ul>
@@ -6576,30 +6589,26 @@ function MerchPage({
               >
                 Official Collection
               </p>
-              <h2
-                className="mt-2 text-4xl tracking-tight text-black sm:text-5xl"
-                style={{ fontFamily: "'Instrument Serif', Georgia, serif", fontStyle: 'normal', fontWeight: 400 }}
-              >
-                {activeCollection?.label ?? 'Shiloh 2026'}
-              </h2>
-            </div>
-            <div className="flex flex-col items-start gap-3 sm:items-end">
-              <div className="inline-flex rounded-full border border-black/10 bg-black/[0.04] p-1">
+              <div className="mt-3 flex max-w-full flex-wrap items-center gap-2" aria-label="Choose merchandise collection">
                 {collectionTabs.map((tab) => (
                   <button
                     key={tab.id}
                     type="button"
                     onClick={() => setActiveTab(tab.id)}
-                    className={`rounded-full px-4 py-2 text-[10px] uppercase tracking-[0.18em] transition-colors ${
-                      activeTab === tab.id ? 'bg-black text-white' : 'text-black/45 hover:text-black'
+                    aria-pressed={activeTab === tab.id}
+                    className={`rounded-full border px-5 py-2.5 text-xs uppercase tracking-[0.18em] transition-colors ${
+                      activeTab === tab.id
+                        ? 'border-black bg-black text-white'
+                        : 'border-black/15 bg-white/70 text-black/55 hover:border-black/35 hover:text-black'
                     }`}
                     style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
-                    aria-pressed={activeTab === tab.id}
                   >
                     {tab.label}
                   </button>
                 ))}
               </div>
+            </div>
+            <div className="flex flex-col items-start gap-3 sm:items-end">
               <p
                 className="text-[11px] text-black/35"
                 style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
@@ -6610,18 +6619,23 @@ function MerchPage({
           </div>
 
           <div className="mx-5 mb-10 max-w-5xl border-y border-black/10 py-6 text-sm leading-7 text-black/62 sm:mx-8 lg:mx-12 lg:text-base">
-            <p>
-              The Official Shiloh 2026 Merchandise collection brings together conference apparel, GoodNews World items,
-              and the required Baptism Set for guests preparing for Shiloh Season. Products shown here are official
-              Shiloh-related items, with product imagery, checkout, and fulfillment connected to UebertAngel.org,
-              Programs.UebertAngel.org, and approved GoodNews World commerce systems.
-            </p>
-            <p className="mt-4">
-              Use this shop to review item details before checkout, confirm Baptism sizing, and move between Shiloh 2026
-              apparel and Baptism products. For search engines and guests, Shilohseason.com should be treated as the
-              official information page for these Shiloh product listings, while the external checkout providers remain
-              the transaction destinations.
-            </p>
+            {activeTab === 'BAPTISM' ? (
+              <>
+                <p>Pre-order the official Baptism Set required for guests participating in Baptism during Shiloh Season 2026.</p>
+                <p className="mt-4">
+                  Each set includes a Baptism Gown, Baptism Towel, and Slippers. Collect your Baptism Set at the GoodNews
+                  Store located in the Iconic Harare Hippodrome during Shiloh Season.
+                </p>
+              </>
+            ) : (
+              <>
+                <p>Shop official Shiloh 2026 apparel and GoodNews World merchandise before you arrive.</p>
+                <p className="mt-4">
+                  Pre-order online and collect your items at the GoodNews Store located in the Iconic Harare Hippodrome
+                  during Shiloh Season.
+                </p>
+              </>
+            )}
           </div>
 
           {/* ── Product Grid / Carousel ── */}
@@ -6658,7 +6672,7 @@ function MerchPage({
                     aria-label={`View ${product.name}`}
                   >
                     {/* ── Card Image Area ── */}
-                    <div className="relative overflow-hidden bg-[#EDEAE5]" style={{ aspectRatio: '4/5' }}>
+                    <div className="relative overflow-hidden bg-[#EDEAE5] p-3" style={{ aspectRatio: '4/5' }}>
                       {/* Badge */}
                       <span
                         className="absolute left-4 top-4 z-10 bg-white px-3 py-1 text-[9px] uppercase tracking-[0.22em] text-black"
@@ -6671,7 +6685,7 @@ function MerchPage({
                         <img
                           src={product.image}
                           alt={product.name}
-                          className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                          className="h-full w-full object-contain transition-transform duration-700 group-hover:scale-[1.02]"
                           loading="lazy"
                           decoding="async"
                           width="760"
@@ -6836,18 +6850,46 @@ function ProductPage({
     setActiveImageIndex(index);
   };
 
+  const baptismSetRequirementContent = (
+    <>
+      <p>The Baptism Set is REQUIRED for all guests participating in Baptism during Shiloh Season 2026.</p>
+      <p className="mt-4">
+        Choose a size that allows comfortable movement over modest clothing worn underneath the gown.
+      </p>
+      <p className="mt-4">Available Sizes: S, M, L, XL</p>
+    </>
+  );
+
+  const baptismSetAboutContent = (
+    <>
+      <p>The official Baptism Set for guests participating in Baptism during Shiloh Season 2026.</p>
+      <div className="mt-4">
+        <p>Each set includes:</p>
+        <ul className="mt-2 list-disc space-y-1 pl-5">
+          <li>Baptism Gown</li>
+          <li>Baptism Towel</li>
+          <li>Slippers</li>
+        </ul>
+      </div>
+    </>
+  );
+
+  const isBaptismSet = product.slug === 'baptism-gown';
+
   const accordionSections = [
     {
       title: 'About',
-      copy: product.description || 'A premium quality Shiloh Season merchandise item.',
+      copy: isBaptismSet ? baptismSetAboutContent : product.description || 'A premium quality Shiloh Season merchandise item.',
     },
     {
       title: 'Product details',
-      copy: product.detail || 'Made with fine materials, double-needle stitching, side-seamed construct, and optimized branding application.',
+      copy: isBaptismSet ? baptismSetRequirementContent : product.detail || 'Made with fine materials, double-needle stitching, side-seamed construct, and optimized branding application.',
     },
     {
       title: 'Size & Fit',
-      copy: 'Fits true to size. Choose your regular size for standard wear or size up for an oversized style statement.',
+      copy: isBaptismSet
+        ? baptismSetRequirementContent
+        : 'Fits true to size. Choose your regular size for standard wear or size up for an oversized style statement.',
     },
   ];
 
@@ -6946,60 +6988,50 @@ function ProductPage({
                       />
                     </button>
                     {openProductSections.includes(section.title) && (
-                      <p
+                      <div
                         className="pb-5 text-[0.82rem] leading-[1.8] text-black/50"
                         style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 800 }}
                       >
                         {section.copy}
-                      </p>
+                      </div>
                     )}
                   </div>
                 ))}
               </div>
-              {product.slug === 'baptism-gown' && product.variants && (
-                <div className="mt-8 border-y border-black/10 py-5">
-                  <h2
-                    className="text-[10px] uppercase tracking-[0.24em] text-black"
-                    style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
-                  >
-                    Baptism size variations
-                  </h2>
-                  <div className="mt-4 grid grid-cols-2 gap-2">
-                    {product.variants.map((variant) => (
-                      <div key={variant.id} className="rounded-lg border border-black/10 bg-white/55 px-3 py-2 text-xs text-black/58">
-                        <span className="font-bold text-black">#{variant.id}</span> size {variant.size}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-              {product.seoCopy && (
-                <section className="mt-8 space-y-4 text-[0.84rem] leading-7 text-black/55">
-                  <h2
-                    className="text-[10px] uppercase tracking-[0.24em] text-black"
-                    style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
-                  >
-                    Official product guidance
-                  </h2>
-                  {product.seoCopy.map((paragraph) => (
-                    <p key={paragraph}>{paragraph}</p>
-                  ))}
-                </section>
-              )}
               <div className="mt-8 rounded-xl border border-black/10 bg-white/55 p-4 text-xs leading-6 text-black/50">
-                <p>
-                  Products on this page are Shiloh-related official merchandise. Checkout, source imagery, and
-                  fulfillment may be provided by UebertAngel.org, Programs.UebertAngel.org, or approved GoodNews World
-                  systems.
-                </p>
-                {product.sourceUrl && (
-                  <a
-                    href={product.sourceUrl}
-                    className="mt-3 inline-flex font-semibold text-black underline decoration-black/20 underline-offset-4"
-                    rel="noopener noreferrer"
-                  >
-                    View source product at {product.sourceName ?? 'official store'}
-                  </a>
+                {isBaptismSet ? (
+                  <>
+                    <p className="font-bold text-black">Preparation & Collection</p>
+                    <p className="mt-3">
+                      Participants are encouraged to wear suitable dark clothing beneath the gown, such as dark leggings,
+                      long athletic bottoms, or a modest dark top.
+                    </p>
+                    <p className="mt-3">
+                      Dedicated changing facilities will be available on the Shiloh grounds for baptism participants.
+                    </p>
+                    <p className="mt-3">
+                      Pre-order online and collect your Baptism Set at the GoodNews Store at the Harare Hippodrome during
+                      Shiloh Season 2026.
+                    </p>
+                    <p className="mt-4 font-semibold text-black/65">Early ordering is recommended. Limited quantities available.</p>
+                  </>
+                ) : (
+                  <>
+                    <p>
+                      Products on this page are Shiloh-related official merchandise. Checkout, source imagery, and
+                      fulfillment may be provided by UebertAngel.org, Programs.UebertAngel.org, or approved GoodNews
+                      World systems.
+                    </p>
+                    {product.sourceUrl && (
+                      <a
+                        href={product.sourceUrl}
+                        className="mt-3 inline-flex font-semibold text-black underline decoration-black/20 underline-offset-4"
+                        rel="noopener noreferrer"
+                      >
+                        View source product at {product.sourceName ?? 'official store'}
+                      </a>
+                    )}
+                  </>
                 )}
               </div>
             </div>
@@ -7341,7 +7373,7 @@ function SchedulePage() {
     ['31 Aug - 3 Sep', 'Prophetic Retreat', 'Fort Moriah City'],
     ['4 September, 4:00 PM CAT', 'Shiloh Conference', 'Fort Moriah City'],
     ['5 September, 4:00 PM CAT', 'Shiloh Conference', 'Fort Moriah City'],
-    ['6 September, 11 AM CAT', 'Sunday Service', 'Harare Hippodrome'],
+    ['6 September, 11 AM CAT', 'Shiloh Conference', 'Fort Moriah City'],
     ['TBC', 'Baptism', 'Fort Moriah City'],
     ['6 Sep 7:00 PM CAT', "The Ra'ah Prophet Uebert Angel Birthday Celebration", 'Harare Hippodrome'],
   ];
@@ -7357,7 +7389,7 @@ function SchedulePage() {
             </h1>
             <p className="mt-4 max-w-3xl text-sm leading-[1.6] text-white/60 md:text-[15px]">
               Shiloh Season 2026 gathers every moment of encounter into one clear journey. From Prophetic Retreat to
-              the conference, Sunday service, and the Ra&apos;ah birthday celebration, plan your arrival with confidence
+              the conference sessions and the Ra&apos;ah birthday celebration, plan your arrival with confidence
               and prepare for a week of worship, teaching, honor, and transformation.
             </p>
           </div>
@@ -7406,7 +7438,7 @@ function SchedulePage() {
               },
               {
                 title: 'What happens on September 6?',
-                copy: "September 6 includes Sunday Service at Harare Hippodrome and The Ra'ah Prophet Uebert Angel Birthday Celebration later that evening.",
+                copy: "September 6 includes Shiloh Conference at Fort Moriah City and The Ra'ah Prophet Uebert Angel Birthday Celebration later that evening.",
               },
               {
                 title: 'How should guests prepare?',

@@ -916,9 +916,18 @@
                 </div>
                 <div class="c2-vip-price-card">
                   <span class="c2-vip-label">Price</span>
-                  <div class="c2-price"><span class="c2-price-amount" data-price>£4000</span> <span data-price-note></span></div>
+                  <div class="c2-price"><span class="c2-price-amount" data-price>$ 5300</span> <span data-price-note></span></div>
                 </div>
-                <button class="c2-btn" type="button" data-package="Prophetic Retreat" data-register-label>Register Now</button>
+                <a
+                  class="c2-btn"
+                  href="https://programs.uebertangel.org/product/2026/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-package="Prophetic Retreat"
+                  data-register-label
+                >
+                  Register Now
+                </a>
               </div>
               <div>
                 <p class="c2-vip-summary" data-summary>
@@ -926,7 +935,7 @@
                 </p>
                 <ul class="c2-list bordered bordered-top" data-feature-list>
                   <li>Prophetic Retreat access from 31 August to 3 September.</li>
-                  <li>Single occupancy needs and registration support for delegates preparing for the retreat.</li>
+                  <li>Includes private room accommodation from August 31 – September 3, 2026. Accommodation beyond September 3 is not included and must be arranged separately.</li>
                   <li>Teaching moments, spiritual alignment, and guided preparation at Fort Moriah City.</li>
                   <li>A dedicated pass for retreat guests who want clarity before arrival.</li>
                 </ul>
@@ -972,10 +981,12 @@
             price: '$6999',
             note: 'USD',
             label: 'VIP Ultimate Passes',
+            href: 'https://programs.uebertangel.org/product/shiloh-ultimate-pass/',
             summary:
               'A complete hosted experience for delegates who want premium access across every defining Shiloh Season moment.',
             features: [
               'Full VIP access to the Prophetic Retreat, Shiloh Conference, Sunday Service, and the Ra’ah Birthday Celebration.',
+              'Includes private room accommodation from August 31 – September 3, 2026. Accommodation beyond September 3 is not included and must be arranged separately.',
               'Reserved seating across major gatherings with priority arrival and hosted entry support.',
               'Official VIP transport coordination between selected partner hotels and Shiloh venues throughout the season.',
               'Access to private VIP lounges with complimentary refreshments and hospitality services.',
@@ -991,6 +1002,7 @@
             price: '$1000',
             note: 'USD',
             label: 'Shiloh VIP',
+            href: 'https://programs.uebertangel.org/product/shiloh-pass/',
             summary:
               'Premium conference access for guests seeking a more focused, elevated experience during the central Shiloh gathering.',
             features: [
@@ -1008,6 +1020,7 @@
             price: '$1000',
             note: 'USD',
             label: 'Birthday VVIP',
+            href: 'https://programs.uebertangel.org/product/birthday/',
             summary:
               'VIP access for the royal birthday celebration honoring the Ra’ah, Prophet Uebert Angel.',
             features: [
@@ -1018,14 +1031,15 @@
             ],
           },
           retreat: {
-            price: '£4000',
+            price: '$ 5300',
             note: '',
             label: 'Prophetic Retreat',
+            href: 'https://programs.uebertangel.org/product/2026/',
             summary:
               'A retreat pass shaped for focused teaching, spiritual preparation, and hosted retreat support.',
             features: [
               'Prophetic Retreat access from 31 August to 3 September.',
-              'Single occupancy needs and registration support for delegates preparing for the retreat.',
+              'Includes private room accommodation from August 31 – September 3, 2026. Accommodation beyond September 3 is not included and must be arranged separately.',
               'Teaching moments, spiritual alignment, and guided preparation at Fort Moriah City.',
               'A dedicated pass for retreat guests who want clarity before arrival.',
             ],
@@ -1072,6 +1086,7 @@
         const tabs = document.querySelectorAll('[data-pages]');
         const featureList = document.querySelector('[data-feature-list]');
         const summary = document.querySelector('[data-summary]');
+        const registerLink = document.querySelector('[data-register-label]');
         const transportTabs = document.querySelectorAll('[data-transport]');
         const transportPrice = document.querySelector('[data-transport-price]');
         const transportNote = document.querySelector('[data-transport-note]');
@@ -1089,7 +1104,10 @@
           priceNote.textContent = pass.note;
           summary.textContent = pass.summary;
           featureList.innerHTML = pass.features.map((feature) => `<li>${feature}</li>`).join('');
-          document.querySelector('[data-register-label]').dataset.package = pass.label;
+          registerLink.dataset.package = pass.label;
+          registerLink.href = buildReferrerUrl(pass.href);
+          registerLink.target = '_blank';
+          registerLink.rel = 'noopener noreferrer';
           if (price.textContent === formatted) return;
 
           price.classList.add('c2-flip');
@@ -1127,16 +1145,22 @@
             delete transportRegister.dataset.checkoutProduct;
             delete transportRegister.dataset.quantity;
           } else if (pass.href) {
-            transportRegister.href = pass.href;
+            transportRegister.href = buildReferrerUrl(pass.href);
+            transportRegister.target = '_blank';
+            transportRegister.rel = 'noopener noreferrer';
             transportRegister.dataset.checkoutProduct = '13607';
             transportRegister.dataset.quantity = '1';
             delete transportRegister.dataset.formUrl;
           } else {
             if (pass.formUrl) {
               transportRegister.href = '#free-shuttle-registration';
+              transportRegister.removeAttribute('target');
+              transportRegister.removeAttribute('rel');
               transportRegister.dataset.formUrl = pass.formUrl;
             } else {
               transportRegister.href = '#';
+              transportRegister.removeAttribute('target');
+              transportRegister.removeAttribute('rel');
               delete transportRegister.dataset.formUrl;
             }
             delete transportRegister.dataset.checkoutProduct;
@@ -1272,10 +1296,8 @@
           }
         });
 
-        document.querySelectorAll('[data-checkout-product]').forEach((link) => {
-          const quantity = Number(link.dataset.quantity || '1') || 1;
-          link.href = `https://programs.uebertangel.org/checkout/?add-to-cart=${link.dataset.checkoutProduct}&quantity=${quantity}`;
-        });
+        render();
+        renderTransport();
 
         document.querySelectorAll('button.c2-btn').forEach((button) => {
           button.addEventListener('click', () => {
@@ -1286,7 +1308,6 @@
             console.log('[c2] contact requested:', label);
           });
         });
-        renderTransport();
         setInterval(renderTransport, 60 * 1000);
       })();
     </script>
