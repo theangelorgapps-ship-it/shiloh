@@ -6766,7 +6766,7 @@ function ProductPage({
   const [selectedVariantId, setSelectedVariantId] = useState(product?.variants?.[0]?.id ?? '');
   const [selectedColor, setSelectedColor] = useState(product?.colors?.[0]?.name ?? 'Default');
   const [selectedSize, setSelectedSize] = useState(getDefaultProductSize(product));
-  const [openProductSections, setOpenProductSections] = useState<string[]>(['About']);
+  const [openProductSections, setOpenProductSections] = useState<string[]>([]);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isAddedSuccess, setIsAddedSuccess] = useState(false);
   const mobileGalleryRef = useRef<HTMLDivElement>(null);
@@ -6777,6 +6777,7 @@ function ProductPage({
       setSelectedVariantId(product.variants?.[0]?.id ?? '');
       setSelectedColor(product.colors?.[0]?.name ?? 'Default');
       setSelectedSize(getDefaultProductSize(product));
+      setOpenProductSections([]);
       setActiveImageIndex(0);
       setIsAddedSuccess(false);
     }
@@ -6852,11 +6853,8 @@ function ProductPage({
 
   const baptismSetRequirementContent = (
     <>
-      <p>The Baptism Set is REQUIRED for all guests participating in Baptism during Shiloh Season 2026.</p>
-      <p className="mt-4">
-        Choose a size that allows comfortable movement over modest clothing worn underneath the gown.
-      </p>
-      <p className="mt-4">Available Sizes: S, M, L, XL</p>
+      <p>Required for Baptism participants during Shiloh Season 2026.</p>
+      <p className="mt-4">Sizes: S, M, L, XL</p>
     </>
   );
 
@@ -6875,15 +6873,25 @@ function ProductPage({
   );
 
   const isBaptismSet = product.slug === 'baptism-gown';
+  const compactProductSummary = isBaptismSet
+    ? 'Gown, towel, and slippers included.'
+    : 'Official Shiloh Season merchandise.';
+  const compactProductDetails = (
+    <>
+      {product.category && <p>{product.category}</p>}
+      {sizeOptions.length > 0 && <p className="mt-4">Sizes: {sizeOptions.join(', ')}</p>}
+      {colorOptions.length > 0 && <p className="mt-4">Colours: {colorOptions.map((color) => color.name).join(', ')}</p>}
+    </>
+  );
 
   const accordionSections = [
     {
       title: 'About',
-      copy: isBaptismSet ? baptismSetAboutContent : product.description || 'A premium quality Shiloh Season merchandise item.',
+      copy: isBaptismSet ? baptismSetAboutContent : compactProductSummary,
     },
     {
       title: 'Product details',
-      copy: isBaptismSet ? baptismSetRequirementContent : product.detail || 'Made with fine materials, double-needle stitching, side-seamed construct, and optimized branding application.',
+      copy: isBaptismSet ? baptismSetRequirementContent : compactProductDetails,
     },
     ...(!isBaptismSet
       ? [
@@ -6958,14 +6966,12 @@ function ProductPage({
               >
                 {selectedPriceLabel}
               </p>
-              {product.description && (
-                <p
-                  className="mt-5 max-w-sm text-[0.85rem] leading-[1.8] text-black/55"
-                  style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 800 }}
-                >
-                  {product.description}
-                </p>
-              )}
+              <p
+                className="mt-5 max-w-sm text-[0.85rem] leading-[1.7] text-black/55"
+                style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 800 }}
+              >
+                {compactProductSummary}
+              </p>
 
 
               {/* Accordion */}
@@ -7005,24 +7011,15 @@ function ProductPage({
                   <>
                     <p className="font-bold text-black">Preparation & Collection</p>
                     <p className="mt-3">
-                      Participants are encouraged to wear suitable dark clothing beneath the gown, such as dark leggings,
-                      long athletic bottoms, or a modest dark top.
-                    </p>
-                    <p className="mt-3">
-                      Dedicated changing facilities will be available on the Shiloh grounds for baptism participants.
-                    </p>
-                    <p className="mt-3">
-                      Pre-order online and collect your Baptism Set at the GoodNews Store at the Harare Hippodrome during
-                      Shiloh Season 2026.
+                      Wear dark clothing underneath. Collect at the GoodNews Store at Harare Hippodrome during Shiloh Season.
                     </p>
                     <p className="mt-4 font-semibold text-black/65">Early ordering is recommended. Limited quantities available.</p>
                   </>
                 ) : (
                   <>
+                    <p className="font-bold text-black">Official Checkout</p>
                     <p>
-                      Products on this page are Shiloh-related official merchandise. Checkout, source imagery, and
-                      fulfillment may be provided by UebertAngel.org, Programs.UebertAngel.org, or approved GoodNews
-                      World systems.
+                      Fulfillment is handled by approved GoodNews World systems.
                     </p>
                     {product.sourceUrl && (
                       <a
