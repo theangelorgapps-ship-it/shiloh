@@ -6885,12 +6885,14 @@ function ProductPage({
       title: 'Product details',
       copy: isBaptismSet ? baptismSetRequirementContent : product.detail || 'Made with fine materials, double-needle stitching, side-seamed construct, and optimized branding application.',
     },
-    {
-      title: 'Size & Fit',
-      copy: isBaptismSet
-        ? baptismSetRequirementContent
-        : 'Fits true to size. Choose your regular size for standard wear or size up for an oversized style statement.',
-    },
+    ...(!isBaptismSet
+      ? [
+          {
+            title: 'Size & Fit',
+            copy: 'Fits true to size. Choose your regular size for standard wear or size up for an oversized style statement.',
+          },
+        ]
+      : []),
   ];
 
   const toggleProductSection = (title: string) => {
@@ -7488,42 +7490,8 @@ function PassesPage() {
   };
 
   return (
-    <main className="min-h-screen bg-black pt-44 md:pt-28">
+    <main className="min-h-screen bg-black pt-44 md:pt-10">
       <HeroHeader sticky />
-      <section className="px-4 pb-10 text-primary sm:px-6 md:px-10">
-        <div className="mx-auto max-w-6xl border-b border-primary/10 pb-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.34em] text-primary/38">Official access</p>
-          <h1 className="mt-4 max-w-4xl font-serif text-5xl italic leading-none text-primary sm:text-6xl">
-            Shiloh 2026 Passes
-          </h1>
-          <div className="mt-6 grid gap-6 text-sm leading-7 text-primary/62 md:grid-cols-[1.1fr_0.9fr] md:text-base">
-            <div className="space-y-4">
-              <p>
-                Use this page to review official Shiloh 2026 pass options before moving into registration or checkout.
-                Passes support conference access planning, shuttle movement, parking, VIP experiences, and birthday
-                celebration access for guests attending Fort Moriah City and Harare Hippodrome.
-              </p>
-              <p>
-                Shilohseason.com should be indexed as the official information page for passes. Checkout and programme
-                flows may open through Programs.UebertAngel.org, GoodNews World forms, or approved registration systems.
-                Keep confirmation emails and order references available when arriving on site.
-              </p>
-            </div>
-            <div className="grid gap-3">
-              {[
-                'Free registration and selected local shuttle options',
-                'Shiloh parking and shuttle information',
-                'VIP access and premium guest support',
-                "The Ra'ah Birthday Celebration access",
-              ].map((item) => (
-                <div key={item} className="rounded-xl border border-primary/10 bg-white/[0.045] px-4 py-3 text-primary/72">
-                  {item}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
       <iframe
         ref={frameRef}
         src="/component2.html?v=dark-passes-vip-content"
