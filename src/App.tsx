@@ -49,6 +49,7 @@ import {
 } from 'framer-motion';
 import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 'react';
 import type { LucideIcon } from 'lucide-react';
+import { ProductDetailPage } from '@/components/ui/product-detail-page';
 import shilohPortrait from './assets/shiloh-portrait.png';
 
 const primaryText = '#E1E0CC';
@@ -2939,6 +2940,7 @@ type MerchProduct = {
   icon: LucideIcon;
   image?: string;
   imagePosition?: string;
+  variantImages?: Record<string, string>;
   variants?: MerchVariant[];
   sizes?: string[];
   defaultSize?: string;
@@ -2951,6 +2953,7 @@ type MerchVariant = {
   label: string;
   size?: string;
   color?: string;
+  image?: string;
   checkoutProductId?: number;
   priceUsd?: number;
   priceLabel?: string;
@@ -2968,14 +2971,25 @@ const merchProducts: MerchProduct[] = [
   {
     slug: 'shiloh-season-jumper',
     name: 'Pre Order - Shiloh Season Jumper',
-    priceUsd: 35,
-    priceLabel: '$35 USD',
+    priceUsd: 30,
+    priceLabel: '$30 USD',
     category: 'SHILOH 2026',
     description: 'Step into your Shiloh Season in style, a season of surrender, growth, breakthrough and divine encounter! The Shiloh Season Jumper is more than apparel, it\'s a statement of faith and expectation. Inspired by the biblical place of encounter and transformation, this piece represents a season where prayers are answered, purpose is revealed, and God\'s presence is experienced deeply. With a comfortable modern fit, this tee is designed for everyday wear while carrying a powerful message. Whether worn casually, to church gatherings, conferences or community events, it serves as a reminder that every season has purpose. And this Shiloh is YOUR Shiloh Season!',
     detail: 'Step into your Shiloh Season in style, a season of surrender, growth, breakthrough and divine encounter! The Shiloh Season Jumper is more than apparel, it\'s a statement of faith and expectation. Inspired by the biblical place of encounter and transformation, this piece represents a season where prayers are answered, purpose is revealed, and God\'s presence is experienced deeply. With a comfortable modern fit, this tee is designed for everyday wear while carrying a powerful message. Whether worn casually, to church gatherings, conferences or community events, it serves as a reminder that every season has purpose. And this Shiloh is YOUR Shiloh Season!',
     accent: 'from-[#E1E0CC] to-[#746C4F]',
     icon: Shirt,
-    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Jumper-Shiloh.webp',
+    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Jumper-Red-Gold.webp',
+    variantImages: {
+      Black: 'https://uebertangel.org/wp-content/uploads/2026/06/Jumper-Black-Gold.webp',
+      'Charcoal Grey': 'https://uebertangel.org/wp-content/uploads/2026/06/Jumper-Grey-Gold.webp',
+      Pink: 'https://uebertangel.org/wp-content/uploads/2026/06/Jumper-Pink-Gold.webp',
+      Red: 'https://uebertangel.org/wp-content/uploads/2026/06/Jumper-Red-Gold.webp',
+      Blue: 'https://uebertangel.org/wp-content/uploads/2026/06/Jumper-Blue-Gold.webp',
+      Green: 'https://uebertangel.org/wp-content/uploads/2026/06/Jumper-Green-Gold.webp',
+      Maroon: 'https://uebertangel.org/wp-content/uploads/2026/06/Jumper-Maroon-Gold.webp',
+      White: 'https://uebertangel.org/wp-content/uploads/2026/06/Jumper-White-Gold.webp',
+      Brown: 'https://uebertangel.org/wp-content/uploads/2026/06/Jumper-Brown-Gold_1.webp',
+    },
     sizes: ["S", "M", "L", "XL", "XXL", "XXXL", "XXXXL"],
     colors: [{ "name": "Black", "className": "#111111" }, { "name": "Charcoal Grey", "className": "#333333" }, { "name": "Pink", "className": "#ad1457" }, { "name": "Red", "className": "#d32f2f" }, { "name": "Blue", "className": "#1976d2" }, { "name": "Green", "className": "#2e7d32" }, { "name": "Maroon", "className": "#800000" }, { "name": "White", "className": "#ffffff" }, { "name": "Brown", "className": "#5d4037" }],
     variants: [
@@ -2983,8 +2997,8 @@ const merchProducts: MerchProduct[] = [
         id: '33022',
         label: 'Size: S / Color: Black',
         checkoutProductId: 33022,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'S',
         color: 'Black'
       },
@@ -2992,8 +3006,8 @@ const merchProducts: MerchProduct[] = [
         id: '33023',
         label: 'Size: M / Color: Black',
         checkoutProductId: 33023,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'M',
         color: 'Black'
       },
@@ -3001,8 +3015,8 @@ const merchProducts: MerchProduct[] = [
         id: '33024',
         label: 'Size: L / Color: Black',
         checkoutProductId: 33024,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'L',
         color: 'Black'
       },
@@ -3010,8 +3024,8 @@ const merchProducts: MerchProduct[] = [
         id: '33025',
         label: 'Size: XL / Color: Black',
         checkoutProductId: 33025,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XL',
         color: 'Black'
       },
@@ -3019,8 +3033,8 @@ const merchProducts: MerchProduct[] = [
         id: '33026',
         label: 'Size: XXL / Color: Black',
         checkoutProductId: 33026,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXL',
         color: 'Black'
       },
@@ -3028,8 +3042,8 @@ const merchProducts: MerchProduct[] = [
         id: '33027',
         label: 'Size: XXXL / Color: Black',
         checkoutProductId: 33027,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXXL',
         color: 'Black'
       },
@@ -3037,8 +3051,8 @@ const merchProducts: MerchProduct[] = [
         id: '33028',
         label: 'Size: XXXXL / Color: Black',
         checkoutProductId: 33028,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXXXL',
         color: 'Black'
       },
@@ -3046,8 +3060,8 @@ const merchProducts: MerchProduct[] = [
         id: '33029',
         label: 'Size: S / Color: Charcoal Grey',
         checkoutProductId: 33029,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'S',
         color: 'Charcoal Grey'
       },
@@ -3055,8 +3069,8 @@ const merchProducts: MerchProduct[] = [
         id: '33030',
         label: 'Size: M / Color: Charcoal Grey',
         checkoutProductId: 33030,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'M',
         color: 'Charcoal Grey'
       },
@@ -3064,8 +3078,8 @@ const merchProducts: MerchProduct[] = [
         id: '33031',
         label: 'Size: L / Color: Charcoal Grey',
         checkoutProductId: 33031,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'L',
         color: 'Charcoal Grey'
       },
@@ -3073,8 +3087,8 @@ const merchProducts: MerchProduct[] = [
         id: '33032',
         label: 'Size: XL / Color: Charcoal Grey',
         checkoutProductId: 33032,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XL',
         color: 'Charcoal Grey'
       },
@@ -3082,8 +3096,8 @@ const merchProducts: MerchProduct[] = [
         id: '33033',
         label: 'Size: XXL / Color: Charcoal Grey',
         checkoutProductId: 33033,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXL',
         color: 'Charcoal Grey'
       },
@@ -3091,8 +3105,8 @@ const merchProducts: MerchProduct[] = [
         id: '33034',
         label: 'Size: XXXL / Color: Charcoal Grey',
         checkoutProductId: 33034,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXXL',
         color: 'Charcoal Grey'
       },
@@ -3100,8 +3114,8 @@ const merchProducts: MerchProduct[] = [
         id: '33035',
         label: 'Size: XXXXL / Color: Charcoal Grey',
         checkoutProductId: 33035,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXXXL',
         color: 'Charcoal Grey'
       },
@@ -3109,8 +3123,8 @@ const merchProducts: MerchProduct[] = [
         id: '33036',
         label: 'Size: S / Color: Pink',
         checkoutProductId: 33036,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'S',
         color: 'Pink'
       },
@@ -3118,8 +3132,8 @@ const merchProducts: MerchProduct[] = [
         id: '33037',
         label: 'Size: M / Color: Pink',
         checkoutProductId: 33037,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'M',
         color: 'Pink'
       },
@@ -3127,8 +3141,8 @@ const merchProducts: MerchProduct[] = [
         id: '33038',
         label: 'Size: L / Color: Pink',
         checkoutProductId: 33038,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'L',
         color: 'Pink'
       },
@@ -3136,8 +3150,8 @@ const merchProducts: MerchProduct[] = [
         id: '33039',
         label: 'Size: XL / Color: Pink',
         checkoutProductId: 33039,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XL',
         color: 'Pink'
       },
@@ -3145,8 +3159,8 @@ const merchProducts: MerchProduct[] = [
         id: '33040',
         label: 'Size: XXL / Color: Pink',
         checkoutProductId: 33040,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXL',
         color: 'Pink'
       },
@@ -3154,8 +3168,8 @@ const merchProducts: MerchProduct[] = [
         id: '33041',
         label: 'Size: XXXL / Color: Pink',
         checkoutProductId: 33041,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXXL',
         color: 'Pink'
       },
@@ -3163,8 +3177,8 @@ const merchProducts: MerchProduct[] = [
         id: '33042',
         label: 'Size: XXXXL / Color: Pink',
         checkoutProductId: 33042,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXXXL',
         color: 'Pink'
       },
@@ -3172,8 +3186,8 @@ const merchProducts: MerchProduct[] = [
         id: '33043',
         label: 'Size: S / Color: Red',
         checkoutProductId: 33043,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'S',
         color: 'Red'
       },
@@ -3181,8 +3195,8 @@ const merchProducts: MerchProduct[] = [
         id: '33044',
         label: 'Size: M / Color: Red',
         checkoutProductId: 33044,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'M',
         color: 'Red'
       },
@@ -3190,8 +3204,8 @@ const merchProducts: MerchProduct[] = [
         id: '33045',
         label: 'Size: L / Color: Red',
         checkoutProductId: 33045,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'L',
         color: 'Red'
       },
@@ -3199,8 +3213,8 @@ const merchProducts: MerchProduct[] = [
         id: '33046',
         label: 'Size: XL / Color: Red',
         checkoutProductId: 33046,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XL',
         color: 'Red'
       },
@@ -3208,8 +3222,8 @@ const merchProducts: MerchProduct[] = [
         id: '33047',
         label: 'Size: XXL / Color: Red',
         checkoutProductId: 33047,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXL',
         color: 'Red'
       },
@@ -3217,8 +3231,8 @@ const merchProducts: MerchProduct[] = [
         id: '33048',
         label: 'Size: XXXL / Color: Red',
         checkoutProductId: 33048,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXXL',
         color: 'Red'
       },
@@ -3226,8 +3240,8 @@ const merchProducts: MerchProduct[] = [
         id: '33049',
         label: 'Size: XXXXL / Color: Red',
         checkoutProductId: 33049,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXXXL',
         color: 'Red'
       },
@@ -3235,8 +3249,8 @@ const merchProducts: MerchProduct[] = [
         id: '33050',
         label: 'Size: S / Color: Blue',
         checkoutProductId: 33050,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'S',
         color: 'Blue'
       },
@@ -3244,8 +3258,8 @@ const merchProducts: MerchProduct[] = [
         id: '33051',
         label: 'Size: M / Color: Blue',
         checkoutProductId: 33051,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'M',
         color: 'Blue'
       },
@@ -3253,8 +3267,8 @@ const merchProducts: MerchProduct[] = [
         id: '33052',
         label: 'Size: L / Color: Blue',
         checkoutProductId: 33052,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'L',
         color: 'Blue'
       },
@@ -3262,8 +3276,8 @@ const merchProducts: MerchProduct[] = [
         id: '33053',
         label: 'Size: XL / Color: Blue',
         checkoutProductId: 33053,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XL',
         color: 'Blue'
       },
@@ -3271,8 +3285,8 @@ const merchProducts: MerchProduct[] = [
         id: '33054',
         label: 'Size: XXL / Color: Blue',
         checkoutProductId: 33054,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXL',
         color: 'Blue'
       },
@@ -3280,8 +3294,8 @@ const merchProducts: MerchProduct[] = [
         id: '33055',
         label: 'Size: XXXL / Color: Blue',
         checkoutProductId: 33055,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXXL',
         color: 'Blue'
       },
@@ -3289,8 +3303,8 @@ const merchProducts: MerchProduct[] = [
         id: '33056',
         label: 'Size: XXXXL / Color: Blue',
         checkoutProductId: 33056,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXXXL',
         color: 'Blue'
       },
@@ -3298,8 +3312,8 @@ const merchProducts: MerchProduct[] = [
         id: '33057',
         label: 'Size: S / Color: Green',
         checkoutProductId: 33057,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'S',
         color: 'Green'
       },
@@ -3307,8 +3321,8 @@ const merchProducts: MerchProduct[] = [
         id: '33058',
         label: 'Size: M / Color: Green',
         checkoutProductId: 33058,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'M',
         color: 'Green'
       },
@@ -3316,8 +3330,8 @@ const merchProducts: MerchProduct[] = [
         id: '33059',
         label: 'Size: L / Color: Green',
         checkoutProductId: 33059,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'L',
         color: 'Green'
       },
@@ -3325,8 +3339,8 @@ const merchProducts: MerchProduct[] = [
         id: '33060',
         label: 'Size: XL / Color: Green',
         checkoutProductId: 33060,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XL',
         color: 'Green'
       },
@@ -3334,8 +3348,8 @@ const merchProducts: MerchProduct[] = [
         id: '33061',
         label: 'Size: XXL / Color: Green',
         checkoutProductId: 33061,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXL',
         color: 'Green'
       },
@@ -3343,8 +3357,8 @@ const merchProducts: MerchProduct[] = [
         id: '33062',
         label: 'Size: XXXL / Color: Green',
         checkoutProductId: 33062,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXXL',
         color: 'Green'
       },
@@ -3352,8 +3366,8 @@ const merchProducts: MerchProduct[] = [
         id: '33063',
         label: 'Size: XXXXL / Color: Green',
         checkoutProductId: 33063,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXXXL',
         color: 'Green'
       },
@@ -3361,8 +3375,8 @@ const merchProducts: MerchProduct[] = [
         id: '33064',
         label: 'Size: S / Color: Maroon',
         checkoutProductId: 33064,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'S',
         color: 'Maroon'
       },
@@ -3370,8 +3384,8 @@ const merchProducts: MerchProduct[] = [
         id: '33065',
         label: 'Size: M / Color: Maroon',
         checkoutProductId: 33065,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'M',
         color: 'Maroon'
       },
@@ -3379,8 +3393,8 @@ const merchProducts: MerchProduct[] = [
         id: '33066',
         label: 'Size: L / Color: Maroon',
         checkoutProductId: 33066,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'L',
         color: 'Maroon'
       },
@@ -3388,8 +3402,8 @@ const merchProducts: MerchProduct[] = [
         id: '33067',
         label: 'Size: XL / Color: Maroon',
         checkoutProductId: 33067,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XL',
         color: 'Maroon'
       },
@@ -3397,8 +3411,8 @@ const merchProducts: MerchProduct[] = [
         id: '33068',
         label: 'Size: XXL / Color: Maroon',
         checkoutProductId: 33068,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXL',
         color: 'Maroon'
       },
@@ -3406,8 +3420,8 @@ const merchProducts: MerchProduct[] = [
         id: '33069',
         label: 'Size: XXXL / Color: Maroon',
         checkoutProductId: 33069,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXXL',
         color: 'Maroon'
       },
@@ -3415,8 +3429,8 @@ const merchProducts: MerchProduct[] = [
         id: '33070',
         label: 'Size: XXXXL / Color: Maroon',
         checkoutProductId: 33070,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXXXL',
         color: 'Maroon'
       },
@@ -3424,8 +3438,8 @@ const merchProducts: MerchProduct[] = [
         id: '33071',
         label: 'Size: S / Color: White',
         checkoutProductId: 33071,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'S',
         color: 'White'
       },
@@ -3433,8 +3447,8 @@ const merchProducts: MerchProduct[] = [
         id: '33072',
         label: 'Size: M / Color: White',
         checkoutProductId: 33072,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'M',
         color: 'White'
       },
@@ -3442,8 +3456,8 @@ const merchProducts: MerchProduct[] = [
         id: '33073',
         label: 'Size: L / Color: White',
         checkoutProductId: 33073,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'L',
         color: 'White'
       },
@@ -3451,8 +3465,8 @@ const merchProducts: MerchProduct[] = [
         id: '33074',
         label: 'Size: XL / Color: White',
         checkoutProductId: 33074,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XL',
         color: 'White'
       },
@@ -3460,8 +3474,8 @@ const merchProducts: MerchProduct[] = [
         id: '33075',
         label: 'Size: XXL / Color: White',
         checkoutProductId: 33075,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXL',
         color: 'White'
       },
@@ -3469,8 +3483,8 @@ const merchProducts: MerchProduct[] = [
         id: '33076',
         label: 'Size: XXXL / Color: White',
         checkoutProductId: 33076,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXXL',
         color: 'White'
       },
@@ -3478,8 +3492,8 @@ const merchProducts: MerchProduct[] = [
         id: '33077',
         label: 'Size: XXXXL / Color: White',
         checkoutProductId: 33077,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXXXL',
         color: 'White'
       },
@@ -3487,8 +3501,8 @@ const merchProducts: MerchProduct[] = [
         id: '33078',
         label: 'Size: S / Color: Brown',
         checkoutProductId: 33078,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'S',
         color: 'Brown'
       },
@@ -3496,8 +3510,8 @@ const merchProducts: MerchProduct[] = [
         id: '33079',
         label: 'Size: M / Color: Brown',
         checkoutProductId: 33079,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'M',
         color: 'Brown'
       },
@@ -3505,8 +3519,8 @@ const merchProducts: MerchProduct[] = [
         id: '33080',
         label: 'Size: L / Color: Brown',
         checkoutProductId: 33080,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'L',
         color: 'Brown'
       },
@@ -3514,8 +3528,8 @@ const merchProducts: MerchProduct[] = [
         id: '33081',
         label: 'Size: XL / Color: Brown',
         checkoutProductId: 33081,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XL',
         color: 'Brown'
       },
@@ -3523,8 +3537,8 @@ const merchProducts: MerchProduct[] = [
         id: '33082',
         label: 'Size: XXL / Color: Brown',
         checkoutProductId: 33082,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXL',
         color: 'Brown'
       },
@@ -3532,8 +3546,8 @@ const merchProducts: MerchProduct[] = [
         id: '33083',
         label: 'Size: XXXL / Color: Brown',
         checkoutProductId: 33083,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXXL',
         color: 'Brown'
       },
@@ -3541,8 +3555,8 @@ const merchProducts: MerchProduct[] = [
         id: '33084',
         label: 'Size: XXXXL / Color: Brown',
         checkoutProductId: 33084,
-        priceUsd: 35,
-        priceLabel: '$35 USD',
+        priceUsd: 30,
+        priceLabel: '$30 USD',
         size: 'XXXXL',
         color: 'Brown'
       }
@@ -3558,7 +3572,18 @@ const merchProducts: MerchProduct[] = [
     detail: 'Step into your Shiloh Season in style, a season of surrender, growth, breakthrough and divine encounter! The Shiloh Season T-Shirt is more than apparel, it&#8217;s a statement of faith and expectation. Inspired by the biblical place of encounter and transformation, this piece represents a season where prayers are answered, purpose is revealed, and God&#8217;s presence is experienced deeply. With a comfortable modern fit, this tee is designed for everyday wear while carrying a powerful message. Whether worn casually, to church gatherings, conferences or community events, it serves as a reminder that every season has purpose. And this Shiloh is YOUR Shiloh Season!',
     accent: 'from-[#E1E0CC] to-[#746C4F]',
     icon: Shirt,
-    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Long-Sleeve-Shiloh.webp',
+    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Longsleeve-Green-Gold.webp',
+    variantImages: {
+      'Black/Silver Logo': 'https://uebertangel.org/wp-content/uploads/2026/06/Longsleeve-Black-Silver.webp',
+      'White/Silver Logo': 'https://uebertangel.org/wp-content/uploads/2026/06/Longsleeve-White-Silver_1.webp',
+      'Red/Blue Logo': 'https://uebertangel.org/wp-content/uploads/2026/06/Longsleeve-Red-Gold.webp',
+      'Green/Gold Logo': 'https://uebertangel.org/wp-content/uploads/2026/06/Longsleeve-Green-Gold.webp',
+      'Blue/Silver Logo': 'https://uebertangel.org/wp-content/uploads/2026/06/Longsleeve-Blue-Silver.webp',
+      'Cream/Gold Logo': 'https://uebertangel.org/wp-content/uploads/2026/06/Longsleeve-Cream-Gold.webp',
+      'Purple/Blue Logo': 'https://uebertangel.org/wp-content/uploads/2026/06/Longsleeve-Purple-Gold_1.webp',
+      'Pink/Silver Logo': 'https://uebertangel.org/wp-content/uploads/2026/06/Longsleeve-Pink-Silver.webp',
+      'Maroon/Gold Logo': 'https://uebertangel.org/wp-content/uploads/2026/06/Longsleeve-Tee-Gold.webp',
+    },
     sizes: ["S", "M", "L", "XL", "XXL", "XXXL", "XXXXL"],
     colors: [{ "name": "Black/Silver Logo", "className": "linear-gradient(135deg, #111 50%, #c0c0c0 50%)" }, { "name": "White/Silver Logo", "className": "linear-gradient(135deg, #fff 50%, #c0c0c0 50%)" }, { "name": "Red/Blue Logo", "className": "linear-gradient(135deg, #d32f2f 50%, #1976d2 50%)" }, { "name": "Green/Gold Logo", "className": "linear-gradient(135deg, #2e7d32 50%, #ffd700 50%)" }, { "name": "Blue/Silver Logo", "className": "linear-gradient(135deg, #1976d2 50%, #c0c0c0 50%)" }, { "name": "Cream/Gold Logo", "className": "linear-gradient(135deg, #f5f5dc 50%, #ffd700 50%)" }, { "name": "Purple/Blue Logo", "className": "linear-gradient(135deg, #7b1fa2 50%, #1976d2 50%)" }, { "name": "Pink/Silver Logo", "className": "linear-gradient(135deg, #ad1457 50%, #c0c0c0 50%)" }, { "name": "Maroon/Gold Logo", "className": "linear-gradient(135deg, #800000 50%, #ffd700 50%)" }],
     variants: [
@@ -4134,14 +4159,25 @@ const merchProducts: MerchProduct[] = [
   {
     slug: 'shiloh-season-silver-logo-t-shirt',
     name: 'Pre Order - Shiloh Season Silver Logo T-Shirt',
-    priceUsd: 20,
-    priceLabel: '$20 USD',
+    priceUsd: 15,
+    priceLabel: '$15 USD',
     category: 'SHILOH 2026',
     description: 'Step into your Shiloh Season in style, a season of surrender, growth, breakthrough and divine encounter! The Shiloh Season T-Shirt is more than apparel, it&#8217;s a statement of faith and expectation. Inspired by the biblical place of encounter and transformation, this piece represents a season where prayers are answered, purpose is revealed, and God&#8217;s presence is experienced deeply. With a comfortable modern fit, this tee is designed for everyday wear while carrying a powerful message. Whether worn casually, to church gatherings, conferences or community events, it serves as a reminder that every season has purpose. And this Shiloh is YOUR Shiloh Season!',
     detail: 'Step into your Shiloh Season in style, a season of surrender, growth, breakthrough and divine encounter! The Shiloh Season T-Shirt is more than apparel, it&#8217;s a statement of faith and expectation. Inspired by the biblical place of encounter and transformation, this piece represents a season where prayers are answered, purpose is revealed, and God&#8217;s presence is experienced deeply. With a comfortable modern fit, this tee is designed for everyday wear while carrying a powerful message. Whether worn casually, to church gatherings, conferences or community events, it serves as a reminder that every season has purpose. And this Shiloh is YOUR Shiloh Season!',
     accent: 'from-[#E1E0CC] to-[#746C4F]',
     icon: Shirt,
-    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Green-Silver.webp',
+    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-Maroon_Silver-Tee.webp',
+    variantImages: {
+      Black: 'https://uebertangel.org/wp-content/uploads/2026/06/Black-Silver.webp',
+      White: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-White_Silver-Tee.webp',
+      Green: 'https://uebertangel.org/wp-content/uploads/2026/06/Green-Silver.webp',
+      Red: 'https://uebertangel.org/wp-content/uploads/2026/06/Red-Silver.webp',
+      Cream: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-Cream_Silver-Logo.webp',
+      Blue: 'https://uebertangel.org/wp-content/uploads/2026/06/Navy-Silveer.webp',
+      Purple: 'https://uebertangel.org/wp-content/uploads/2026/06/Purple-Silver.webp',
+      Pink: 'https://uebertangel.org/wp-content/uploads/2026/06/Pink-Silver.webp',
+      Maroon: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-Maroon_Silver-Tee.webp',
+    },
     sizes: ["S", "M", "L", "XL", "XXL", "XXXL", "XXXXL"],
     colors: [{ "name": "Black", "className": "#111111" }, { "name": "White", "className": "#ffffff" }, { "name": "Green", "className": "#2e7d32" }, { "name": "Red", "className": "#d32f2f" }, { "name": "Cream", "className": "#f5f5dc" }, { "name": "Blue", "className": "#1976d2" }, { "name": "Purple", "className": "#7b1fa2" }, { "name": "Pink", "className": "#ad1457" }, { "name": "Maroon", "className": "#800000" }],
     variants: [
@@ -4149,8 +4185,8 @@ const merchProducts: MerchProduct[] = [
         id: '32889',
         label: 'Size: S / Color: Black',
         checkoutProductId: 32889,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Black'
       },
@@ -4158,8 +4194,8 @@ const merchProducts: MerchProduct[] = [
         id: '32890',
         label: 'Size: M / Color: Black',
         checkoutProductId: 32890,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Black'
       },
@@ -4167,8 +4203,8 @@ const merchProducts: MerchProduct[] = [
         id: '32891',
         label: 'Size: L / Color: Black',
         checkoutProductId: 32891,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Black'
       },
@@ -4176,8 +4212,8 @@ const merchProducts: MerchProduct[] = [
         id: '32892',
         label: 'Size: XL / Color: Black',
         checkoutProductId: 32892,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Black'
       },
@@ -4185,8 +4221,8 @@ const merchProducts: MerchProduct[] = [
         id: '32893',
         label: 'Size: XXL / Color: Black',
         checkoutProductId: 32893,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Black'
       },
@@ -4194,8 +4230,8 @@ const merchProducts: MerchProduct[] = [
         id: '32894',
         label: 'Size: XXXL / Color: Black',
         checkoutProductId: 32894,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Black'
       },
@@ -4203,8 +4239,8 @@ const merchProducts: MerchProduct[] = [
         id: '32895',
         label: 'Size: XXXXL / Color: Black',
         checkoutProductId: 32895,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Black'
       },
@@ -4212,8 +4248,8 @@ const merchProducts: MerchProduct[] = [
         id: '32896',
         label: 'Size: S / Color: White',
         checkoutProductId: 32896,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'White'
       },
@@ -4221,8 +4257,8 @@ const merchProducts: MerchProduct[] = [
         id: '32897',
         label: 'Size: M / Color: White',
         checkoutProductId: 32897,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'White'
       },
@@ -4230,8 +4266,8 @@ const merchProducts: MerchProduct[] = [
         id: '32898',
         label: 'Size: L / Color: White',
         checkoutProductId: 32898,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'White'
       },
@@ -4239,8 +4275,8 @@ const merchProducts: MerchProduct[] = [
         id: '32899',
         label: 'Size: XL / Color: White',
         checkoutProductId: 32899,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'White'
       },
@@ -4248,8 +4284,8 @@ const merchProducts: MerchProduct[] = [
         id: '32900',
         label: 'Size: XXL / Color: White',
         checkoutProductId: 32900,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'White'
       },
@@ -4257,8 +4293,8 @@ const merchProducts: MerchProduct[] = [
         id: '32901',
         label: 'Size: XXXL / Color: White',
         checkoutProductId: 32901,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'White'
       },
@@ -4266,8 +4302,8 @@ const merchProducts: MerchProduct[] = [
         id: '32902',
         label: 'Size: XXXXL / Color: White',
         checkoutProductId: 32902,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'White'
       },
@@ -4275,8 +4311,8 @@ const merchProducts: MerchProduct[] = [
         id: '32904',
         label: 'Size: S / Color: Green',
         checkoutProductId: 32904,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Green'
       },
@@ -4284,8 +4320,8 @@ const merchProducts: MerchProduct[] = [
         id: '32905',
         label: 'Size: M / Color: Green',
         checkoutProductId: 32905,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Green'
       },
@@ -4293,8 +4329,8 @@ const merchProducts: MerchProduct[] = [
         id: '32906',
         label: 'Size: L / Color: Green',
         checkoutProductId: 32906,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Green'
       },
@@ -4302,8 +4338,8 @@ const merchProducts: MerchProduct[] = [
         id: '32907',
         label: 'Size: XL / Color: Green',
         checkoutProductId: 32907,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Green'
       },
@@ -4311,8 +4347,8 @@ const merchProducts: MerchProduct[] = [
         id: '32908',
         label: 'Size: XXL / Color: Green',
         checkoutProductId: 32908,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Green'
       },
@@ -4320,8 +4356,8 @@ const merchProducts: MerchProduct[] = [
         id: '32909',
         label: 'Size: XXXL / Color: Green',
         checkoutProductId: 32909,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Green'
       },
@@ -4329,8 +4365,8 @@ const merchProducts: MerchProduct[] = [
         id: '32910',
         label: 'Size: XXXXL / Color: Green',
         checkoutProductId: 32910,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Green'
       },
@@ -4338,8 +4374,8 @@ const merchProducts: MerchProduct[] = [
         id: '32911',
         label: 'Size: S / Color: Red',
         checkoutProductId: 32911,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Red'
       },
@@ -4347,8 +4383,8 @@ const merchProducts: MerchProduct[] = [
         id: '32912',
         label: 'Size: M / Color: Red',
         checkoutProductId: 32912,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Red'
       },
@@ -4356,8 +4392,8 @@ const merchProducts: MerchProduct[] = [
         id: '32913',
         label: 'Size: L / Color: Red',
         checkoutProductId: 32913,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Red'
       },
@@ -4365,8 +4401,8 @@ const merchProducts: MerchProduct[] = [
         id: '32914',
         label: 'Size: XL / Color: Red',
         checkoutProductId: 32914,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Red'
       },
@@ -4374,8 +4410,8 @@ const merchProducts: MerchProduct[] = [
         id: '32915',
         label: 'Size: XXL / Color: Red',
         checkoutProductId: 32915,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Red'
       },
@@ -4383,8 +4419,8 @@ const merchProducts: MerchProduct[] = [
         id: '32916',
         label: 'Size: XXXL / Color: Red',
         checkoutProductId: 32916,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Red'
       },
@@ -4392,8 +4428,8 @@ const merchProducts: MerchProduct[] = [
         id: '32917',
         label: 'Size: XXXXL / Color: Red',
         checkoutProductId: 32917,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Red'
       },
@@ -4401,8 +4437,8 @@ const merchProducts: MerchProduct[] = [
         id: '32918',
         label: 'Size: S / Color: Cream',
         checkoutProductId: 32918,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Cream'
       },
@@ -4410,8 +4446,8 @@ const merchProducts: MerchProduct[] = [
         id: '32919',
         label: 'Size: M / Color: Cream',
         checkoutProductId: 32919,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Cream'
       },
@@ -4419,8 +4455,8 @@ const merchProducts: MerchProduct[] = [
         id: '32920',
         label: 'Size: L / Color: Cream',
         checkoutProductId: 32920,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Cream'
       },
@@ -4428,8 +4464,8 @@ const merchProducts: MerchProduct[] = [
         id: '32921',
         label: 'Size: XL / Color: Cream',
         checkoutProductId: 32921,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Cream'
       },
@@ -4437,8 +4473,8 @@ const merchProducts: MerchProduct[] = [
         id: '32922',
         label: 'Size: XXL / Color: Cream',
         checkoutProductId: 32922,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Cream'
       },
@@ -4446,8 +4482,8 @@ const merchProducts: MerchProduct[] = [
         id: '32923',
         label: 'Size: XXXL / Color: Cream',
         checkoutProductId: 32923,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Cream'
       },
@@ -4455,8 +4491,8 @@ const merchProducts: MerchProduct[] = [
         id: '32924',
         label: 'Size: XXXXL / Color: Cream',
         checkoutProductId: 32924,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Cream'
       },
@@ -4464,8 +4500,8 @@ const merchProducts: MerchProduct[] = [
         id: '32925',
         label: 'Size: S / Color: Blue',
         checkoutProductId: 32925,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Blue'
       },
@@ -4473,8 +4509,8 @@ const merchProducts: MerchProduct[] = [
         id: '32926',
         label: 'Size: M / Color: Blue',
         checkoutProductId: 32926,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Blue'
       },
@@ -4482,8 +4518,8 @@ const merchProducts: MerchProduct[] = [
         id: '32927',
         label: 'Size: L / Color: Blue',
         checkoutProductId: 32927,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Blue'
       },
@@ -4491,8 +4527,8 @@ const merchProducts: MerchProduct[] = [
         id: '32928',
         label: 'Size: XL / Color: Blue',
         checkoutProductId: 32928,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Blue'
       },
@@ -4500,8 +4536,8 @@ const merchProducts: MerchProduct[] = [
         id: '32929',
         label: 'Size: XXL / Color: Blue',
         checkoutProductId: 32929,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Blue'
       },
@@ -4509,8 +4545,8 @@ const merchProducts: MerchProduct[] = [
         id: '32930',
         label: 'Size: XXXL / Color: Blue',
         checkoutProductId: 32930,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Blue'
       },
@@ -4518,8 +4554,8 @@ const merchProducts: MerchProduct[] = [
         id: '32931',
         label: 'Size: XXXXL / Color: Blue',
         checkoutProductId: 32931,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Blue'
       },
@@ -4527,8 +4563,8 @@ const merchProducts: MerchProduct[] = [
         id: '32932',
         label: 'Size: S / Color: Purple',
         checkoutProductId: 32932,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Purple'
       },
@@ -4536,8 +4572,8 @@ const merchProducts: MerchProduct[] = [
         id: '32933',
         label: 'Size: M / Color: Purple',
         checkoutProductId: 32933,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Purple'
       },
@@ -4545,8 +4581,8 @@ const merchProducts: MerchProduct[] = [
         id: '32934',
         label: 'Size: L / Color: Purple',
         checkoutProductId: 32934,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Purple'
       },
@@ -4554,8 +4590,8 @@ const merchProducts: MerchProduct[] = [
         id: '32935',
         label: 'Size: XL / Color: Purple',
         checkoutProductId: 32935,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Purple'
       },
@@ -4563,8 +4599,8 @@ const merchProducts: MerchProduct[] = [
         id: '32936',
         label: 'Size: XXL / Color: Purple',
         checkoutProductId: 32936,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Purple'
       },
@@ -4572,8 +4608,8 @@ const merchProducts: MerchProduct[] = [
         id: '32937',
         label: 'Size: XXXL / Color: Purple',
         checkoutProductId: 32937,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Purple'
       },
@@ -4581,8 +4617,8 @@ const merchProducts: MerchProduct[] = [
         id: '32938',
         label: 'Size: XXXXL / Color: Purple',
         checkoutProductId: 32938,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Purple'
       },
@@ -4590,8 +4626,8 @@ const merchProducts: MerchProduct[] = [
         id: '32939',
         label: 'Size: S / Color: Pink',
         checkoutProductId: 32939,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Pink'
       },
@@ -4599,8 +4635,8 @@ const merchProducts: MerchProduct[] = [
         id: '32940',
         label: 'Size: M / Color: Pink',
         checkoutProductId: 32940,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Pink'
       },
@@ -4608,8 +4644,8 @@ const merchProducts: MerchProduct[] = [
         id: '32941',
         label: 'Size: L / Color: Pink',
         checkoutProductId: 32941,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Pink'
       },
@@ -4617,8 +4653,8 @@ const merchProducts: MerchProduct[] = [
         id: '32942',
         label: 'Size: XL / Color: Pink',
         checkoutProductId: 32942,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Pink'
       },
@@ -4626,8 +4662,8 @@ const merchProducts: MerchProduct[] = [
         id: '32943',
         label: 'Size: XXL / Color: Pink',
         checkoutProductId: 32943,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Pink'
       },
@@ -4635,8 +4671,8 @@ const merchProducts: MerchProduct[] = [
         id: '32944',
         label: 'Size: XXXL / Color: Pink',
         checkoutProductId: 32944,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Pink'
       },
@@ -4644,8 +4680,8 @@ const merchProducts: MerchProduct[] = [
         id: '32945',
         label: 'Size: XXXXL / Color: Pink',
         checkoutProductId: 32945,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Pink'
       },
@@ -4653,8 +4689,8 @@ const merchProducts: MerchProduct[] = [
         id: '32946',
         label: 'Size: S / Color: Maroon',
         checkoutProductId: 32946,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Maroon'
       },
@@ -4662,8 +4698,8 @@ const merchProducts: MerchProduct[] = [
         id: '32947',
         label: 'Size: M / Color: Maroon',
         checkoutProductId: 32947,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Maroon'
       },
@@ -4671,8 +4707,8 @@ const merchProducts: MerchProduct[] = [
         id: '32948',
         label: 'Size: L / Color: Maroon',
         checkoutProductId: 32948,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Maroon'
       },
@@ -4680,8 +4716,8 @@ const merchProducts: MerchProduct[] = [
         id: '32949',
         label: 'Size: XL / Color: Maroon',
         checkoutProductId: 32949,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Maroon'
       },
@@ -4689,8 +4725,8 @@ const merchProducts: MerchProduct[] = [
         id: '32950',
         label: 'Size: XXL / Color: Maroon',
         checkoutProductId: 32950,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Maroon'
       },
@@ -4698,8 +4734,8 @@ const merchProducts: MerchProduct[] = [
         id: '32951',
         label: 'Size: XXXL / Color: Maroon',
         checkoutProductId: 32951,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Maroon'
       },
@@ -4707,8 +4743,8 @@ const merchProducts: MerchProduct[] = [
         id: '32952',
         label: 'Size: XXXXL / Color: Maroon',
         checkoutProductId: 32952,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Maroon'
       }
@@ -4717,14 +4753,25 @@ const merchProducts: MerchProduct[] = [
   {
     slug: 'shiloh-season-gold-logo-t-shirt',
     name: 'Pre Order - Shiloh Season Gold Logo T-Shirt',
-    priceUsd: 20,
-    priceLabel: '$20 USD',
+    priceUsd: 15,
+    priceLabel: '$15 USD',
     category: 'SHILOH 2026',
     description: 'Step into your Shiloh Season in style, a season of surrender, growth, breakthrough and divine encounter! The Shiloh Season T-Shirt is more than apparel, it&#8217;s a statement of faith and expectation. Inspired by the biblical place of encounter and transformation, this piece represents a season where prayers are answered, purpose is revealed, and God&#8217;s presence is experienced deeply. With a comfortable modern fit, this tee is designed for everyday wear while carrying a powerful message. Whether worn casually, to church gatherings, conferences or community events, it serves as a reminder that every season has purpose. And this Shiloh is YOUR Shiloh Season!',
     detail: 'Step into your Shiloh Season in style, a season of surrender, growth, breakthrough and divine encounter! The Shiloh Season T-Shirt is more than apparel, it&#8217;s a statement of faith and expectation. Inspired by the biblical place of encounter and transformation, this piece represents a season where prayers are answered, purpose is revealed, and God&#8217;s presence is experienced deeply. With a comfortable modern fit, this tee is designed for everyday wear while carrying a powerful message. Whether worn casually, to church gatherings, conferences or community events, it serves as a reminder that every season has purpose. And this Shiloh is YOUR Shiloh Season!',
     accent: 'from-[#E1E0CC] to-[#746C4F]',
     icon: Shirt,
-    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Gold-Shiloh-Mock-Up.webp',
+    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-Purple_Gold-Tee.webp',
+    variantImages: {
+      Black: 'https://uebertangel.org/wp-content/uploads/2026/06/Gold-Shiloh-Mock-Up.webp',
+      Red: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-Red_Gold-Tee.webp',
+      Green: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-Green_Gold-Tee_1.webp',
+      White: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-White_Gold-Tee.webp',
+      Blue: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-Blue_Gold-Tee_1.webp',
+      Cream: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-Cream_Gold-Tee.webp',
+      Purple: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-Purple_Gold-Tee.webp',
+      Pink: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-Pink_Gold-Tee.webp',
+      Maroon: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-Maroon_Gold-Tee.webp',
+    },
     sizes: ["S", "M", "L", "XL", "XXL", "XXXL", "XXXXL"],
     colors: [{ "name": "Black", "className": "#111111" }, { "name": "Red", "className": "#d32f2f" }, { "name": "Green", "className": "#2e7d32" }, { "name": "White", "className": "#ffffff" }, { "name": "Blue", "className": "#1976d2" }, { "name": "Cream", "className": "#f5f5dc" }, { "name": "Purple", "className": "#7b1fa2" }, { "name": "Pink", "className": "#ad1457" }, { "name": "Maroon", "className": "#800000" }],
     variants: [
@@ -4732,8 +4779,8 @@ const merchProducts: MerchProduct[] = [
         id: '32823',
         label: 'Size: S / Color: Black',
         checkoutProductId: 32823,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Black'
       },
@@ -4741,8 +4788,8 @@ const merchProducts: MerchProduct[] = [
         id: '32824',
         label: 'Size: M / Color: Black',
         checkoutProductId: 32824,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Black'
       },
@@ -4750,8 +4797,8 @@ const merchProducts: MerchProduct[] = [
         id: '32825',
         label: 'Size: L / Color: Black',
         checkoutProductId: 32825,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Black'
       },
@@ -4759,8 +4806,8 @@ const merchProducts: MerchProduct[] = [
         id: '32826',
         label: 'Size: XL / Color: Black',
         checkoutProductId: 32826,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Black'
       },
@@ -4768,8 +4815,8 @@ const merchProducts: MerchProduct[] = [
         id: '32827',
         label: 'Size: XXL / Color: Black',
         checkoutProductId: 32827,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Black'
       },
@@ -4777,8 +4824,8 @@ const merchProducts: MerchProduct[] = [
         id: '32828',
         label: 'Size: XXXL / Color: Black',
         checkoutProductId: 32828,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Black'
       },
@@ -4786,8 +4833,8 @@ const merchProducts: MerchProduct[] = [
         id: '32829',
         label: 'Size: XXXXL / Color: Black',
         checkoutProductId: 32829,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Black'
       },
@@ -4795,8 +4842,8 @@ const merchProducts: MerchProduct[] = [
         id: '32830',
         label: 'Size: S / Color: Red',
         checkoutProductId: 32830,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Red'
       },
@@ -4804,8 +4851,8 @@ const merchProducts: MerchProduct[] = [
         id: '32831',
         label: 'Size: M / Color: Red',
         checkoutProductId: 32831,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Red'
       },
@@ -4813,8 +4860,8 @@ const merchProducts: MerchProduct[] = [
         id: '32832',
         label: 'Size: L / Color: Red',
         checkoutProductId: 32832,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Red'
       },
@@ -4822,8 +4869,8 @@ const merchProducts: MerchProduct[] = [
         id: '32833',
         label: 'Size: XL / Color: Red',
         checkoutProductId: 32833,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Red'
       },
@@ -4831,8 +4878,8 @@ const merchProducts: MerchProduct[] = [
         id: '32834',
         label: 'Size: XXL / Color: Red',
         checkoutProductId: 32834,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Red'
       },
@@ -4840,8 +4887,8 @@ const merchProducts: MerchProduct[] = [
         id: '32835',
         label: 'Size: XXXL / Color: Red',
         checkoutProductId: 32835,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Red'
       },
@@ -4849,8 +4896,8 @@ const merchProducts: MerchProduct[] = [
         id: '32836',
         label: 'Size: XXXXL / Color: Red',
         checkoutProductId: 32836,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Red'
       },
@@ -4858,8 +4905,8 @@ const merchProducts: MerchProduct[] = [
         id: '32837',
         label: 'Size: S / Color: Green',
         checkoutProductId: 32837,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Green'
       },
@@ -4867,8 +4914,8 @@ const merchProducts: MerchProduct[] = [
         id: '32838',
         label: 'Size: M / Color: Green',
         checkoutProductId: 32838,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Green'
       },
@@ -4876,8 +4923,8 @@ const merchProducts: MerchProduct[] = [
         id: '32839',
         label: 'Size: L / Color: Green',
         checkoutProductId: 32839,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Green'
       },
@@ -4885,8 +4932,8 @@ const merchProducts: MerchProduct[] = [
         id: '32840',
         label: 'Size: XL / Color: Green',
         checkoutProductId: 32840,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Green'
       },
@@ -4894,8 +4941,8 @@ const merchProducts: MerchProduct[] = [
         id: '32841',
         label: 'Size: XXL / Color: Green',
         checkoutProductId: 32841,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Green'
       },
@@ -4903,8 +4950,8 @@ const merchProducts: MerchProduct[] = [
         id: '32842',
         label: 'Size: XXXL / Color: Green',
         checkoutProductId: 32842,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Green'
       },
@@ -4912,8 +4959,8 @@ const merchProducts: MerchProduct[] = [
         id: '32843',
         label: 'Size: XXXXL / Color: Green',
         checkoutProductId: 32843,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Green'
       },
@@ -4921,8 +4968,8 @@ const merchProducts: MerchProduct[] = [
         id: '32844',
         label: 'Size: S / Color: White',
         checkoutProductId: 32844,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'White'
       },
@@ -4930,8 +4977,8 @@ const merchProducts: MerchProduct[] = [
         id: '32845',
         label: 'Size: M / Color: White',
         checkoutProductId: 32845,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'White'
       },
@@ -4939,8 +4986,8 @@ const merchProducts: MerchProduct[] = [
         id: '32846',
         label: 'Size: L / Color: White',
         checkoutProductId: 32846,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'White'
       },
@@ -4948,8 +4995,8 @@ const merchProducts: MerchProduct[] = [
         id: '32847',
         label: 'Size: XL / Color: White',
         checkoutProductId: 32847,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'White'
       },
@@ -4957,8 +5004,8 @@ const merchProducts: MerchProduct[] = [
         id: '32848',
         label: 'Size: XXL / Color: White',
         checkoutProductId: 32848,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'White'
       },
@@ -4966,8 +5013,8 @@ const merchProducts: MerchProduct[] = [
         id: '32849',
         label: 'Size: XXXL / Color: White',
         checkoutProductId: 32849,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'White'
       },
@@ -4975,8 +5022,8 @@ const merchProducts: MerchProduct[] = [
         id: '32850',
         label: 'Size: XXXXL / Color: White',
         checkoutProductId: 32850,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'White'
       },
@@ -4984,8 +5031,8 @@ const merchProducts: MerchProduct[] = [
         id: '32851',
         label: 'Size: S / Color: Blue',
         checkoutProductId: 32851,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Blue'
       },
@@ -4993,8 +5040,8 @@ const merchProducts: MerchProduct[] = [
         id: '32852',
         label: 'Size: M / Color: Blue',
         checkoutProductId: 32852,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Blue'
       },
@@ -5002,8 +5049,8 @@ const merchProducts: MerchProduct[] = [
         id: '32853',
         label: 'Size: L / Color: Blue',
         checkoutProductId: 32853,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Blue'
       },
@@ -5011,8 +5058,8 @@ const merchProducts: MerchProduct[] = [
         id: '32854',
         label: 'Size: XL / Color: Blue',
         checkoutProductId: 32854,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Blue'
       },
@@ -5020,8 +5067,8 @@ const merchProducts: MerchProduct[] = [
         id: '32855',
         label: 'Size: XXL / Color: Blue',
         checkoutProductId: 32855,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Blue'
       },
@@ -5029,8 +5076,8 @@ const merchProducts: MerchProduct[] = [
         id: '32856',
         label: 'Size: XXXL / Color: Blue',
         checkoutProductId: 32856,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Blue'
       },
@@ -5038,8 +5085,8 @@ const merchProducts: MerchProduct[] = [
         id: '32857',
         label: 'Size: XXXXL / Color: Blue',
         checkoutProductId: 32857,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Blue'
       },
@@ -5047,8 +5094,8 @@ const merchProducts: MerchProduct[] = [
         id: '32858',
         label: 'Size: S / Color: Cream',
         checkoutProductId: 32858,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Cream'
       },
@@ -5056,8 +5103,8 @@ const merchProducts: MerchProduct[] = [
         id: '32859',
         label: 'Size: M / Color: Cream',
         checkoutProductId: 32859,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Cream'
       },
@@ -5065,8 +5112,8 @@ const merchProducts: MerchProduct[] = [
         id: '32860',
         label: 'Size: L / Color: Cream',
         checkoutProductId: 32860,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Cream'
       },
@@ -5074,8 +5121,8 @@ const merchProducts: MerchProduct[] = [
         id: '32861',
         label: 'Size: XL / Color: Cream',
         checkoutProductId: 32861,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Cream'
       },
@@ -5083,8 +5130,8 @@ const merchProducts: MerchProduct[] = [
         id: '32862',
         label: 'Size: XXL / Color: Cream',
         checkoutProductId: 32862,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Cream'
       },
@@ -5092,8 +5139,8 @@ const merchProducts: MerchProduct[] = [
         id: '32863',
         label: 'Size: XXXL / Color: Cream',
         checkoutProductId: 32863,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Cream'
       },
@@ -5101,8 +5148,8 @@ const merchProducts: MerchProduct[] = [
         id: '32864',
         label: 'Size: XXXXL / Color: Cream',
         checkoutProductId: 32864,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Cream'
       },
@@ -5110,8 +5157,8 @@ const merchProducts: MerchProduct[] = [
         id: '32865',
         label: 'Size: S / Color: Purple',
         checkoutProductId: 32865,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Purple'
       },
@@ -5119,8 +5166,8 @@ const merchProducts: MerchProduct[] = [
         id: '32866',
         label: 'Size: M / Color: Purple',
         checkoutProductId: 32866,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Purple'
       },
@@ -5128,8 +5175,8 @@ const merchProducts: MerchProduct[] = [
         id: '32867',
         label: 'Size: L / Color: Purple',
         checkoutProductId: 32867,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Purple'
       },
@@ -5137,8 +5184,8 @@ const merchProducts: MerchProduct[] = [
         id: '32868',
         label: 'Size: XL / Color: Purple',
         checkoutProductId: 32868,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Purple'
       },
@@ -5146,8 +5193,8 @@ const merchProducts: MerchProduct[] = [
         id: '32869',
         label: 'Size: XXL / Color: Purple',
         checkoutProductId: 32869,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Purple'
       },
@@ -5155,8 +5202,8 @@ const merchProducts: MerchProduct[] = [
         id: '32870',
         label: 'Size: XXXL / Color: Purple',
         checkoutProductId: 32870,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Purple'
       },
@@ -5164,8 +5211,8 @@ const merchProducts: MerchProduct[] = [
         id: '32871',
         label: 'Size: XXXXL / Color: Purple',
         checkoutProductId: 32871,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Purple'
       },
@@ -5173,8 +5220,8 @@ const merchProducts: MerchProduct[] = [
         id: '32872',
         label: 'Size: S / Color: Pink',
         checkoutProductId: 32872,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Pink'
       },
@@ -5182,8 +5229,8 @@ const merchProducts: MerchProduct[] = [
         id: '32873',
         label: 'Size: M / Color: Pink',
         checkoutProductId: 32873,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Pink'
       },
@@ -5191,8 +5238,8 @@ const merchProducts: MerchProduct[] = [
         id: '32874',
         label: 'Size: L / Color: Pink',
         checkoutProductId: 32874,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Pink'
       },
@@ -5200,8 +5247,8 @@ const merchProducts: MerchProduct[] = [
         id: '32875',
         label: 'Size: XL / Color: Pink',
         checkoutProductId: 32875,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Pink'
       },
@@ -5209,8 +5256,8 @@ const merchProducts: MerchProduct[] = [
         id: '32876',
         label: 'Size: XXL / Color: Pink',
         checkoutProductId: 32876,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Pink'
       },
@@ -5218,8 +5265,8 @@ const merchProducts: MerchProduct[] = [
         id: '32877',
         label: 'Size: XXXL / Color: Pink',
         checkoutProductId: 32877,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Pink'
       },
@@ -5227,8 +5274,8 @@ const merchProducts: MerchProduct[] = [
         id: '32878',
         label: 'Size: XXXXL / Color: Pink',
         checkoutProductId: 32878,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Pink'
       },
@@ -5236,8 +5283,8 @@ const merchProducts: MerchProduct[] = [
         id: '32879',
         label: 'Size: S / Color: Maroon',
         checkoutProductId: 32879,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Maroon'
       },
@@ -5245,8 +5292,8 @@ const merchProducts: MerchProduct[] = [
         id: '32880',
         label: 'Size: M / Color: Maroon',
         checkoutProductId: 32880,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Maroon'
       },
@@ -5254,8 +5301,8 @@ const merchProducts: MerchProduct[] = [
         id: '32881',
         label: 'Size: L / Color: Maroon',
         checkoutProductId: 32881,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Maroon'
       },
@@ -5263,8 +5310,8 @@ const merchProducts: MerchProduct[] = [
         id: '32882',
         label: 'Size: XL / Color: Maroon',
         checkoutProductId: 32882,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Maroon'
       },
@@ -5272,8 +5319,8 @@ const merchProducts: MerchProduct[] = [
         id: '32883',
         label: 'Size: XXL / Color: Maroon',
         checkoutProductId: 32883,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Maroon'
       },
@@ -5281,8 +5328,8 @@ const merchProducts: MerchProduct[] = [
         id: '32884',
         label: 'Size: XXXL / Color: Maroon',
         checkoutProductId: 32884,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Maroon'
       },
@@ -5290,8 +5337,8 @@ const merchProducts: MerchProduct[] = [
         id: '32885',
         label: 'Size: XXXXL / Color: Maroon',
         checkoutProductId: 32885,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Maroon'
       }
@@ -5300,14 +5347,25 @@ const merchProducts: MerchProduct[] = [
   {
     slug: 'shiloh-season-blue-logo-t-shirt',
     name: 'Pre Order - Shiloh Season Blue Logo T-Shirt',
-    priceUsd: 20,
-    priceLabel: '$20 USD',
+    priceUsd: 15,
+    priceLabel: '$15 USD',
     category: 'SHILOH 2026',
     description: 'Step into your Shiloh Season in style, a season of surrender, growth, breakthrough and divine encounter! The Shiloh Season T-Shirt is more than apparel, it&#8217;s a statement of faith and expectation. Inspired by the biblical place of encounter and transformation, this piece represents a season where prayers are answered, purpose is revealed, and God&#8217;s presence is experienced deeply. With a comfortable modern fit, this tee is designed for everyday wear while carrying a powerful message. Whether worn casually, to church gatherings, conferences or community events, it serves as a reminder that every season has purpose. And this Shiloh is YOUR Shiloh Season!',
     detail: 'Step into your Shiloh Season in style, a season of surrender, growth, breakthrough and divine encounter! The Shiloh Season T-Shirt is more than apparel, it&#8217;s a statement of faith and expectation. Inspired by the biblical place of encounter and transformation, this piece represents a season where prayers are answered, purpose is revealed, and God&#8217;s presence is experienced deeply. With a comfortable modern fit, this tee is designed for everyday wear while carrying a powerful message. Whether worn casually, to church gatherings, conferences or community events, it serves as a reminder that every season has purpose. And this Shiloh is YOUR Shiloh Season!',
     accent: 'from-[#E1E0CC] to-[#746C4F]',
     icon: Shirt,
-    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Blue-Shiloh-Mock-Up.webp',
+    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-Green-Blue_Gold-Tee.webp',
+    variantImages: {
+      Black: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-Black-Blue_Gold-Tee.webp',
+      White: 'https://uebertangel.org/wp-content/uploads/2026/06/Blue-Shiloh-Mock-Up.webp',
+      Red: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-Red-Blue_Gold-Tee.webp',
+      Green: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-Green-Blue_Gold-Tee.webp',
+      Blue: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-Blue-Blue_Gold-Tee_1.webp',
+      Cream: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-Cream-Blue_Gold-Tee.webp',
+      Purple: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-Purple-Blue_Gold-Tee.webp',
+      Pink: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-Pink-Blue_Gold-Tee.webp',
+      Maroon: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-Maroon-Blue_Gold.webp',
+    },
     sizes: ["S", "M", "L", "XL", "XXL", "XXXL", "XXXXL"],
     colors: [{ "name": "Black", "className": "#111111" }, { "name": "White", "className": "#ffffff" }, { "name": "Red", "className": "#d32f2f" }, { "name": "Green", "className": "#2e7d32" }, { "name": "Blue", "className": "#1976d2" }, { "name": "Cream", "className": "#f5f5dc" }, { "name": "Purple", "className": "#7b1fa2" }, { "name": "Pink", "className": "#ad1457" }, { "name": "Maroon", "className": "#800000" }],
     variants: [
@@ -5315,8 +5373,8 @@ const merchProducts: MerchProduct[] = [
         id: '32745',
         label: 'Size: S / Color: Black',
         checkoutProductId: 32745,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Black'
       },
@@ -5324,8 +5382,8 @@ const merchProducts: MerchProduct[] = [
         id: '32746',
         label: 'Size: M / Color: Black',
         checkoutProductId: 32746,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Black'
       },
@@ -5333,8 +5391,8 @@ const merchProducts: MerchProduct[] = [
         id: '32747',
         label: 'Size: L / Color: Black',
         checkoutProductId: 32747,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Black'
       },
@@ -5342,8 +5400,8 @@ const merchProducts: MerchProduct[] = [
         id: '32748',
         label: 'Size: XL / Color: Black',
         checkoutProductId: 32748,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Black'
       },
@@ -5351,8 +5409,8 @@ const merchProducts: MerchProduct[] = [
         id: '32749',
         label: 'Size: XXL / Color: Black',
         checkoutProductId: 32749,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Black'
       },
@@ -5360,8 +5418,8 @@ const merchProducts: MerchProduct[] = [
         id: '32750',
         label: 'Size: XXXL / Color: Black',
         checkoutProductId: 32750,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Black'
       },
@@ -5369,8 +5427,8 @@ const merchProducts: MerchProduct[] = [
         id: '32751',
         label: 'Size: XXXXL / Color: Black',
         checkoutProductId: 32751,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Black'
       },
@@ -5378,8 +5436,8 @@ const merchProducts: MerchProduct[] = [
         id: '32764',
         label: 'Size: S / Color: White',
         checkoutProductId: 32764,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'White'
       },
@@ -5387,8 +5445,8 @@ const merchProducts: MerchProduct[] = [
         id: '32765',
         label: 'Size: M / Color: White',
         checkoutProductId: 32765,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'White'
       },
@@ -5396,8 +5454,8 @@ const merchProducts: MerchProduct[] = [
         id: '32766',
         label: 'Size: L / Color: White',
         checkoutProductId: 32766,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'White'
       },
@@ -5405,8 +5463,8 @@ const merchProducts: MerchProduct[] = [
         id: '32767',
         label: 'Size: XL / Color: White',
         checkoutProductId: 32767,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'White'
       },
@@ -5414,8 +5472,8 @@ const merchProducts: MerchProduct[] = [
         id: '32768',
         label: 'Size: XXL / Color: White',
         checkoutProductId: 32768,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'White'
       },
@@ -5423,8 +5481,8 @@ const merchProducts: MerchProduct[] = [
         id: '32769',
         label: 'Size: XXXL / Color: White',
         checkoutProductId: 32769,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'White'
       },
@@ -5432,8 +5490,8 @@ const merchProducts: MerchProduct[] = [
         id: '32770',
         label: 'Size: XXXXL / Color: White',
         checkoutProductId: 32770,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'White'
       },
@@ -5441,8 +5499,8 @@ const merchProducts: MerchProduct[] = [
         id: '32771',
         label: 'Size: S / Color: Red',
         checkoutProductId: 32771,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Red'
       },
@@ -5450,8 +5508,8 @@ const merchProducts: MerchProduct[] = [
         id: '32772',
         label: 'Size: M / Color: Red',
         checkoutProductId: 32772,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Red'
       },
@@ -5459,8 +5517,8 @@ const merchProducts: MerchProduct[] = [
         id: '32773',
         label: 'Size: L / Color: Red',
         checkoutProductId: 32773,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Red'
       },
@@ -5468,8 +5526,8 @@ const merchProducts: MerchProduct[] = [
         id: '32774',
         label: 'Size: XL / Color: Red',
         checkoutProductId: 32774,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Red'
       },
@@ -5477,8 +5535,8 @@ const merchProducts: MerchProduct[] = [
         id: '32775',
         label: 'Size: XXL / Color: Red',
         checkoutProductId: 32775,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Red'
       },
@@ -5486,8 +5544,8 @@ const merchProducts: MerchProduct[] = [
         id: '32776',
         label: 'Size: XXXL / Color: Red',
         checkoutProductId: 32776,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Red'
       },
@@ -5495,8 +5553,8 @@ const merchProducts: MerchProduct[] = [
         id: '32777',
         label: 'Size: XXXXL / Color: Red',
         checkoutProductId: 32777,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Red'
       },
@@ -5504,8 +5562,8 @@ const merchProducts: MerchProduct[] = [
         id: '32778',
         label: 'Size: S / Color: Green',
         checkoutProductId: 32778,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Green'
       },
@@ -5513,8 +5571,8 @@ const merchProducts: MerchProduct[] = [
         id: '32779',
         label: 'Size: M / Color: Green',
         checkoutProductId: 32779,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Green'
       },
@@ -5522,8 +5580,8 @@ const merchProducts: MerchProduct[] = [
         id: '32780',
         label: 'Size: L / Color: Green',
         checkoutProductId: 32780,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Green'
       },
@@ -5531,8 +5589,8 @@ const merchProducts: MerchProduct[] = [
         id: '32781',
         label: 'Size: XL / Color: Green',
         checkoutProductId: 32781,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Green'
       },
@@ -5540,8 +5598,8 @@ const merchProducts: MerchProduct[] = [
         id: '32782',
         label: 'Size: XXL / Color: Green',
         checkoutProductId: 32782,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Green'
       },
@@ -5549,8 +5607,8 @@ const merchProducts: MerchProduct[] = [
         id: '32783',
         label: 'Size: XXXL / Color: Green',
         checkoutProductId: 32783,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Green'
       },
@@ -5558,8 +5616,8 @@ const merchProducts: MerchProduct[] = [
         id: '32784',
         label: 'Size: XXXXL / Color: Green',
         checkoutProductId: 32784,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Green'
       },
@@ -5567,8 +5625,8 @@ const merchProducts: MerchProduct[] = [
         id: '32785',
         label: 'Size: S / Color: Blue',
         checkoutProductId: 32785,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Blue'
       },
@@ -5576,8 +5634,8 @@ const merchProducts: MerchProduct[] = [
         id: '32786',
         label: 'Size: M / Color: Blue',
         checkoutProductId: 32786,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Blue'
       },
@@ -5585,8 +5643,8 @@ const merchProducts: MerchProduct[] = [
         id: '32787',
         label: 'Size: L / Color: Blue',
         checkoutProductId: 32787,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Blue'
       },
@@ -5594,8 +5652,8 @@ const merchProducts: MerchProduct[] = [
         id: '32788',
         label: 'Size: XL / Color: Blue',
         checkoutProductId: 32788,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Blue'
       },
@@ -5603,8 +5661,8 @@ const merchProducts: MerchProduct[] = [
         id: '32789',
         label: 'Size: XXL / Color: Blue',
         checkoutProductId: 32789,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Blue'
       },
@@ -5612,8 +5670,8 @@ const merchProducts: MerchProduct[] = [
         id: '32790',
         label: 'Size: XXXL / Color: Blue',
         checkoutProductId: 32790,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Blue'
       },
@@ -5621,8 +5679,8 @@ const merchProducts: MerchProduct[] = [
         id: '32791',
         label: 'Size: XXXXL / Color: Blue',
         checkoutProductId: 32791,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Blue'
       },
@@ -5630,8 +5688,8 @@ const merchProducts: MerchProduct[] = [
         id: '32792',
         label: 'Size: S / Color: Cream',
         checkoutProductId: 32792,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Cream'
       },
@@ -5639,8 +5697,8 @@ const merchProducts: MerchProduct[] = [
         id: '32793',
         label: 'Size: M / Color: Cream',
         checkoutProductId: 32793,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Cream'
       },
@@ -5648,8 +5706,8 @@ const merchProducts: MerchProduct[] = [
         id: '32794',
         label: 'Size: L / Color: Cream',
         checkoutProductId: 32794,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Cream'
       },
@@ -5657,8 +5715,8 @@ const merchProducts: MerchProduct[] = [
         id: '32795',
         label: 'Size: XL / Color: Cream',
         checkoutProductId: 32795,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Cream'
       },
@@ -5666,8 +5724,8 @@ const merchProducts: MerchProduct[] = [
         id: '32796',
         label: 'Size: XXL / Color: Cream',
         checkoutProductId: 32796,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Cream'
       },
@@ -5675,8 +5733,8 @@ const merchProducts: MerchProduct[] = [
         id: '32797',
         label: 'Size: XXXL / Color: Cream',
         checkoutProductId: 32797,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Cream'
       },
@@ -5684,8 +5742,8 @@ const merchProducts: MerchProduct[] = [
         id: '32798',
         label: 'Size: XXXXL / Color: Cream',
         checkoutProductId: 32798,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Cream'
       },
@@ -5693,8 +5751,8 @@ const merchProducts: MerchProduct[] = [
         id: '32799',
         label: 'Size: S / Color: Purple',
         checkoutProductId: 32799,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Purple'
       },
@@ -5702,8 +5760,8 @@ const merchProducts: MerchProduct[] = [
         id: '32800',
         label: 'Size: M / Color: Purple',
         checkoutProductId: 32800,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Purple'
       },
@@ -5711,8 +5769,8 @@ const merchProducts: MerchProduct[] = [
         id: '32801',
         label: 'Size: L / Color: Purple',
         checkoutProductId: 32801,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Purple'
       },
@@ -5720,8 +5778,8 @@ const merchProducts: MerchProduct[] = [
         id: '32802',
         label: 'Size: XL / Color: Purple',
         checkoutProductId: 32802,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Purple'
       },
@@ -5729,8 +5787,8 @@ const merchProducts: MerchProduct[] = [
         id: '32803',
         label: 'Size: XXL / Color: Purple',
         checkoutProductId: 32803,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Purple'
       },
@@ -5738,8 +5796,8 @@ const merchProducts: MerchProduct[] = [
         id: '32804',
         label: 'Size: XXXL / Color: Purple',
         checkoutProductId: 32804,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Purple'
       },
@@ -5747,8 +5805,8 @@ const merchProducts: MerchProduct[] = [
         id: '32805',
         label: 'Size: XXXXL / Color: Purple',
         checkoutProductId: 32805,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Purple'
       },
@@ -5756,8 +5814,8 @@ const merchProducts: MerchProduct[] = [
         id: '32806',
         label: 'Size: S / Color: Pink',
         checkoutProductId: 32806,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Pink'
       },
@@ -5765,8 +5823,8 @@ const merchProducts: MerchProduct[] = [
         id: '32807',
         label: 'Size: M / Color: Pink',
         checkoutProductId: 32807,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Pink'
       },
@@ -5774,8 +5832,8 @@ const merchProducts: MerchProduct[] = [
         id: '32808',
         label: 'Size: L / Color: Pink',
         checkoutProductId: 32808,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Pink'
       },
@@ -5783,8 +5841,8 @@ const merchProducts: MerchProduct[] = [
         id: '32809',
         label: 'Size: XL / Color: Pink',
         checkoutProductId: 32809,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Pink'
       },
@@ -5792,8 +5850,8 @@ const merchProducts: MerchProduct[] = [
         id: '32810',
         label: 'Size: XXL / Color: Pink',
         checkoutProductId: 32810,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Pink'
       },
@@ -5801,8 +5859,8 @@ const merchProducts: MerchProduct[] = [
         id: '32811',
         label: 'Size: XXXL / Color: Pink',
         checkoutProductId: 32811,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Pink'
       },
@@ -5810,8 +5868,8 @@ const merchProducts: MerchProduct[] = [
         id: '32812',
         label: 'Size: XXXXL / Color: Pink',
         checkoutProductId: 32812,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Pink'
       },
@@ -5819,8 +5877,8 @@ const merchProducts: MerchProduct[] = [
         id: '32813',
         label: 'Size: S / Color: Maroon',
         checkoutProductId: 32813,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'S',
         color: 'Maroon'
       },
@@ -5828,8 +5886,8 @@ const merchProducts: MerchProduct[] = [
         id: '32814',
         label: 'Size: M / Color: Maroon',
         checkoutProductId: 32814,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'M',
         color: 'Maroon'
       },
@@ -5837,8 +5895,8 @@ const merchProducts: MerchProduct[] = [
         id: '32815',
         label: 'Size: L / Color: Maroon',
         checkoutProductId: 32815,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'L',
         color: 'Maroon'
       },
@@ -5846,8 +5904,8 @@ const merchProducts: MerchProduct[] = [
         id: '32816',
         label: 'Size: XL / Color: Maroon',
         checkoutProductId: 32816,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XL',
         color: 'Maroon'
       },
@@ -5855,8 +5913,8 @@ const merchProducts: MerchProduct[] = [
         id: '32817',
         label: 'Size: XXL / Color: Maroon',
         checkoutProductId: 32817,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXL',
         color: 'Maroon'
       },
@@ -5864,8 +5922,8 @@ const merchProducts: MerchProduct[] = [
         id: '32818',
         label: 'Size: XXXL / Color: Maroon',
         checkoutProductId: 32818,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXL',
         color: 'Maroon'
       },
@@ -5873,8 +5931,8 @@ const merchProducts: MerchProduct[] = [
         id: '32819',
         label: 'Size: XXXXL / Color: Maroon',
         checkoutProductId: 32819,
-        priceUsd: 20,
-        priceLabel: '$20 USD',
+        priceUsd: 15,
+        priceLabel: '$15 USD',
         size: 'XXXXL',
         color: 'Maroon'
       }
@@ -6077,6 +6135,27 @@ function buildEventSchema() {
   };
 }
 
+function getProductImage(product: MerchProduct, variant?: MerchVariant) {
+  return (
+    variant?.image ??
+    (variant?.color ? product.variantImages?.[variant.color] : undefined) ??
+    product.image ??
+    defaultSeoImage
+  );
+}
+
+function getProductGalleryImages(product: MerchProduct, variant?: MerchVariant) {
+  const selectedImage = getProductImage(product, variant);
+  const images = [
+    selectedImage,
+    ...(product.images ?? []),
+    product.image,
+    ...Object.values(product.variantImages ?? {}),
+  ].filter(Boolean) as string[];
+
+  return images.filter((image, index) => images.indexOf(image) === index);
+}
+
 function buildProductSchema(product: MerchProduct) {
   const variantSchemas = (product.variants && product.variants.length > 0 ? product.variants : [undefined]).map(
     (variant) => ({
@@ -6084,7 +6163,7 @@ function buildProductSchema(product: MerchProduct) {
       '@id': `${siteUrl}/merch/${product.slug}${variant ? `#variant-${variant.id}` : '#product'}`,
       name: variant ? `${product.name} - ${variant.label}` : product.name,
       sku: variant?.id ?? String(product.checkoutProductId ?? product.slug),
-      image: product.image ? [product.image] : [defaultSeoImage],
+      image: [getProductImage(product, variant)],
       description: product.description,
       brand: {
         '@id': `${siteUrl}/#organization`,
@@ -6116,7 +6195,7 @@ function buildProductSchema(product: MerchProduct) {
     productGroupID: product.slug,
     variesBy: product.colors && product.colors.length > 0 ? ['https://schema.org/size', 'https://schema.org/color'] : ['https://schema.org/size'],
     description: product.description,
-    image: product.image ? [product.image] : [defaultSeoImage],
+    image: getProductGalleryImages(product),
     brand: {
       '@id': `${siteUrl}/#organization`,
     },
@@ -6213,6 +6292,13 @@ const getCartKey = (slug: string, variantId = '', size = '', color = '') => `${s
 
 const getProductVariant = (product: MerchProduct, variantId?: string) =>
   product.variants?.find((variant) => variant.id === variantId) ?? product.variants?.[0];
+
+const getMatchingProductVariant = (product: MerchProduct, size: string, color: string) =>
+  product.variants?.find((variant) => {
+    const matchSize = !variant.size || variant.size.toLowerCase() === size.toLowerCase();
+    const matchColor = !variant.color || variant.color.toLowerCase() === color.toLowerCase();
+    return matchSize && matchColor;
+  });
 
 const getCartLinePrice = (product: MerchProduct, variant?: MerchVariant) => variant?.priceUsd ?? product.priceUsd;
 
@@ -6785,11 +6871,7 @@ function ProductPage({
 
   useEffect(() => {
     if (!product || !product.variants || product.variants.length === 0) return;
-    const variant = product.variants.find((v) => {
-      const matchSize = !v.size || v.size.toLowerCase() === selectedSize.toLowerCase();
-      const matchColor = !v.color || v.color.toLowerCase() === selectedColor.toLowerCase();
-      return matchSize && matchColor;
-    });
+    const variant = getMatchingProductVariant(product, selectedSize, selectedColor);
     if (variant) {
       setSelectedVariantId(variant.id);
     }
@@ -6816,7 +6898,7 @@ function ProductPage({
     );
   }
 
-  const selectedVariant = getProductVariant(product, selectedVariantId);
+  const selectedVariant = getMatchingProductVariant(product, selectedSize, selectedColor) ?? getProductVariant(product, selectedVariantId);
   const selectedCartKey = getCartKey(product.slug, selectedVariant?.id, selectedSize, selectedColor);
   const productCartItem = cart.find((item) => getCartKey(item.slug, item.variantId, item.size, item.color) === selectedCartKey);
   const productInCart = Boolean(productCartItem);
@@ -6830,9 +6912,7 @@ function ProductPage({
   const sizeOptions = product.sizes && product.sizes.length > 0
     ? product.sizes
     : [];
-  const images = (product.images && product.images.length > 0
-    ? product.images
-    : [product.image].filter(Boolean)) as string[];
+  const images = getProductGalleryImages(product, selectedVariant);
 
   const scrollGallery = (direction: 'left' | 'right') => {
     const container = mobileGalleryRef.current;
@@ -6909,133 +6989,185 @@ function ProductPage({
     );
   };
 
+  const activeVariantId = selectedVariant?.id ?? selectedVariantId;
+  const navigateToPath = (href: string) => {
+    window.history.pushState({}, '', href);
+    window.dispatchEvent(new PopStateEvent('popstate'));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  const productDetailTags = [
+    { label: product.category ?? 'Shiloh 2026', icon: Shirt },
+    ...(selectedColor !== 'Default' ? [{ label: selectedColor, icon: Palette }] : []),
+    ...(selectedSize ? [{ label: `${selectedSize} Size`, icon: Info }] : []),
+    { label: isBaptismSet ? 'Baptism Ready' : 'Official Merchandise', icon: ShieldCheck },
+  ];
+  const productDetailActions = (
+    <div className="space-y-5">
+      {colorOptions.length > 0 && (
+        <div>
+          <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">Colour</p>
+          <div className="flex flex-wrap gap-2">
+            {colorOptions.map((color) => (
+              <button
+                key={color.name}
+                type="button"
+                onClick={() => setSelectedColor(color.name)}
+                className={`h-9 w-9 rounded-full border-2 transition-all ${
+                  selectedColor === color.name ? 'scale-110 border-foreground shadow-sm' : 'border-border hover:border-foreground/40'
+                }`}
+                style={{ background: color.className }}
+                aria-label={`Select colour ${color.name}`}
+                aria-pressed={selectedColor === color.name}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {sizeOptions.length > 0 && (
+        <div>
+          <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-muted-foreground">Size</p>
+          <div className="flex flex-wrap gap-2">
+            {sizeOptions.map((size) => (
+              <button
+                key={size}
+                type="button"
+                onClick={() => setSelectedSize(size)}
+                className={`h-10 min-w-[3rem] rounded-md border px-3 text-xs font-bold uppercase tracking-[0.12em] transition ${
+                  selectedSize === size
+                    ? 'border-foreground bg-foreground text-background'
+                    : 'border-border bg-background text-foreground hover:border-foreground/45'
+                }`}
+                aria-pressed={selectedSize === size}
+              >
+                {size}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="hidden gap-3 sm:grid sm:grid-cols-[8rem_minmax(0,1fr)]">
+        <div className="flex h-12 w-full items-center justify-between overflow-hidden rounded-lg border border-border bg-background px-1 sm:h-11">
+          <button
+            type="button"
+            onClick={() => updateSelectedQuantity(selectedQuantity - 1)}
+            className="flex h-full w-9 items-center justify-center text-muted-foreground transition hover:text-foreground"
+            aria-label="Decrease quantity"
+          >
+            <Minus className="h-3.5 w-3.5" />
+          </button>
+          <span className="text-sm font-bold">{selectedQuantity}</span>
+          <button
+            type="button"
+            onClick={() => updateSelectedQuantity(selectedQuantity + 1)}
+            className="flex h-full w-9 items-center justify-center text-muted-foreground transition hover:text-foreground"
+            aria-label="Increase quantity"
+          >
+            <Plus className="h-3.5 w-3.5" />
+          </button>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => {
+            onAddToCart(product.slug, selectedQuantity, activeVariantId, { size: selectedSize, color: selectedColor });
+            setIsAddedSuccess(true);
+          }}
+          className="flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-foreground px-4 text-[0.72rem] font-black uppercase tracking-[0.08em] text-background transition hover:bg-foreground/90 active:scale-[0.99] sm:min-h-11 sm:px-5 sm:text-xs sm:tracking-[0.14em]"
+        >
+          <ShoppingCart className="h-4 w-4" />
+          {productInCart ? 'Update Bag' : 'Add to Bag'} — {selectedPriceLabel}
+        </button>
+      </div>
+    </div>
+  );
+  const productDetailDetails = (
+    <div className="space-y-6">
+      <div className="border-t border-border">
+        {accordionSections.map((section) => (
+          <div key={section.title} className="border-b border-border">
+            <button
+              type="button"
+              onClick={() => toggleProductSection(section.title)}
+              className="flex w-full items-center justify-between py-5 text-left"
+            >
+              <span className="text-xs font-black uppercase tracking-[0.18em] text-foreground">{section.title}</span>
+              <Plus
+                className={`h-3.5 w-3.5 text-muted-foreground transition-transform duration-300 ${
+                  openProductSections.includes(section.title) ? 'rotate-45' : ''
+                }`}
+              />
+            </button>
+            {openProductSections.includes(section.title) && (
+              <div className="pb-5 text-sm leading-7 text-muted-foreground">{section.copy}</div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      <div className="rounded-lg border border-border bg-card p-4 text-sm leading-6 text-muted-foreground">
+        {isBaptismSet ? (
+          <>
+            <p className="font-bold text-foreground">Preparation & Collection</p>
+            <p className="mt-3">
+              Wear dark clothing underneath. Collect at the GoodNews Store at Harare Hippodrome during Shiloh Season.
+            </p>
+            <p className="mt-4 font-semibold text-foreground/70">Early ordering is recommended. Limited quantities available.</p>
+          </>
+        ) : (
+          <>
+            <p className="font-bold text-foreground">Official Checkout</p>
+            <p>Fulfillment is handled by approved GoodNews World systems.</p>
+            {product.sourceUrl && (
+              <a
+                href={product.sourceUrl}
+                className="mt-3 inline-flex font-semibold text-foreground underline decoration-foreground/20 underline-offset-4"
+                rel="noopener noreferrer"
+              >
+                View source product at {product.sourceName ?? 'official store'}
+              </a>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+
   return (
     <main className="min-h-screen bg-[#FDFBF7] text-[#1a1a1a] pb-64 lg:pb-24">
       <HeroHeader pageType="product" />
-      
-      <section className="px-4 pb-20 pt-32 sm:px-6 md:px-12 lg:px-20">
-        <div className="mx-auto max-w-[1400px]">
-          {/* Breadcrumb / Navigation */}
-          <div className="mb-12 flex items-center gap-4" style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900, fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.2em', color: 'rgba(0,0,0,0.4)' }}>
-            <a
-              href="/merch"
-              onClick={(e) => {
-                e.preventDefault();
-                window.history.pushState({}, '', '/merch');
-                window.dispatchEvent(new PopStateEvent('popstate'));
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="hover:text-black transition-colors"
-            >
-              Shop
-            </a>
-            <span>/</span>
-            <span style={{ color: '#1a1a1a' }}>{product.name}</span>
-          </div>
 
-          <div className="grid gap-12 lg:grid-cols-2 lg:gap-20">
-            {/* Gallery Column */}
-            <div className="min-w-0 overflow-hidden space-y-4">
-              {images.map((img, idx) => (
-                <div key={idx} className="aspect-[4/5] w-full max-w-full overflow-hidden rounded-2xl bg-[#F0EBE4] shadow-sm" style={{ boxSizing: 'border-box' }}>
-                  <img
-                    src={img}
-                    alt={product.name}
-                    className="h-full w-full max-w-full object-cover block"
-                    loading={idx === 0 ? 'eager' : 'lazy'}
-                    decoding="async"
-                    width="960"
-                    height="1200"
-                    referrerPolicy="no-referrer"
-                  />
-                </div>
-              ))}
-            </div>
-
-            {/* Info Column */}
-            <div className="lg:sticky lg:top-32 lg:h-fit">
-              <h1
-                className="text-[3rem] leading-[0.95] tracking-[-0.03em] text-[#1a1a1a] sm:text-[3.6rem]"
-                style={{ fontFamily: "'Instrument Serif', Georgia, serif", fontStyle: 'normal', fontWeight: 400 }}
-              >
-                {product.name}
-              </h1>
-              <p
-                className="mt-4 text-base text-black/60"
-                style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
-              >
-                {selectedPriceLabel}
-              </p>
-              <p
-                className="mt-5 max-w-sm text-[0.85rem] leading-[1.7] text-black/55"
-                style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 800 }}
-              >
-                {compactProductSummary}
-              </p>
-
-
-              {/* Accordion */}
-              <div className="mt-8 border-t border-black/8">
-                {accordionSections.map((section) => (
-                  <div key={section.title} className="border-b border-black/8">
-                    <button
-                      type="button"
-                      onClick={() => toggleProductSection(section.title)}
-                      className="flex w-full items-center justify-between py-5 text-left"
-                    >
-                      <span
-                        className="text-[10px] uppercase tracking-[0.24em] text-black"
-                        style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
-                      >
-                        {section.title}
-                      </span>
-                      <Plus
-                        className={`h-3.5 w-3.5 text-black/40 transition-transform duration-300 ${
-                          openProductSections.includes(section.title) ? 'rotate-45' : ''
-                        }`}
-                      />
-                    </button>
-                    {openProductSections.includes(section.title) && (
-                      <div
-                        className="pb-5 text-[0.82rem] leading-[1.8] text-black/50"
-                        style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 800 }}
-                      >
-                        {section.copy}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-              <div className="mt-8 rounded-xl border border-black/10 bg-white/55 p-4 text-xs leading-6 text-black/50">
-                {isBaptismSet ? (
-                  <>
-                    <p className="font-bold text-black">Preparation & Collection</p>
-                    <p className="mt-3">
-                      Wear dark clothing underneath. Collect at the GoodNews Store at Harare Hippodrome during Shiloh Season.
-                    </p>
-                    <p className="mt-4 font-semibold text-black/65">Early ordering is recommended. Limited quantities available.</p>
-                  </>
-                ) : (
-                  <>
-                    <p className="font-bold text-black">Official Checkout</p>
-                    <p>
-                      Fulfillment is handled by approved GoodNews World systems.
-                    </p>
-                    {product.sourceUrl && (
-                      <a
-                        href={product.sourceUrl}
-                        className="mt-3 inline-flex font-semibold text-black underline decoration-black/20 underline-offset-4"
-                        rel="noopener noreferrer"
-                      >
-                        View source product at {product.sourceName ?? 'official store'}
-                      </a>
-                    )}
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
+      <section className="px-0 pb-20 pt-24 sm:pt-28">
+        <ProductDetailPage
+          breadcrumbs={[
+            { label: 'Shop', href: '/merch' },
+            { label: product.category ?? 'Merchandise', href: '/merch' },
+            { label: product.name, href: `/merch/${product.slug}` },
+          ]}
+          product={{
+            name: product.name,
+            price: getCartLinePrice(product, selectedVariant),
+            priceLabel: selectedPriceLabel,
+            shippingCost: 0,
+            currency: '$',
+            images,
+            description: product.detail || product.description,
+            tags: productDetailTags,
+            imageFit: 'contain',
+          }}
+          actions={productDetailActions}
+          details={productDetailDetails}
+          onNavigate={navigateToPath}
+          onShare={() => {
+            const url = window.location.href;
+            if (navigator.share) {
+              void navigator.share({ title: product.name, url });
+              return;
+            }
+            void navigator.clipboard?.writeText(url);
+          }}
+        />
       </section>
 
       {/* ── Sticky Add to Bag ── */}
@@ -7092,8 +7224,8 @@ function ProductPage({
                           onClick={() => setSelectedSize(s)}
                           className={`shrink-0 h-8 min-w-[2.6rem] px-2 rounded border text-[10px] uppercase tracking-wider transition ${
                             selectedSize === s
-                              ? 'bg-black border-black text-white'
-                              : 'bg-white/60 border-black/15 text-black hover:border-black'
+                              ? 'border-[#171717] bg-[#171717] text-white'
+                              : 'bg-white/60 border-black/15 text-black hover:border-[#171717]'
                           }`}
                           style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
                         >
@@ -7136,10 +7268,10 @@ function ProductPage({
                   <button
                     type="button"
                     onClick={() => {
-                      onAddToCart(product.slug, selectedQuantity, selectedVariantId, { size: selectedSize, color: selectedColor });
+                      onAddToCart(product.slug, selectedQuantity, activeVariantId, { size: selectedSize, color: selectedColor });
                       setIsAddedSuccess(true);
                     }}
-                    className="flex-1 h-11 bg-[#111] text-white rounded-md flex items-center justify-center gap-2 transition hover:bg-black active:scale-[0.98]"
+                    className="flex-1 h-11 bg-[#171717] text-white rounded-md flex items-center justify-center gap-2 transition hover:bg-[#242424] active:scale-[0.98]"
                     style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900, fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase' }}
                   >
                     Add to Bag
@@ -7195,8 +7327,8 @@ function ProductPage({
                             onClick={() => setSelectedColor(color.name)}
                             className={`h-7 w-7 shrink-0 rounded-full border-2 transition-all ${
                               selectedColor === color.name
-                                ? 'border-black shadow-sm scale-110'
-                                : 'border-transparent hover:border-black/30'
+                                ? 'border-[#171717] shadow-sm scale-110'
+                                : 'border-transparent hover:border-[#171717]/30'
                             }`}
                             style={{ background: color.className }}
                             aria-label={`Select colour ${color.name}`}
@@ -7259,10 +7391,10 @@ function ProductPage({
                   <button
                     type="button"
                     onClick={() => {
-                      onAddToCart(product.slug, selectedQuantity, selectedVariantId, { size: selectedSize, color: selectedColor });
+                      onAddToCart(product.slug, selectedQuantity, activeVariantId, { size: selectedSize, color: selectedColor });
                       setIsAddedSuccess(true);
                     }}
-                    className="h-11 px-10 bg-[#111] text-white rounded-md flex items-center justify-center transition hover:bg-black active:scale-[0.98] whitespace-nowrap"
+                    className="h-11 px-10 bg-[#171717] text-white rounded-md flex items-center justify-center transition hover:bg-[#242424] active:scale-[0.98] whitespace-nowrap"
                     style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900, fontSize: '11px', letterSpacing: '0.22em', textTransform: 'uppercase' }}
                   >
                     Add to Bag — {selectedPriceLabel}
@@ -7303,7 +7435,7 @@ function ProductPage({
                   <button
                     type="button"
                     onClick={() => window.dispatchEvent(new CustomEvent('open-cart'))}
-                    className="flex-1 sm:flex-none h-11 px-6 bg-[#111] text-white rounded-md transition hover:bg-black"
+                    className="flex-1 sm:flex-none h-11 px-6 bg-[#171717] text-white rounded-md transition hover:bg-[#242424]"
                     style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900, fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase' }}
                   >
                     View Bag

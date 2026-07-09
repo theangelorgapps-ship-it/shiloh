@@ -63,9 +63,38 @@
   --foreground: 0 0% 100%;
   --heading: 205 52% 5%;
   --description: 180 9% 33%;
-  --primary: 0 0% 100%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 10%;
+  --muted: 45 18% 90%;
+  --muted-foreground: 0 0% 35%;
+  --border: 0 0% 88%;
+  --input: 0 0% 85%;
+  --ring: 0 0% 15%;
+  --accent: 45 18% 92%;
+  --accent-foreground: 0 0% 10%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+  --primary: 54 25% 83%;
   --primary-foreground: 0 0% 0%;
   --radius: 9999px;
+}
+
+.shadcn-product-page {
+  --background: 40 60% 98%;
+  --foreground: 0 0% 10%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 10%;
+  --muted: 40 28% 92%;
+  --muted-foreground: 0 0% 38%;
+  --border: 30 18% 84%;
+  --input: 30 18% 82%;
+  --ring: 0 0% 12%;
+  --accent: 40 24% 90%;
+  --accent-foreground: 0 0% 10%;
+  --primary: 0 0% 7%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 40 28% 92%;
+  --secondary-foreground: 0 0% 10%;
 }
 
 * {

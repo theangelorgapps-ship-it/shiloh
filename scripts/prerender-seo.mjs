@@ -11,10 +11,10 @@ const products = [
   {
     slug: 'shiloh-season-jumper',
     name: 'Pre Order - Shiloh Season Jumper',
-    price: 35,
+    price: 30,
     description:
       "Step into your Shiloh Season in style with the official Shiloh Season Jumper, a conference apparel item carrying the message that this is your Shiloh Season.",
-    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Jumper-Shiloh.webp',
+    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Jumper-Red-Gold.webp',
   },
   {
     slug: 'shiloh-season-long-sleeve-t-shirt',
@@ -22,31 +22,31 @@ const products = [
     price: 20,
     description:
       'Shop the official Shiloh Season Long Sleeve T-Shirt for Shiloh 2026, designed for conference wear, travel days, and cool evening sessions.',
-    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Long-Sleeve-Shiloh.webp',
+    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Longsleeve-Green-Gold.webp',
   },
   {
     slug: 'shiloh-season-silver-logo-t-shirt',
     name: 'Pre Order - Shiloh Season Silver Logo T-Shirt',
-    price: 20,
+    price: 15,
     description:
       'Shop the official Shiloh Season Silver Logo T-Shirt for Shiloh 2026, part of the conference merchandise collection.',
-    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Green-Silver.webp',
+    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-Maroon_Silver-Tee.webp',
   },
   {
     slug: 'shiloh-season-gold-logo-t-shirt',
     name: 'Pre Order - Shiloh Season Gold Logo T-Shirt',
-    price: 20,
+    price: 15,
     description:
       'Shop the official Shiloh Season Gold Logo T-Shirt for Shiloh 2026, part of the GoodNews World conference apparel collection.',
-    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Gold-Shiloh-Mock-Up.webp',
+    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-Purple_Gold-Tee.webp',
   },
   {
     slug: 'shiloh-season-blue-logo-t-shirt',
     name: 'Pre Order - Shiloh Season Blue Logo T-Shirt',
-    price: 20,
+    price: 15,
     description:
       'Shop the official Shiloh Season Blue Logo T-Shirt for Shiloh 2026, available through the Shiloh merchandise collection.',
-    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Blue-Shiloh-Mock-Up.webp',
+    image: 'https://uebertangel.org/wp-content/uploads/2026/06/Shiloh-Green-Blue_Gold-Tee.webp',
   },
   {
     slug: 'baptism-gown',
