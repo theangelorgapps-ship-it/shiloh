@@ -824,7 +824,7 @@ function HeroHeader({ sticky = true, pageType }: { sticky?: boolean; pageType?: 
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            className="fixed inset-x-3 top-[11.75rem] z-10 max-h-[calc(100vh-12.5rem)] overflow-y-auto rounded-[2rem] border border-white/10 bg-black/92 p-4 text-[22px] font-medium text-[#E1E0CC] shadow-[0_20px_60px_rgba(0,0,0,0.45)] backdrop-blur-2xl md:hidden"
+            className="fixed inset-x-3 top-[11.75rem] z-10 max-h-[calc(100dvh-12.5rem)] overflow-y-auto rounded-[2rem] border border-white/10 bg-black/92 p-4 text-[22px] font-medium text-[#E1E0CC] shadow-[0_20px_60px_rgba(0,0,0,0.45)] backdrop-blur-2xl md:hidden"
             initial={{ y: -24, opacity: 0, scale: 0.98 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: -18, opacity: 0, scale: 0.98 }}
@@ -957,7 +957,7 @@ function Hero() {
     <section
       id="home"
       ref={ref}
-      className="relative min-h-[100svh] overflow-hidden bg-black px-4 pb-6 pt-20 text-white sm:px-6 md:h-screen md:min-h-[640px] md:px-10 md:pb-6 md:pt-20"
+      className="relative min-h-[100dvh] overflow-hidden bg-black px-4 pb-6 pt-20 text-white sm:px-6 md:px-10 md:pb-6 md:pt-20"
     >
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <video
@@ -974,9 +974,9 @@ function Hero() {
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-[24vw] font-extrabold uppercase tracking-[0.22em] text-white/[0.08] blur-[4px]">
           SHILOH
         </div>
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.22)_0%,rgba(0,0,0,0.12)_34%,rgba(0,0,0,0.58)_76%,#000000_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.22)_0%,rgba(0,0,0,0.12)_34%,rgba(0,0,0,0.58)_76%,#050505_100%)]" />
       </div>
-      <div className="hero-gradient pointer-events-none absolute inset-0 z-[15] bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.08)_42%,rgba(0,0,0,0.48)_74%,#000000_100%)]" />
+      <div className="hero-gradient pointer-events-none absolute inset-0 z-[15] bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.08)_42%,rgba(0,0,0,0.48)_74%,#050505_100%)]" />
 
       <HeroHeader />
 
@@ -1059,7 +1059,7 @@ function Hero() {
       >
         <ArrowRight className="h-4 w-4 rotate-90" />
       </motion.a>
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-32 bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,#000000_82%)] md:h-40" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-[5] h-32 bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,#050505_82%)] md:h-40" />
     </section>
   );
 }
@@ -1696,7 +1696,7 @@ function VipWhySection() {
 
   return (
     <section id="vip-discover" ref={sectionRef} className="bg-black px-4 py-24 text-white sm:px-8 md:py-32">
-      <div className="mx-auto flex min-h-screen max-w-6xl flex-col items-center justify-center text-center">
+      <div className="mx-auto flex min-h-[100dvh] max-w-6xl flex-col items-center justify-center text-center">
         <h2 className="vip-title gold-emboss mb-14 text-5xl leading-none tracking-[-0.03em] sm:text-6xl md:text-7xl lg:text-8xl">
           WHY VIP?
         </h2>
@@ -2043,7 +2043,7 @@ function ContactPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-black text-[#E1E0CC]">
+    <main className="min-h-[100dvh] bg-black text-[#E1E0CC]">
       <HeroHeader sticky />
       <section className="px-4 py-16 sm:px-6 md:px-10 md:py-24">
         <div className="mx-auto max-w-7xl">
@@ -2121,8 +2121,8 @@ function ContactPage() {
 
 function VipPage() {
   return (
-    <main className="vip-page min-h-screen bg-black text-[#202A36]">
-      <section className="relative h-screen overflow-hidden">
+    <main className="vip-page min-h-[100dvh] bg-black text-[#202A36]">
+      <section className="relative min-h-[100dvh] overflow-hidden">
         <video
           className="absolute inset-0 h-full w-full object-cover"
           src={vipVideo}
@@ -2135,7 +2135,7 @@ function VipPage() {
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-[42%] bg-gradient-to-b from-transparent via-black/30 to-black" />
         <HeroHeader />
 
-        <div className="relative z-10 flex h-full flex-col">
+        <div className="relative z-10 flex min-h-[100dvh] flex-col">
           <div className="flex flex-1 items-start justify-center px-4 pt-[25vh] text-center md:pt-[35vh]">
             <motion.div
               className="max-w-5xl -translate-y-1/2"
@@ -2191,8 +2191,8 @@ function JourneyPage({ startAnimations }: { startAnimations: boolean }) {
   ];
 
   return (
-    <main className="journey-page min-h-screen bg-black">
-      <section className="relative flex min-h-screen overflow-hidden text-white">
+    <main className="journey-page min-h-[100dvh] bg-black">
+      <section className="relative flex min-h-[100dvh] overflow-hidden text-white">
         <video
           className="absolute inset-0 h-full w-full object-cover"
           src={journeyVideo}
@@ -2203,7 +2203,7 @@ function JourneyPage({ startAnimations }: { startAnimations: boolean }) {
           preload="auto"
         />
         <div className="absolute inset-0 bg-black/5" />
-        <div className="absolute inset-x-0 bottom-0 h-[38%] bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.45)_58%,#000_100%)]" />
+        <div className="absolute inset-x-0 bottom-0 h-[38%] bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0.45)_58%,#050505_100%)]" />
 
         <HeroHeader />
 
@@ -2441,7 +2441,7 @@ function Features() {
   const inView = useInView(gridRef, { once: true, margin: '-100px' });
 
   return (
-    <section id="features" className="relative min-h-screen overflow-hidden bg-black px-4 py-20 pb-32 sm:px-6 md:py-28 md:pb-40">
+    <section id="features" className="relative min-h-[100dvh] overflow-hidden bg-black px-4 py-20 pb-32 sm:px-6 md:py-28 md:pb-40">
       <div className="bg-noise pointer-events-none absolute inset-0 opacity-[0.15]" />
       <div className="relative z-10 mx-auto max-w-7xl">
         <div className="mx-auto mb-12 max-w-4xl text-center">
@@ -6578,13 +6578,7 @@ function MerchPage({
   };
 
   return (
-    <main
-      className="min-h-screen bg-black text-white"
-      style={{
-        fontFamily:
-          '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-      }}
-    >
+    <main className="min-h-[100dvh] bg-black text-white">
       <HeroHeader pageType="shop" />
       <section className="relative flex min-h-[82svh] items-end overflow-hidden px-6 pb-14 pt-32 sm:px-8 lg:px-12 lg:pb-20">
         {heroVideos.map((video, index) => (
@@ -6669,10 +6663,7 @@ function MerchPage({
           {/* ── Section Header ── */}
           <div className="mb-10 flex flex-col gap-5 px-5 sm:flex-row sm:items-end sm:justify-between sm:px-8 lg:px-12">
             <div>
-              <p
-                className="text-[10px] uppercase tracking-[0.32em] text-black/40"
-                style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
-              >
+              <p className="text-[10px] font-black uppercase tracking-[0.32em] text-black/40">
                 Official Collection
               </p>
               <div className="mt-3 flex max-w-full flex-wrap items-center gap-2" aria-label="Choose merchandise collection">
@@ -6682,12 +6673,11 @@ function MerchPage({
                     type="button"
                     onClick={() => setActiveTab(tab.id)}
                     aria-pressed={activeTab === tab.id}
-                    className={`rounded-full border px-5 py-2.5 text-xs uppercase tracking-[0.18em] transition-colors ${
+                    className={`rounded-full border px-5 py-2.5 text-xs font-black uppercase tracking-[0.18em] transition-colors ${
                       activeTab === tab.id
                         ? 'border-black bg-black text-white'
                         : 'border-black/15 bg-white/70 text-black/55 hover:border-black/35 hover:text-black'
                     }`}
-                    style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
                   >
                     {tab.label}
                   </button>
@@ -6695,10 +6685,7 @@ function MerchPage({
               </div>
             </div>
             <div className="flex flex-col items-start gap-3 sm:items-end">
-              <p
-                className="text-[11px] text-black/35"
-                style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
-              >
+              <p className="text-[11px] font-black text-black/35">
                 {activeProducts.length} {activeItemLabel}
               </p>
             </div>
@@ -6760,10 +6747,7 @@ function MerchPage({
                     {/* ── Card Image Area ── */}
                     <div className="relative overflow-hidden bg-[#EDEAE5] p-3" style={{ aspectRatio: '4/5' }}>
                       {/* Badge */}
-                      <span
-                        className="absolute left-4 top-4 z-10 bg-white px-3 py-1 text-[9px] uppercase tracking-[0.22em] text-black"
-                        style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
-                      >
+                      <span className="absolute left-4 top-4 z-10 bg-white px-3 py-1 text-[9px] font-black uppercase tracking-[0.22em] text-black">
                         {badge}
                       </span>
 
@@ -6789,25 +6773,16 @@ function MerchPage({
                     <div className="px-4 pt-4 pb-8 lg:px-5 lg:pt-5">
                       {/* Name + Price on one line */}
                       <div className="flex items-baseline gap-2">
-                        <h3
-                          className="flex-1 text-[0.82rem] uppercase leading-snug tracking-[0.08em] text-black"
-                          style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
-                        >
+                        <h3 className="flex-1 text-[0.82rem] font-black uppercase leading-snug tracking-[0.08em] text-black">
                           {product.name.replace(/^Pre Order - /i, '')}
                         </h3>
-                        <span
-                          className="shrink-0 text-[0.82rem] uppercase tracking-[0.05em] text-black"
-                          style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
-                        >
+                        <span className="shrink-0 text-[0.82rem] font-black uppercase tracking-[0.05em] text-black">
                           {product.priceLabel}
                         </span>
                       </div>
 
                       {/* Subcategory / description line */}
-                      <p
-                        className="mt-1 text-[0.75rem] leading-snug text-black/45"
-                        style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
-                      >
+                      <p className="mt-1 text-[0.75rem] font-black leading-snug text-black/45">
                         {product.subcategory || (activeTab === 'BAPTISM' ? 'Baptism Collection' : 'Shiloh Season Collection')}
                       </p>
                     </div>
@@ -6879,7 +6854,7 @@ function ProductPage({
 
   if (!product) {
     return (
-      <main className="min-h-screen bg-black text-primary">
+      <main className="min-h-[100dvh] bg-black text-primary">
         <HeroHeader pageType="product" />
         <section className="px-4 pb-24 pt-36 sm:px-6 md:px-10">
           <div className="mx-auto max-w-3xl rounded-3xl border border-white/10 bg-white/[0.055] p-8 text-center">
@@ -7135,7 +7110,7 @@ function ProductPage({
   );
 
   return (
-    <main className="min-h-screen bg-[#FDFBF7] text-[#1a1a1a] pb-64 lg:pb-24">
+    <main className="min-h-[100dvh] bg-[#FDFBF7] text-[#1a1a1a] pb-64 lg:pb-24">
       <HeroHeader pageType="product" />
 
       <section className="px-0 pb-20 pt-24 sm:pt-28">
@@ -7210,10 +7185,7 @@ function ProductPage({
                 {/* Row 2 — Size Swatches (pill buttons, overflow collapses to scroll) */}
                 {sizeOptions.length > 0 && (
                   <div className="flex items-center gap-2">
-                    <span
-                      className="shrink-0 text-[9px] uppercase tracking-[0.22em] text-black/40"
-                      style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
-                    >
+                    <span className="shrink-0 text-[9px] font-black uppercase tracking-[0.22em] text-black/40">
                       Size
                     </span>
                     <div className="flex gap-1.5 overflow-x-auto scrollbar-hide">
@@ -7222,12 +7194,11 @@ function ProductPage({
                           key={s}
                           type="button"
                           onClick={() => setSelectedSize(s)}
-                          className={`shrink-0 h-8 min-w-[2.6rem] px-2 rounded border text-[10px] uppercase tracking-wider transition ${
+                          className={`shrink-0 h-8 min-w-[2.6rem] px-2 rounded border text-[10px] font-black uppercase tracking-wider transition ${
                             selectedSize === s
                               ? 'border-[#171717] bg-[#171717] text-white'
                               : 'bg-white/60 border-black/15 text-black hover:border-[#171717]'
                           }`}
-                          style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
                         >
                           {s}
                         </button>
@@ -7248,10 +7219,7 @@ function ProductPage({
                     >
                       <Minus className="h-3 w-3" />
                     </button>
-                    <span
-                      className="text-xs text-black"
-                      style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
-                    >
+                    <span className="text-xs font-black text-black">
                       {selectedQuantity}
                     </span>
                     <button
@@ -7271,8 +7239,7 @@ function ProductPage({
                       onAddToCart(product.slug, selectedQuantity, activeVariantId, { size: selectedSize, color: selectedColor });
                       setIsAddedSuccess(true);
                     }}
-                    className="flex-1 h-11 bg-[#171717] text-white rounded-md flex items-center justify-center gap-2 transition hover:bg-[#242424] active:scale-[0.98]"
-                    style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900, fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase' }}
+                    className="flex-1 h-11 bg-[#171717] text-white rounded-md flex items-center justify-center gap-2 text-[11px] font-black uppercase tracking-[0.2em] transition hover:bg-[#242424] active:scale-[0.98]"
                   >
                     Add to Bag
                     <span className="opacity-60" style={{ fontWeight: 700 }}>— {selectedPriceLabel}</span>
@@ -7292,16 +7259,10 @@ function ProductPage({
                     referrerPolicy="no-referrer"
                   />
                   <div className="min-w-0">
-                    <p
-                      className="text-[1rem] leading-snug text-black line-clamp-1"
-                      style={{ fontFamily: "'Instrument Serif', Georgia, serif", fontStyle: 'normal', fontWeight: 400 }}
-                    >
+                    <p className="font-serif text-[1rem] font-normal not-italic leading-snug text-black line-clamp-1">
                       {displayProductName}
                     </p>
-                    <p
-                      className="text-[10px] text-black/45 mt-0.5"
-                      style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
-                    >
+                    <p className="mt-0.5 text-[10px] font-black text-black/45">
                       {selectedPriceLabel}
                     </p>
                   </div>
@@ -7313,10 +7274,7 @@ function ProductPage({
                   {/* Colour column */}
                   {colorOptions.length > 0 && (
                     <div className="flex flex-col gap-1.5 shrink-0">
-                      <span
-                        className="text-[9px] uppercase tracking-[0.22em] text-black/40"
-                        style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
-                      >
+                      <span className="text-[9px] font-black uppercase tracking-[0.22em] text-black/40">
                         Colour
                       </span>
                       <div className="flex gap-2">
@@ -7341,17 +7299,13 @@ function ProductPage({
                   {/* Size column */}
                   {sizeOptions.length > 0 && (
                     <div className="flex flex-col gap-1.5 shrink-0">
-                      <span
-                        className="text-[9px] uppercase tracking-[0.22em] text-black/40"
-                        style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
-                      >
+                      <span className="text-[9px] font-black uppercase tracking-[0.22em] text-black/40">
                         Size
                       </span>
                       <select
                         value={selectedSize}
                         onChange={(e) => setSelectedSize(e.target.value)}
-                        className="h-8 min-w-[5rem] border border-black/15 bg-white/70 rounded-md px-2 pr-7 text-[10px] uppercase tracking-wider text-black outline-none focus:border-black/40 transition appearance-none cursor-pointer"
-                        style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
+                        className="h-8 min-w-[5rem] border border-black/15 bg-white/70 rounded-md px-2 pr-7 text-[10px] font-black uppercase tracking-wider text-black outline-none focus:border-black/40 transition appearance-none cursor-pointer"
                       >
                         {sizeOptions.map((s) => (
                           <option key={s} value={s}>{s}</option>
@@ -7372,10 +7326,7 @@ function ProductPage({
                     >
                       <Minus className="h-3 w-3" />
                     </button>
-                    <span
-                      className="min-w-[1.75rem] text-center text-xs text-black"
-                      style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900 }}
-                    >
+                    <span className="min-w-[1.75rem] text-center text-xs font-black text-black">
                       {selectedQuantity}
                     </span>
                     <button
@@ -7394,8 +7345,7 @@ function ProductPage({
                       onAddToCart(product.slug, selectedQuantity, activeVariantId, { size: selectedSize, color: selectedColor });
                       setIsAddedSuccess(true);
                     }}
-                    className="h-11 px-10 bg-[#171717] text-white rounded-md flex items-center justify-center transition hover:bg-[#242424] active:scale-[0.98] whitespace-nowrap"
-                    style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900, fontSize: '11px', letterSpacing: '0.22em', textTransform: 'uppercase' }}
+                    className="h-11 px-10 bg-[#171717] text-white rounded-md flex items-center justify-center text-[11px] font-black uppercase tracking-[0.22em] transition hover:bg-[#242424] active:scale-[0.98] whitespace-nowrap"
                   >
                     Add to Bag — {selectedPriceLabel}
                   </button>
@@ -7416,10 +7366,7 @@ function ProductPage({
                   <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white">
                     <Check className="h-3 w-3" strokeWidth={3} />
                   </div>
-                  <span
-                    className="text-[1rem] text-black"
-                    style={{ fontFamily: "'Instrument Serif', Georgia, serif", fontStyle: 'normal' }}
-                  >
+                  <span className="font-serif text-[1rem] not-italic text-black">
                     Added to your bag
                   </span>
                 </div>
@@ -7427,16 +7374,14 @@ function ProductPage({
                   <button
                     type="button"
                     onClick={() => setIsAddedSuccess(false)}
-                    className="flex-1 sm:flex-none h-11 px-6 border border-black/10 bg-transparent text-black rounded-md transition hover:border-black/25"
-                    style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900, fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase' }}
+                    className="flex-1 sm:flex-none h-11 px-6 border border-black/10 bg-transparent text-black rounded-md text-[10px] font-black uppercase tracking-[0.2em] transition hover:border-black/25"
                   >
                     Keep Shopping
                   </button>
                   <button
                     type="button"
                     onClick={() => window.dispatchEvent(new CustomEvent('open-cart'))}
-                    className="flex-1 sm:flex-none h-11 px-6 bg-[#171717] text-white rounded-md transition hover:bg-[#242424]"
-                    style={{ fontFamily: "'Manrope', sans-serif", fontWeight: 900, fontSize: '10px', letterSpacing: '0.2em', textTransform: 'uppercase' }}
+                    className="flex-1 sm:flex-none h-11 px-6 bg-[#171717] text-white rounded-md text-[10px] font-black uppercase tracking-[0.2em] transition hover:bg-[#242424]"
                   >
                     View Bag
                   </button>
@@ -7510,7 +7455,7 @@ function SchedulePage() {
   ];
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white antialiased" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
+    <main className="min-h-[100dvh] bg-[#0a0a0a] text-white antialiased">
       <HeroHeader sticky />
       <section className="px-4 pb-8 pt-28 sm:px-6 md:px-10 md:pb-10 md:pt-32 lg:px-14">
         <div className="mx-auto flex max-w-7xl flex-col gap-6">
@@ -7619,7 +7564,7 @@ function PassesPage() {
   };
 
   return (
-    <main className="min-h-screen bg-black pt-44 md:pt-10">
+    <main className="min-h-[100dvh] bg-black pt-44 md:pt-10">
       <HeroHeader sticky />
       <iframe
         ref={frameRef}
@@ -7637,7 +7582,7 @@ function PassesPage() {
 
 function UnavailablePage() {
   return (
-    <main className="min-h-screen bg-black text-primary">
+    <main className="min-h-[100dvh] bg-black text-primary">
       <HeroHeader sticky />
       <section className="px-4 pb-24 pt-36 sm:px-6 md:px-10">
         <div className="mx-auto max-w-3xl rounded-3xl border border-white/10 bg-white/[0.055] p-8 text-center">

@@ -4,6 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        black: '#050505',
         background: 'hsl(var(--background) / <alpha-value>)',
         foreground: 'hsl(var(--foreground) / <alpha-value>)',
         card: 'hsl(var(--card) / <alpha-value>)',

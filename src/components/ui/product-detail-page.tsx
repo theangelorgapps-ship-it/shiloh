@@ -284,7 +284,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                       type="button"
                       onClick={() => setCurrentImageIndex(index)}
                       className={cn(
-                        'h-16 w-16 shrink-0 overflow-hidden rounded-md border transition sm:h-20 sm:w-20',
+                        'h-16 w-16 shrink-0 overflow-hidden rounded-md border transition-[border-color,opacity,transform] duration-[var(--motion-fast)] ease-[var(--motion-ease)] sm:h-20 sm:w-20',
                         currentImageIndex === index
                           ? 'scale-[1.03] border-white'
                           : 'border-white/20 opacity-65 hover:scale-[1.03] hover:opacity-100',
