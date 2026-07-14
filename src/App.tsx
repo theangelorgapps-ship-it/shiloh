@@ -2701,7 +2701,7 @@ function SponsorModal({
     { amount: '$25', impact: '1 person' },
     { amount: '$100', impact: '4 people' },
     { amount: '$500', impact: '20 people' },
-    { amount: '$2,500', impact: '65 people' },
+    { amount: '$1,625', impact: '65 people' },
   ];
 
   useEffect(() => {
