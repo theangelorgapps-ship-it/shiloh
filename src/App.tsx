@@ -347,7 +347,7 @@ const journeyEvents = [
   },
   {
     tab: "The Ra'ah's Birthday Celebration",
-    date: 'September 6',
+    date: '6 September at 7:00 PM',
     title: "The Ra'ah's Birthday Celebration",
     image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/69f2171e590487fe57c2f87b.jpg',
     description:
@@ -1892,7 +1892,7 @@ const vipPassOptions = [
   },
   {
     label: 'Birthday VVIP',
-    date: '6 Sep 7:00 PM',
+    date: '6 September at 7:00 PM',
     price: '$1000 USD',
     tag: 'Celebration',
     href: 'https://programs.uebertangel.org/product/birthday/',
@@ -2335,7 +2335,7 @@ const featureCards = [
   {
     number: '03',
     title: "The Ra'ah's Birthday Celebration",
-    date: 'September 6',
+    date: '6 September at 7:00 PM',
     image: '/discover-images/birthday-gala.jpg',
     href: 'https://programs.uebertangel.org/product/birthday/',
     items: [
@@ -7451,7 +7451,7 @@ function SchedulePage() {
     ['5 September, 4:00 PM CAT', 'Shiloh Conference', 'Fort Moriah City'],
     ['6 September, 11 AM CAT', 'Shiloh Conference', 'Fort Moriah City'],
     ['TBC', 'Baptism', 'Fort Moriah City'],
-    ['6 Sep 7:00 PM CAT', "The Ra'ah Prophet Uebert Angel Birthday Celebration", 'Harare Hippodrome'],
+    ['6 September at 7:00 PM', "The Ra'ah Prophet Uebert Angel Birthday Celebration", 'Harare Hippodrome'],
   ];
 
   return (
@@ -7514,7 +7514,7 @@ function SchedulePage() {
               },
               {
                 title: 'What happens on September 6?',
-                copy: "September 6 includes Shiloh Conference at Fort Moriah City and The Ra'ah Prophet Uebert Angel Birthday Celebration later that evening.",
+                copy: "September 6 includes Shiloh Conference at Fort Moriah City and The Ra'ah Prophet Uebert Angel Birthday Celebration at 7:00 PM.",
               },
               {
                 title: 'How should guests prepare?',
