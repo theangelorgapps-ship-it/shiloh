@@ -1316,7 +1316,14 @@ function JourneySupportSection({
               </li>
             </ul>
             <p className="mt-8 text-sm italic text-black/45">
-              Questions: contact <span className="font-semibold text-black">tendai.murumbi@opeaal.co.zw.</span>
+              Questions: contact{' '}
+              <a
+                href="mailto:Internationalvisitors@goodnewsworld.com"
+                className="font-semibold text-black underline decoration-black/30 underline-offset-4"
+              >
+                Internationalvisitors@goodnewsworld.com
+              </a>
+              .
             </p>
           </div>
         </div>
