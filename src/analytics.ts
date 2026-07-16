@@ -7,8 +7,9 @@ declare global {
   }
 }
 
-const googleAdsId = import.meta.env.VITE_GOOGLE_ADS_ID?.trim();
-const sponsorConversionLabel = import.meta.env.VITE_GOOGLE_ADS_SPONSOR_CONVERSION_LABEL?.trim();
+const googleAdsId = import.meta.env.VITE_GOOGLE_ADS_ID?.trim() || 'AW-994462220';
+const sponsorConversionLabel =
+  import.meta.env.VITE_GOOGLE_ADS_SPONSOR_CONVERSION_LABEL?.trim() || '3_G6CO-ErNEcEIyUmdoD';
 
 export function initializeAnalytics() {
   persistCampaignAttribution();
