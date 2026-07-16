@@ -51,6 +51,7 @@ import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 
 import type { LucideIcon } from 'lucide-react';
 import { ProductDetailPage } from '@/components/ui/product-detail-page';
 import shilohPortrait from './assets/shiloh-portrait.png';
+import { readSponsorPaymentMessage, trackEvent, trackSponsorPurchase } from './analytics';
 
 const primaryText = '#E1E0CC';
 const customEase = [0.16, 1, 0.3, 1] as const;
@@ -2713,9 +2714,17 @@ function SponsorModal({
 
   useEffect(() => {
     if (open) {
-      setActiveTab('about');
+      const directSponsor = new URLSearchParams(window.location.search).get('sponsor') === '1';
+      setActiveTab(directSponsor ? 'sponsor' : 'about');
+      trackEvent('sponsor_modal_view', { campaign: 'bring_someone_to_shiloh_2026' });
     }
   }, [open]);
+
+  useEffect(() => {
+    if (open && activeTab === 'sponsor') {
+      trackEvent('begin_checkout', { currency: 'USD', campaign: 'bring_someone_to_shiloh_2026' });
+    }
+  }, [activeTab, open]);
 
   return (
     <AnimatePresence>
@@ -7715,6 +7724,9 @@ export default function App() {
     const openSponsorModal = () => setSponsorOpen(true);
 
     window.addEventListener('open-sponsor-modal', openSponsorModal);
+    if (new URLSearchParams(window.location.search).get('sponsor') === '1') {
+      setSponsorOpen(true);
+    }
     return () => window.removeEventListener('open-sponsor-modal', openSponsorModal);
   }, []);
 
@@ -7830,6 +7842,13 @@ export default function App() {
       const data = typeof event.data === 'string' ? event.data : JSON.stringify(event.data ?? {});
       if (/thank\s*you|success(?:ful)?|submitted|submission\s*complete|formSubmitted/i.test(data)) {
         triggerCelebration();
+        if (sponsorOpen) trackEvent('generate_lead', { campaign: 'bring_someone_to_shiloh_2026' });
+      }
+      if (sponsorOpen) {
+        const payment = readSponsorPaymentMessage(event.data);
+        if (payment.paid && payment.transactionId && Number.isFinite(payment.value)) {
+          trackSponsorPurchase(payment.transactionId, payment.value, payment.currency);
+        }
       }
     };
 
