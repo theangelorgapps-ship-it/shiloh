@@ -137,6 +137,15 @@ const routes = [
     image: defaultImage,
     type: 'website',
   },
+  {
+    path: '/bus',
+    title: 'Sponsor a Bus to Shiloh 2026',
+    description:
+      'Sponsor a seat or a bus to help bring someone to Shiloh 2026 at Fort Moriah City in Zimbabwe.',
+    canonical: `${siteUrl}/bus`,
+    image: defaultImage,
+    type: 'website',
+  },
   ...products.map((product) => ({
     path: `/merch/${product.slug}`,
     title: `${product.name} | Shiloh Season 2026 Merchandise`,

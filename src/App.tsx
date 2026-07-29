@@ -126,6 +126,12 @@ const routeSeo: Record<string, SeoDetails> = {
       "View the official Shiloh 2026 schedule for Prophetic Retreat, conference services, Baptism, and the Ra'ah Birthday Celebration.",
     canonical: `${siteUrl}/schedule`,
   },
+  '/bus': {
+    title: 'Sponsor a Bus to Shiloh 2026',
+    description:
+      'Sponsor a seat or a bus to help bring someone to Shiloh 2026 at Fort Moriah City in Zimbabwe.',
+    canonical: `${siteUrl}/bus`,
+  },
 };
 
 function setMetaAttribute(attribute: 'name' | 'property', key: string, content: string) {
@@ -2714,7 +2720,9 @@ function SponsorModal({
 
   useEffect(() => {
     if (open) {
-      const directSponsor = new URLSearchParams(window.location.search).get('sponsor') === '1';
+      const directSponsor =
+        window.location.pathname.replace(/\/+$/, '') === '/bus' ||
+        new URLSearchParams(window.location.search).get('sponsor') === '1';
       setActiveTab(directSponsor ? 'sponsor' : 'about');
       trackEvent('sponsor_modal_view', { campaign: 'bring_someone_to_shiloh_2026' });
     }
@@ -6044,7 +6052,7 @@ const eventDates = {
   end: '2026-09-06',
 };
 
-const indexableRoutes = ['/', '/journey', '/vip', '/passes', '/contact', '/merch', '/schedule'];
+const indexableRoutes = ['/', '/journey', '/vip', '/passes', '/contact', '/merch', '/schedule', '/bus'];
 const removedRoutes = ['/partners'];
 
 function getCheckoutSchemaUrl(product: MerchProduct, variant?: MerchVariant) {
@@ -7724,11 +7732,17 @@ export default function App() {
     const openSponsorModal = () => setSponsorOpen(true);
 
     window.addEventListener('open-sponsor-modal', openSponsorModal);
-    if (new URLSearchParams(window.location.search).get('sponsor') === '1') {
-      setSponsorOpen(true);
-    }
     return () => window.removeEventListener('open-sponsor-modal', openSponsorModal);
   }, []);
+
+  useEffect(() => {
+    const directSponsor =
+      normalizedPathname === '/bus' || new URLSearchParams(window.location.search).get('sponsor') === '1';
+
+    if (directSponsor) {
+      setSponsorOpen(true);
+    }
+  }, [normalizedPathname]);
 
   useEffect(() => {
     if (window.location.hash) {
