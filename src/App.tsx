@@ -51,7 +51,17 @@ import { useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from 
 import type { LucideIcon } from 'lucide-react';
 import { ProductDetailPage } from '@/components/ui/product-detail-page';
 import shilohPortrait from './assets/shiloh-portrait.png';
-import { readSponsorPaymentMessage, trackEvent, trackSponsorPurchase } from './analytics';
+import {
+  appendCampaignAttribution,
+  getAnalyticsConsent,
+  readSponsorPaymentMessage,
+  setAnalyticsConsent,
+  trackEvent,
+  trackMerchCheckout,
+  trackRegistrationLead,
+  trackSponsorLead,
+  trackSponsorPurchase,
+} from './analytics';
 
 const primaryText = '#E1E0CC';
 const customEase = [0.16, 1, 0.3, 1] as const;
@@ -2663,7 +2673,7 @@ function RegistrationModal({
                 aria-label={registrationTitle}
                 title={registrationTitle}
                 className="h-[72svh] w-full rounded-2xl border-0"
-                src={registrationUrl}
+                src={appendCampaignAttribution(registrationUrl)}
                 loading="eager"
                 referrerPolicy="strict-origin-when-cross-origin"
               />
@@ -2698,6 +2708,34 @@ function FloatingSponsorButton({ onClick, visible }: { onClick: () => void; visi
         </motion.div>
       )}
     </AnimatePresence>
+  );
+}
+
+function ConsentBanner() {
+  const [consent, setConsent] = useState(getAnalyticsConsent);
+
+  if (consent) return null;
+
+  const chooseConsent = (choice: 'granted' | 'denied') => {
+    setAnalyticsConsent(choice);
+    setConsent(choice);
+  };
+
+  return (
+    <div className="fixed inset-x-3 bottom-3 z-[300] mx-auto max-w-3xl rounded-2xl border border-white/15 bg-[#061923]/95 p-4 text-white shadow-[0_24px_80px_rgba(0,0,0,0.55)] backdrop-blur-xl sm:flex sm:items-center sm:gap-5 sm:p-5">
+      <p className="text-sm leading-6 text-white/78">
+        We use first-party and Google measurement to understand registrations, sponsorship enquiries, and completed
+        sponsorships. You can accept or decline analytics and advertising storage.
+      </p>
+      <div className="mt-4 flex shrink-0 gap-2 sm:mt-0">
+        <button type="button" onClick={() => chooseConsent('denied')} className="rounded-full border border-white/25 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em]">
+          Decline
+        </button>
+        <button type="button" onClick={() => chooseConsent('granted')} className="rounded-full bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-black">
+          Accept
+        </button>
+      </div>
+    </div>
   );
 }
 
@@ -2812,7 +2850,7 @@ function SponsorModal({
                 </div>
               ) : (
                 <iframe
-                  src="https://crm.goodnewsworld.com/widget/form/WBglmsiMfAfsGPSlyekb"
+                  src={appendCampaignAttribution('https://crm.goodnewsworld.com/widget/form/WBglmsiMfAfsGPSlyekb')}
                   className="h-[min(74svh,688px)] min-h-[560px] w-full rounded-2xl border border-black/10"
                   id="inline-WBglmsiMfAfsGPSlyekb"
                   data-layout="{'id':'INLINE'}"
@@ -6344,7 +6382,7 @@ const getCheckoutUrl = (cartLines: Array<{ product: MerchProduct; variant?: Merc
     return '';
   }
 
-  return `https://uebertangel.org/checkout/?add-to-cart=${checkoutProductId}&quantity=${checkoutLine.quantity}`;
+  return appendCampaignAttribution(`https://uebertangel.org/checkout/?add-to-cart=${checkoutProductId}&quantity=${checkoutLine.quantity}`);
 };
 
 function FloatingCart({
@@ -6457,6 +6495,7 @@ function FloatingCart({
               {checkoutUrl ? (
                 <a
                   href={checkoutUrl}
+                  onClick={() => trackMerchCheckout(subtotal, itemCount)}
                   className="w-full rounded-full bg-primary px-5 py-3 text-center text-sm font-semibold text-black transition-transform hover:-translate-y-0.5"
                 >
                   Checkout
@@ -7856,7 +7895,8 @@ export default function App() {
       const data = typeof event.data === 'string' ? event.data : JSON.stringify(event.data ?? {});
       if (/thank\s*you|success(?:ful)?|submitted|submission\s*complete|formSubmitted/i.test(data)) {
         triggerCelebration();
-        if (sponsorOpen) trackEvent('generate_lead', { campaign: 'bring_someone_to_shiloh_2026' });
+        if (registrationOpen) trackRegistrationLead(registrationType);
+        if (sponsorOpen) trackSponsorLead();
       }
       if (sponsorOpen) {
         const payment = readSponsorPaymentMessage(event.data);
@@ -7918,6 +7958,7 @@ export default function App() {
       <SponsorModal open={sponsorOpen} onClose={() => setSponsorOpen(false)} />
       <SowModal open={sowOpen} onClose={() => setSowOpen(false)} />
       <CelebrationBurst active={celebrating} />
+      <ConsentBanner />
       <FloatingCart
         cart={cart}
         onUpdateQuantity={updateCartQuantity}
