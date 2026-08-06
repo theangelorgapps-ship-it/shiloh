@@ -1302,7 +1302,10 @@ function JourneySupportSection({
   theme?: 'light' | 'dark';
   showAside?: boolean;
 } = {}) {
-  const [openIndex, setOpenIndex] = useState(0);
+  const recommendedStayFaqIndex = 5;
+  const [openIndex, setOpenIndex] = useState(() =>
+    window.location.hash === '#recommended-stay' ? recommendedStayFaqIndex : 0,
+  );
   const isDark = theme === 'dark';
   const faqItems = [
     {
@@ -1459,7 +1462,7 @@ function JourneySupportSection({
       title: 'Recommended Stay',
       icon: Building2,
       content: (
-        <div id="recommended-stay" className="scroll-mt-32 space-y-5">
+        <div className="space-y-5">
           <p className="text-xs leading-relaxed text-black/48 sm:text-sm">
             VIP transport services are exclusively available for guests staying at selected partner hotels listed below.
             Guests staying at non-partner accommodations will be required to arrange independent transportation to and
@@ -1568,6 +1571,21 @@ function JourneySupportSection({
     },
   ];
 
+  useEffect(() => {
+    const openRecommendedStay = () => {
+      if (window.location.hash !== '#recommended-stay') return;
+
+      setOpenIndex(recommendedStayFaqIndex);
+      window.requestAnimationFrame(() => {
+        document.getElementById('recommended-stay')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    };
+
+    openRecommendedStay();
+    window.addEventListener('hashchange', openRecommendedStay);
+    return () => window.removeEventListener('hashchange', openRecommendedStay);
+  }, []);
+
   const hotlines = [
     { flag: '🇺🇸', country: 'USA', phone: '+1 448 877 0344' },
     { flag: '🇬🇧', country: 'UK', phone: '+44 1244 727242' },
@@ -1606,7 +1624,8 @@ function JourneySupportSection({
               return (
                 <div
                   key={item.title}
-                  className={`overflow-hidden rounded-[1.75rem] border bg-white transition-shadow ${isOpen ? 'border-black shadow-[0_18px_60px_rgba(0,0,0,0.08)]' : 'border-black/[0.08] shadow-[0_10px_40px_rgba(0,0,0,0.025)]'
+                  id={item.title === 'Recommended Stay' ? 'recommended-stay' : undefined}
+                  className={`scroll-mt-32 overflow-hidden rounded-[1.75rem] border bg-white transition-shadow ${isOpen ? 'border-black shadow-[0_18px_60px_rgba(0,0,0,0.08)]' : 'border-black/[0.08] shadow-[0_10px_40px_rgba(0,0,0,0.025)]'
                     }`}
                 >
                   <button
@@ -1953,6 +1972,28 @@ const vipPassOptions = [
   },
 ];
 
+function VipFeatureText({ feature }: { feature: string }) {
+  const partnerHotelsLabel = 'partner hotels';
+  const partnerHotelsStart = feature.toLowerCase().indexOf(partnerHotelsLabel);
+
+  if (partnerHotelsStart === -1) return feature;
+
+  const partnerHotelsEnd = partnerHotelsStart + partnerHotelsLabel.length;
+
+  return (
+    <>
+      {feature.slice(0, partnerHotelsStart)}
+      <a
+        href="/journey#recommended-stay"
+        className="font-semibold text-[#f7d98e] underline decoration-[#f7d98e]/45 underline-offset-4 transition-colors hover:text-white"
+      >
+        {feature.slice(partnerHotelsStart, partnerHotelsEnd)}
+      </a>
+      {feature.slice(partnerHotelsEnd)}
+    </>
+  );
+}
+
 function VipFeaturesSection() {
   const [activePassIndex, setActivePassIndex] = useState(0);
   const activePass = vipPassOptions[activePassIndex];
@@ -2045,7 +2086,7 @@ function VipFeaturesSection() {
                       <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#f0c96f]/15 text-[#f0c96f]">
                         <Check className="h-3 w-3" />
                       </span>
-                      <span>{feature}</span>
+                      <span><VipFeatureText feature={feature} /></span>
                     </li>
                   ))}
                 </ul>
@@ -2656,7 +2697,6 @@ function RegistrationModal({
           >
             <div className="flex items-center justify-between gap-4 border-b border-black/10 px-5 py-4">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.34em] text-black/45">Registration</p>
                 <h2 className="journey-card-title mt-1 text-2xl text-black">{registrationTitle}</h2>
               </div>
               <button
