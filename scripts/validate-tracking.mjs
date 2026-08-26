@@ -22,6 +22,7 @@ const assertions = [
   ['Sponsor purchase wiring', app.includes('trackSponsorPurchase(payment.transactionId')],
   ['GHL attribution decoration', app.includes("appendCampaignAttribution('https://crm.goodnewsworld.com/widget/form/WBglmsiMfAfsGPSlyekb')")],
   ['Zoho attribution decoration', app.includes('appendCampaignAttribution(registrationUrl)')],
+  ['Registration modal remains scrollable', app.includes('min-h-0 flex-1 overflow-y-auto overscroll-contain bg-white p-2')],
   ['Merch checkout event', app.includes('trackMerchCheckout(subtotal, itemCount)')],
   ['Google Ads CSP support', vercel.includes('https://www.googleadservices.com') && vercel.includes('https://stats.g.doubleclick.net')],
   ['Production bundle contains registration label', builtAssets.includes('-_kFCMmqqtkcEIyUmdoD')],

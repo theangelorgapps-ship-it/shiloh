@@ -2489,22 +2489,12 @@ function FeatureCard({
             </li>
           ))}
         </ul>
-        {card.registrationType === 'baptism' && (
-          <button
-            type="button"
-            data-registration-type="baptism"
-            className="mt-auto inline-flex w-full items-center justify-center gap-3 rounded-full border border-primary/30 bg-[#061923] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.24em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] transition-transform duration-300 hover:-translate-y-0.5 hover:border-primary/55 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
-          >
-            Register Now
-            <ArrowRight className="h-4 w-4" />
-          </button>
-        )}
         <a
           href={card.href ?? '#registration'}
           data-registration-type={card.registrationType}
-          className={`${card.registrationType === 'baptism' ? 'pt-5' : 'mt-auto pt-8'} inline-flex items-center gap-2 text-sm font-medium text-primary`}
+          className="mt-auto inline-flex items-center gap-2 pt-8 text-sm font-medium text-primary"
         >
-          Learn more
+          {card.registrationType === 'baptism' ? 'Register Now' : 'Learn more'}
           <ArrowRight className="h-4 w-4 -rotate-45" />
         </a>
       </div>
@@ -2756,7 +2746,7 @@ function RegistrationModal({
                 <X className="h-4 w-4" />
               </button>
             </div>
-            <div className="min-h-0 flex-1 overflow-hidden bg-white p-2">
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain bg-white p-2">
               <iframe
                 aria-label={registrationTitle}
                 title={isBaptism ? 'Affiliate Marketing Agency Lead' : registrationTitle}
