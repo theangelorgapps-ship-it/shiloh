@@ -138,6 +138,15 @@ const routes = [
     type: 'website',
   },
   {
+    path: '/baptism',
+    title: 'Baptism Registration | Shiloh 2026',
+    description:
+      'Register directly for the Shiloh Season 2026 baptism led by The Ra’ah, Prophet Uebert Angel, on September 5.',
+    canonical: `${siteUrl}/baptism`,
+    image: defaultImage,
+    type: 'website',
+  },
+  {
     path: '/bus',
     title: 'Sponsor a Bus to Shiloh 2026',
     description:

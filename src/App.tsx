@@ -136,6 +136,12 @@ const routeSeo: Record<string, SeoDetails> = {
       "View the official Shiloh 2026 schedule for Prophetic Retreat, conference services, Baptism, and the Ra'ah Birthday Celebration.",
     canonical: `${siteUrl}/schedule`,
   },
+  '/baptism': {
+    title: 'Baptism Registration | Shiloh 2026',
+    description:
+      'Register directly for the Shiloh Season 2026 baptism led by The Ra’ah, Prophet Uebert Angel, on September 5.',
+    canonical: `${siteUrl}/baptism`,
+  },
   '/bus': {
     title: 'Sponsor a Bus to Shiloh 2026',
     description:
@@ -2414,6 +2420,7 @@ const featureCards = [
     title: 'Baptism by The Ra’ah',
     date: '5 September',
     image: '/discover-images/baptism.jpg',
+    href: '/baptism',
     registrationType: 'baptism',
     items: [
       'A sacred moment of public faith, renewal, and spiritual transformation during Shiloh Season 26, led by The Ra’ah, Prophet Uebert Angel.',
@@ -6180,7 +6187,7 @@ const eventDates = {
   end: '2026-09-06',
 };
 
-const indexableRoutes = ['/', '/journey', '/vip', '/passes', '/contact', '/merch', '/schedule', '/bus'];
+const indexableRoutes = ['/', '/journey', '/vip', '/passes', '/contact', '/merch', '/schedule', '/baptism', '/bus'];
 const removedRoutes = ['/partners'];
 
 function getCheckoutSchemaUrl(product: MerchProduct, variant?: MerchVariant) {
@@ -6222,6 +6229,7 @@ function buildBreadcrumbSchema(pathname: string, product?: MerchProduct) {
       '/contact': 'Contact',
       '/merch': 'Official Shiloh Merchandise',
       '/schedule': 'Schedule',
+      '/baptism': 'Baptism Registration',
     };
     itemListElement.push({
       '@type': 'ListItem',
@@ -7874,6 +7882,13 @@ export default function App() {
   }, [normalizedPathname]);
 
   useEffect(() => {
+    if (normalizedPathname !== '/baptism') return;
+
+    setRegistrationType('baptism');
+    setRegistrationOpen(true);
+  }, [normalizedPathname]);
+
+  useEffect(() => {
     if (window.location.hash) {
       return;
     }
@@ -7953,6 +7968,14 @@ export default function App() {
 
   const removeFromCart = (cartKey: string) => {
     setCart((items) => items.filter((item) => getCartKey(item.slug, item.variantId, item.size, item.color) !== cartKey));
+  };
+
+  const closeRegistration = () => {
+    setRegistrationOpen(false);
+    if (normalizedPathname === '/baptism') {
+      window.history.replaceState({}, '', '/');
+      setPathname('/');
+    }
   };
 
   useEffect(() => {
@@ -8048,7 +8071,7 @@ export default function App() {
         onClick={() => setSponsorOpen(true)}
         visible={!isLoading && sponsorVisible && !registrationOpen && !sponsorOpen && !sowOpen && !isProductPage && (!isMobile || !isMerchPage)}
       />
-      <RegistrationModal open={registrationOpen} onClose={() => setRegistrationOpen(false)} type={registrationType} />
+      <RegistrationModal open={registrationOpen} onClose={closeRegistration} type={registrationType} />
       <SponsorModal open={sponsorOpen} onClose={() => setSponsorOpen(false)} />
       <SowModal open={sowOpen} onClose={() => setSowOpen(false)} />
       <CelebrationBurst active={celebrating} />

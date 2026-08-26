@@ -6,6 +6,7 @@ const distDir = new URL('../dist/', import.meta.url);
 const assetsDir = new URL('./assets/', distDir);
 const merchPage = new URL('./merch/index.html', distDir);
 const baptismPage = new URL('./merch/baptism-gown/index.html', distDir);
+const baptismRegistrationPage = new URL('./baptism/index.html', distDir);
 
 const javascriptAssets = readdirSync(assetsDir)
   .filter((file) => file.endsWith('.js'))
@@ -15,6 +16,7 @@ const javascriptAssets = readdirSync(assetsDir)
 const checks = [
   ['Merch collection page is pre-rendered', existsSync(merchPage)],
   ['Baptism product page is pre-rendered', existsSync(baptismPage)],
+  ['Baptism registration route is pre-rendered', existsSync(baptismRegistrationPage)],
   ['Baptism product is included in the client bundle', javascriptAssets.includes('baptism-gown')],
   ['Baptism collection is included in the client bundle', javascriptAssets.includes('BAPTISM')],
   ['Baptism Set label is included in the client bundle', javascriptAssets.includes('Baptism Set')],
