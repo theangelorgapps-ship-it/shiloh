@@ -2412,8 +2412,9 @@ const featureCards = [
   {
     number: '04',
     title: 'Baptism by The Ra’ah',
-    date: 'Date to be Decided',
+    date: '5 September',
     image: '/discover-images/baptism.jpg',
+    registrationType: 'baptism',
     items: [
       'A sacred moment of public faith, renewal, and spiritual transformation during Shiloh Season 26, led by The Ra’ah, Prophet Uebert Angel.',
       'Guests participating in baptism will be required to wear the official GoodNews World baptism garments for unity, order, and conference presentation purposes.',
@@ -2488,10 +2489,20 @@ function FeatureCard({
             </li>
           ))}
         </ul>
+        {card.registrationType === 'baptism' && (
+          <button
+            type="button"
+            data-registration-type="baptism"
+            className="mt-auto inline-flex w-full items-center justify-center gap-3 rounded-full border border-primary/30 bg-[#061923] px-6 py-3.5 text-xs font-semibold uppercase tracking-[0.24em] text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)] transition-transform duration-300 hover:-translate-y-0.5 hover:border-primary/55 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+          >
+            Register Now
+            <ArrowRight className="h-4 w-4" />
+          </button>
+        )}
         <a
           href={card.href ?? '#registration'}
           data-registration-type={card.registrationType}
-          className="mt-auto inline-flex items-center gap-2 pt-8 text-sm font-medium text-primary"
+          className={`${card.registrationType === 'baptism' ? 'pt-5' : 'mt-auto pt-8'} inline-flex items-center gap-2 text-sm font-medium text-primary`}
         >
           Learn more
           <ArrowRight className="h-4 w-4 -rotate-45" />
@@ -2678,26 +2689,63 @@ function RegistrationModal({
 }: {
   open: boolean;
   onClose: () => void;
-  type: 'conference' | 'birthday';
+  type: 'conference' | 'birthday' | 'baptism';
 }) {
-  const registrationTitle = "Let Us Know You're Coming";
-  const registrationUrl =
-    'https://forms.zohopublic.eu/rikki/form/SimpleOrderForm/formperma/ygi0PjWj3QQC-FSgvE1HfiaATMsF7qzn3jVwuNd8c6g';
+  const isBaptism = type === 'baptism';
+  const registrationTitle = isBaptism ? 'Baptism Registration' : "Let Us Know You're Coming";
+  const registrationUrl = isBaptism
+    ? 'https://crm.goodnewsworld.com/widget/form/jIFrYKb1fEtnoHS0Xdla'
+    : 'https://forms.zohopublic.eu/rikki/form/SimpleOrderForm/formperma/ygi0PjWj3QQC-FSgvE1HfiaATMsF7qzn3jVwuNd8c6g';
+
+  useEffect(() => {
+    if (!open) return;
+
+    const originalOverflow = document.body.style.overflow;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+    };
+
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [open, onClose]);
+
+  useEffect(() => {
+    if (!open || !isBaptism || document.querySelector('script[data-baptism-form-embed="true"]')) return;
+
+    const script = document.createElement('script');
+    script.src = 'https://crm.goodnewsworld.com/js/form_embed.js';
+    script.async = true;
+    script.dataset.baptismFormEmbed = 'true';
+    document.body.appendChild(script);
+  }, [isBaptism, open]);
 
   return (
     <AnimatePresence>
       {open && (
-        <motion.div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/75 p-4 backdrop-blur-sm">
+        <motion.div
+          className="fixed inset-0 z-[120] flex items-center justify-center bg-black/75 p-3 backdrop-blur-sm sm:p-4"
+          onClick={onClose}
+          role="presentation"
+        >
           <motion.div
             className="relative flex max-h-[88svh] w-full max-w-3xl flex-col overflow-hidden rounded-[1.6rem] bg-white text-black shadow-[0_30px_100px_rgba(0,0,0,0.45)]"
             initial={{ opacity: 0, y: 26, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.98 }}
             transition={{ duration: 0.42, ease: customEase }}
+            onClick={(event) => event.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="registration-modal-title"
           >
             <div className="flex items-center justify-between gap-4 border-b border-black/10 px-5 py-4">
               <div>
-                <h2 className="journey-card-title mt-1 text-2xl text-black">{registrationTitle}</h2>
+                <h2 id="registration-modal-title" className="journey-card-title mt-1 text-2xl text-black">{registrationTitle}</h2>
               </div>
               <button
                 type="button"
@@ -2711,9 +2759,21 @@ function RegistrationModal({
             <div className="min-h-0 flex-1 overflow-hidden bg-white p-2">
               <iframe
                 aria-label={registrationTitle}
-                title={registrationTitle}
-                className="h-[72svh] w-full rounded-2xl border-0"
+                title={isBaptism ? 'Affiliate Marketing Agency Lead' : registrationTitle}
+                className="h-[72svh] min-h-[520px] w-full rounded-2xl border-0"
                 src={appendCampaignAttribution(registrationUrl)}
+                id={isBaptism ? 'inline-jIFrYKb1fEtnoHS0Xdla' : undefined}
+                data-layout={isBaptism ? "{'id':'INLINE'}" : undefined}
+                data-trigger-type={isBaptism ? 'alwaysShow' : undefined}
+                data-trigger-value={isBaptism ? '' : undefined}
+                data-activation-type={isBaptism ? 'alwaysActivated' : undefined}
+                data-activation-value={isBaptism ? '' : undefined}
+                data-deactivation-type={isBaptism ? 'neverDeactivate' : undefined}
+                data-deactivation-value={isBaptism ? '' : undefined}
+                data-form-name={isBaptism ? 'Affiliate Marketing Agency Lead' : undefined}
+                data-height={isBaptism ? '749' : undefined}
+                data-layout-iframe-id={isBaptism ? 'inline-jIFrYKb1fEtnoHS0Xdla' : undefined}
+                data-form-id={isBaptism ? 'jIFrYKb1fEtnoHS0Xdla' : undefined}
                 loading="eager"
                 referrerPolicy="strict-origin-when-cross-origin"
               />
@@ -7713,7 +7773,7 @@ function UnavailablePage() {
 export default function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [registrationOpen, setRegistrationOpen] = useState(false);
-  const [registrationType, setRegistrationType] = useState<'conference' | 'birthday'>('conference');
+  const [registrationType, setRegistrationType] = useState<'conference' | 'birthday' | 'baptism'>('conference');
   const [sponsorOpen, setSponsorOpen] = useState(false);
   const [sowOpen, setSowOpen] = useState(false);
   const [sponsorVisible, setSponsorVisible] = useState(false);
@@ -7918,7 +7978,11 @@ export default function App() {
         event.preventDefault();
         const registrationContext = target?.closest('article, section, div')?.textContent?.toLowerCase() ?? '';
         setRegistrationType(
-          requestedRegistration === 'birthday' || registrationContext.includes('birthday') ? 'birthday' : 'conference',
+          requestedRegistration === 'baptism'
+            ? 'baptism'
+            : requestedRegistration === 'birthday' || registrationContext.includes('birthday')
+              ? 'birthday'
+              : 'conference',
         );
         setRegistrationOpen(true);
       }

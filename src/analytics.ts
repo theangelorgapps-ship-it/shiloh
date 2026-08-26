@@ -59,7 +59,7 @@ export function trackEvent(name: string, parameters: Record<string, AnalyticsVal
   window.gtag?.('event', name, parameters);
 }
 
-export function trackRegistrationLead(registrationType: 'conference' | 'birthday') {
+export function trackRegistrationLead(registrationType: 'conference' | 'birthday' | 'baptism') {
   const dedupeKey = `shiloh-registration-lead:${registrationType}`;
   if (!markOnce(window.sessionStorage, dedupeKey)) return false;
   const event = {
