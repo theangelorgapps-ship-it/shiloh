@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow, noarchive" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <link rel="preconnect" href="https://donorbox.org" />
+    <link rel="preconnect" href="https://js.stripe.com" />
+    <link rel="dns-prefetch" href="//www.paypal.com" />
+    <link rel="dns-prefetch" href="//www.recaptcha.net" />
     <title>Shiloh 2026 Payments</title>
     <style>
       :root {
@@ -31,6 +35,30 @@
         padding: 24px 12px 48px;
       }
 
+      .payment-frame {
+        position: relative;
+        width: 100%;
+        max-width: 500px;
+        min-width: 250px;
+        min-height: 900px;
+        overflow: hidden;
+        background: #fff;
+      }
+
+      .loading-message {
+        position: absolute;
+        inset: 48px 16px auto;
+        color: #4d4a43;
+        font-size: 14px;
+        line-height: 1.5;
+        text-align: center;
+        transition: opacity 160ms ease;
+      }
+
+      .payment-frame.is-loaded .loading-message {
+        opacity: 0;
+      }
+
       .visually-hidden {
         position: absolute;
         width: 1px;
@@ -44,29 +72,37 @@
       }
 
       iframe {
+        position: relative;
         display: block;
         width: 100%;
         border: 0;
+        background: transparent;
       }
     </style>
   </head>
   <body>
     <main>
       <h1 class="visually-hidden">Shiloh 2026 Payments</h1>
-      <script src="https://donorbox.org/widget.js" paypalExpress="true"></script>
-      <iframe
-        src="https://donorbox.org/embed/shiloh2026-payments?"
-        name="donorbox"
-        title="Shiloh 2026 secure payment form"
-        allowpaymentrequest="allowpaymentrequest"
-        seamless="seamless"
-        frameborder="0"
-        scrolling="no"
-        height="900px"
-        width="100%"
-        style="max-width: 500px; min-width: 250px; max-height: none !important"
-        allow="payment"
-      ></iframe>
+      <div class="payment-frame">
+        <p class="loading-message" role="status" aria-live="polite">Loading the secure payment form…</p>
+        <iframe
+          src="https://donorbox.org/embed/shiloh2026-payments?"
+          name="donorbox"
+          title="Shiloh 2026 secure payment form"
+          allowpaymentrequest="allowpaymentrequest"
+          seamless="seamless"
+          frameborder="0"
+          scrolling="no"
+          height="900px"
+          width="100%"
+          loading="eager"
+          fetchpriority="high"
+          style="max-width: 500px; min-width: 250px; max-height: none !important"
+          allow="payment"
+          onload="this.parentElement.classList.add('is-loaded'); this.previousElementSibling.hidden = true"
+        ></iframe>
+      </div>
+      <script async src="https://donorbox.org/widget.js" paypalExpress="true"></script>
     </main>
   </body>
 </html>
