@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-const seedPath = path.resolve('public/SEED/index.html');
+const seedPath = path.resolve('public/seed/index.html');
 const sitemapPath = path.resolve('public/sitemap.xml');
 const appPath = path.resolve('src/App.tsx');
 const vercelPath = path.resolve('vercel.json');
@@ -30,12 +30,12 @@ const checks = [
   [
     vercel.headers?.some(
       (rule) =>
-        rule.source === '/SEED' &&
+        rule.source === '/seed' &&
         rule.headers?.some(
           (header) => header.key.toLowerCase() === 'x-robots-tag' && header.value.toLowerCase().includes('noindex'),
         ),
     ),
-    'Vercel must send an X-Robots-Tag noindex header for /SEED',
+    'Vercel must send an X-Robots-Tag noindex header for /seed',
   ],
   [
     vercel.headers?.some((rule) =>
@@ -46,6 +46,12 @@ const checks = [
       ),
     ),
     'Vercel Permissions-Policy must permit payments for the Donorbox iframe',
+  ],
+  [
+    vercel.redirects?.some(
+      (rule) => rule.source === '/SEED' && rule.destination === '/seed' && rule.permanent === true,
+    ),
+    'Uppercase /SEED must redirect permanently to lowercase /seed',
   ],
 ];
 

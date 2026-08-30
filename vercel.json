@@ -1,6 +1,11 @@
 {
   "redirects": [
     {
+      "source": "/SEED",
+      "destination": "/seed",
+      "permanent": true
+    },
+    {
       "source": "/partners",
       "destination": "/merch",
       "permanent": true
@@ -13,7 +18,7 @@
   ],
   "headers": [
     {
-      "source": "/SEED",
+      "source": "/seed",
       "headers": [
         {
           "key": "X-Robots-Tag",
