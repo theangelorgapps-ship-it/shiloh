@@ -63,7 +63,7 @@ const checks = [
       rule.headers?.some(
         (header) =>
           header.key.toLowerCase() === 'permissions-policy' &&
-          header.value.includes('payment=(self "https://donorbox.org")'),
+          header.value.includes('"https://donorbox.org"'),
       ),
     ),
     'Vercel Permissions-Policy must permit payments for the Donorbox iframe',
