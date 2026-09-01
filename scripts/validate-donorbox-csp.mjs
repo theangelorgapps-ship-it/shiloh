@@ -15,6 +15,7 @@ const requiredSources = {
     'https://js.stripe.com',
     'https://*.js.stripe.com',
     'https://jspm.dev',
+    'https://cdn.jsdelivr.net',
     'https://*.paypal.com',
     'https://*.paypalobjects.com',
     'https://*.venmo.com',
