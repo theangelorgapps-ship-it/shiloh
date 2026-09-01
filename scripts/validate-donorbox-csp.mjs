@@ -2,6 +2,7 @@ import fs from 'node:fs';
 
 const vercel = JSON.parse(fs.readFileSync('vercel.json', 'utf8'));
 const headersFile = fs.readFileSync('public/_headers', 'utf8');
+const app = fs.readFileSync('src/App.tsx', 'utf8');
 
 const rootHeaders = vercel.headers?.find((rule) => rule.source === '/(.*)')?.headers ?? [];
 const vercelCsp = rootHeaders.find((header) => header.key.toLowerCase() === 'content-security-policy')?.value;
@@ -87,4 +88,16 @@ validateCsp(staticCsp, 'public/_headers CSP');
 validatePermissionsPolicy(permissionsPolicy, 'vercel.json Permissions-Policy');
 validatePermissionsPolicy(staticPermissionsPolicy, 'public/_headers Permissions-Policy');
 
-console.log('Donorbox payment CSP checks passed');
+if (!app.includes("script.src = 'https://donorbox.org/widget.js'")) {
+  throw new Error('Giving modal must load the classic Donorbox widget.js embed helper');
+}
+
+if (!app.includes('src={`https://donorbox.org/embed/${campaign}?`}')) {
+  throw new Error('Giving modal must render the classic Donorbox campaign iframe');
+}
+
+if (app.includes('https://donorbox.org/widgets.js') || app.includes('<dbox-widget')) {
+  throw new Error('Giving modal must not use the failing Donorbox Web Component embed');
+}
+
+console.log('Donorbox classic embed and payment CSP checks passed');

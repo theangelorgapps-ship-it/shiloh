@@ -2976,26 +2976,40 @@ function SponsorModal({
 
 function DonorboxWidget({ campaign }: { campaign: string }) {
   useEffect(() => {
-    if (document.querySelector('script[data-donorbox-widget="true"]')) {
+    if (document.querySelector('script[data-donorbox-embed="true"]')) {
       return;
     }
 
     const script = document.createElement('script');
-    script.type = 'module';
-    script.src = 'https://donorbox.org/widgets.js';
+    script.src = 'https://donorbox.org/widget.js';
     script.async = true;
-    script.dataset.donorboxWidget = 'true';
+    script.setAttribute('paypalExpress', 'true');
+    script.dataset.donorboxEmbed = 'true';
     document.body.appendChild(script);
   }, []);
 
   return (
     <div
       key={campaign}
-      className="mx-auto flex min-h-[620px] w-full max-w-2xl justify-center overflow-hidden rounded-2xl bg-white"
-      dangerouslySetInnerHTML={{
-        __html: `<dbox-widget campaign="${campaign}" type="donation_form" enable-auto-scroll="true"></dbox-widget>`,
-      }}
-    />
+      className="mx-auto flex min-h-[900px] w-full max-w-2xl justify-center overflow-hidden rounded-2xl bg-white"
+    >
+      <iframe
+        src={`https://donorbox.org/embed/${campaign}?`}
+        name="donorbox"
+        ref={(iframe) => {
+          iframe?.setAttribute('allowpaymentrequest', 'allowpaymentrequest');
+          iframe?.setAttribute('seamless', 'seamless');
+        }}
+        frameBorder="0"
+        scrolling="no"
+        height="900px"
+        width="100%"
+        className="min-w-[250px] max-w-[500px]"
+        style={{ maxHeight: 'none' }}
+        allow="payment"
+        title={`${campaign} donation form`}
+      />
+    </div>
   );
 }
 
