@@ -133,7 +133,7 @@ const routeSeo: Record<string, SeoDetails> = {
   '/schedule': {
     title: 'Shiloh 2026 Schedule | Dates and Events',
     description:
-      "View the official Shiloh 2026 schedule for Prophetic Retreat, conference services, Baptism, and the Ra'ah Birthday Celebration.",
+      "View the official Shiloh 2026 schedule for conference services, Baptism, and the Ra'ah Birthday Celebration.",
     canonical: `${siteUrl}/schedule`,
   },
   '/baptism': {
@@ -7551,7 +7551,6 @@ function ScheduleMarqueeRow({
 
 function SchedulePage() {
   const timeline = [
-    ['31 Aug - 3 Sep', 'Prophetic Retreat', 'Fort Moriah City'],
     ['4 September, 4:00 PM CAT', 'Shiloh Conference', 'Fort Moriah City'],
     ['5 September, 4:00 PM CAT', 'Shiloh Conference', 'Fort Moriah City'],
     ['6 September, 11 AM CAT', 'Shiloh Conference', 'Fort Moriah City'],
@@ -7569,8 +7568,8 @@ function SchedulePage() {
               Schedule
             </h1>
             <p className="mt-4 max-w-3xl text-sm leading-[1.6] text-white/60 md:text-[15px]">
-              Shiloh Season 2026 gathers every moment of encounter into one clear journey. From Prophetic Retreat to
-              the conference sessions and the Ra&apos;ah birthday celebration, plan your arrival with confidence
+              Shiloh Season 2026 gathers every moment of encounter into one clear journey. From the conference sessions
+              to the Ra&apos;ah birthday celebration, plan your arrival with confidence
               and prepare for a week of worship, teaching, honor, and transformation.
             </p>
           </div>
@@ -7610,8 +7609,8 @@ function SchedulePage() {
           <section className="grid gap-4 pt-4 md:grid-cols-2">
             {[
               {
-                title: 'When does Shiloh 2026 begin?',
-                copy: 'Shiloh 2026 begins on August 31, 2026 with Prophetic Retreat at Fort Moriah City and continues through September 6, 2026.',
+                title: 'When is the Shiloh Conference?',
+                copy: 'Shiloh Conference runs from September 4 through September 6, 2026 at Fort Moriah City.',
               },
               {
                 title: 'Where are the main Shiloh venues?',

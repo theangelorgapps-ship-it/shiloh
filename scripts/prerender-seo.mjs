@@ -132,7 +132,7 @@ const routes = [
     path: '/schedule',
     title: 'Shiloh 2026 Schedule | Dates and Events',
     description:
-      "View the official Shiloh 2026 schedule for Prophetic Retreat, conference services, Sunday service, Baptism, and the Ra'ah Birthday Celebration.",
+      "View the official Shiloh 2026 schedule for conference services, Sunday service, Baptism, and the Ra'ah Birthday Celebration.",
     canonical: `${siteUrl}/schedule`,
     image: defaultImage,
     type: 'website',

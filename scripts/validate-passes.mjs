@@ -12,6 +12,7 @@ const checks = [
   ['React VIP options exclude Shiloh Ultimate', !vipOptions.includes("label: 'VIP Ultimate Passes'")],
   ['Journey carousel excludes Prophetic Retreat promotion', !journeyEvents.includes("tab: 'Prophetic Retreat'")],
   ['Homepage features exclude Prophetic Retreat promotion', !featureCards.includes("title: 'Prophetic Retreat'")],
+  ['Public React app excludes Prophetic Retreat content', !app.includes('Prophetic Retreat')],
   ['Built passes page excludes Prophetic Retreat tab', !builtPasses.includes('data-pages="retreat"')],
   ['Built passes page excludes Shiloh Ultimate tab', !builtPasses.includes('data-pages="ultimate"')],
   ['Built passes page defaults to Shiloh VIP', builtPasses.includes("const state = { pages: 'shiloh', transport: 'free' }")],
