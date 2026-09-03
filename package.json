@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build && node scripts/prerender-seo.mjs",
     "test:donorbox-csp": "node scripts/validate-donorbox-csp.mjs",
     "test:merch": "npm run build && node scripts/validate-merch.mjs",
+    "test:passes": "npm run build && node scripts/validate-passes.mjs",
     "test:tracking": "npm run build && node scripts/validate-tracking.mjs",
     "preview": "vite preview"
   },

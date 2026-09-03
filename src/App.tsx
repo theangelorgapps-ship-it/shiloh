@@ -1904,21 +1904,6 @@ function VipCompareSection() {
 
 const vipPassOptions = [
   {
-    label: 'Prophetic Retreat',
-    date: '31 Aug - 3 Sep',
-    price: '$ 5300',
-    tag: 'Retreat',
-    href: 'https://programs.uebertangel.org/product/2026/',
-    summary:
-      'A retreat pass shaped for focused teaching, spiritual preparation, and hosted retreat support.',
-    features: [
-      'Prophetic Retreat access from 31 August to 3 September.',
-      'Includes private room accommodation from August 31 – September 3, 2026. Accommodation beyond September 3 is not included and must be arranged separately.',
-      'Teaching moments, spiritual alignment, and guided preparation at Fort Moriah City.',
-      'A dedicated pass for retreat guests who want clarity before arrival.',
-    ],
-  },
-  {
     label: 'Shiloh VIP',
     date: '4 Sep - 5 Sep',
     price: '$1000 USD',
@@ -1952,28 +1937,6 @@ const vipPassOptions = [
       'Gala arrival guidance, seating support, and a smoother hosted experience for the evening.',
       'Designed for guests joining the thanksgiving, honor, presentation, and celebration moments.',
       'A focused pass for the Ra’ah birthday gala experience.',
-    ],
-  },
-  {
-    label: 'VIP Ultimate Passes',
-    date: '31 Aug - 6 Sep',
-    price: '$6999 USD',
-    tag: 'Full Season',
-    href: 'https://programs.uebertangel.org/product/shiloh-ultimate-pass/',
-    summary:
-      'A complete hosted experience for delegates who want premium access across every defining Shiloh Season moment.',
-    features: [
-      'Full VIP access to the Prophetic Retreat, Shiloh Conference, Sunday Service, and the Ra’ah Birthday Celebration.',
-      'Includes private room accommodation from August 31 – September 3, 2026. Accommodation beyond September 3 is not included and must be arranged separately.',
-      'Reserved seating across major gatherings with priority arrival and hosted entry support.',
-      'Official VIP transport coordination between selected partner hotels and Shiloh venues throughout the season.',
-      'Access to private VIP lounges with complimentary refreshments and hospitality services.',
-      'Dedicated VIP guest assistance for movement, scheduling, check-in, and conference support.',
-      'Premium covered lounge areas and enhanced comfort spaces during conference sessions.',
-      'Access to preferred VIP restroom and hospitality facilities across major venues.',
-      'Priority movement support between high-capacity gathering locations and scheduled events.',
-      'Exclusive VIP accreditation, welcome package, and priority merchandise collection.',
-      'A single premium pass designed for guests wanting the most complete Shiloh Season 26 experience.',
     ],
   },
 ];
@@ -2024,7 +1987,7 @@ function VipFeaturesSection() {
         </div>
 
         <div className="overflow-hidden rounded-[1.5rem] bg-[linear-gradient(145deg,rgba(255,255,255,0.085),rgba(255,255,255,0.025))] p-3 shadow-[0_22px_70px_rgba(0,0,0,0.4)] backdrop-blur-xl sm:p-4 lg:p-5">
-          <div className="grid grid-cols-2 gap-2 rounded-[1.1rem] bg-black/40 p-2 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-2 rounded-[1.1rem] bg-black/40 p-2">
             {vipPassOptions.map((pass, index) => (
               <button
                 key={pass.label}
