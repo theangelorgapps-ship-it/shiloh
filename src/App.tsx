@@ -334,21 +334,6 @@ const mapLocations = [
 
 const journeyEvents = [
   {
-    tab: 'Prophetic Retreat',
-    date: 'August 31 - Sep 3',
-    title: 'Prophetic Retreat',
-    image: 'https://assets.cdn.filesafe.space/pVxIE30GROfdQAaVsJgi/media/69f21a466630fc6c0b48cb90.jpg',
-    description:
-      'Learn from highly esteemed Prophet Uebert Angel in the sacred atmosphere of Mount Moriah City. Deepen your understanding and spiritual journey where signs and wonders manifest.',
-    buttons: [
-      {
-        label: 'Register Now',
-        href: 'https://programs.uebertangel.org/product/2026/',
-        external: true,
-      },
-    ],
-  },
-  {
     tab: 'Shiloh Conference',
     date: '4 - 6 September',
     title: 'Shiloh Conference',
@@ -2343,19 +2328,6 @@ function About() {
 const featureCards = [
   {
     number: '01',
-    title: 'Prophetic Retreat',
-    date: 'August 31 - September 3',
-    image: '/discover-images/prophetic-retreat.jpg',
-    href: 'https://programs.uebertangel.org/product/2026/',
-    items: [
-      'Teaching for every level, whether you are beginning or already attending as a student.',
-      'Learning sessions with the highly esteemed Prophet Uebert Angel at Mount Moriah City.',
-      'A sacred atmosphere where signs, wonders, and prophetic manifestations take place.',
-      'An extraordinary retreat experience you will not want to miss.',
-    ],
-  },
-  {
-    number: '02',
     title: 'Shiloh Conference',
     date: 'September 4 - September 6',
     image: '/discover-images/shiloh-conference.jpg',
@@ -2367,7 +2339,7 @@ const featureCards = [
     ],
   },
   {
-    number: '03',
+    number: '02',
     title: "The Ra'ah's Birthday Celebration",
     date: '6 September at 7:00 PM',
     image: '/discover-images/birthday-gala.jpg',
@@ -2379,7 +2351,7 @@ const featureCards = [
     ],
   },
   {
-    number: '04',
+    number: '03',
     title: 'Baptism by The Ra’ah',
     date: '5 September',
     image: '/discover-images/baptism.jpg',
@@ -2410,12 +2382,7 @@ function FeatureCard({
       transition: { duration: 0.8, delay: index * 0.15, ease: cardEase },
     },
   };
-  const imagePosition =
-    card.title === 'Prophetic Retreat'
-      ? 'object-[50%_44%]'
-      : card.title === 'Baptism by The Ra’ah'
-        ? 'object-top'
-        : 'object-center';
+  const imagePosition = card.title === 'Baptism by The Ra’ah' ? 'object-top' : 'object-center';
 
   return (
     <motion.article

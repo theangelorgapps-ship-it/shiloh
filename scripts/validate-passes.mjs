@@ -4,10 +4,14 @@ const read = (path) => readFileSync(new URL(`../${path}`, import.meta.url), 'utf
 const app = read('src/App.tsx');
 const builtPasses = read('dist/component2.html');
 const vipOptions = app.slice(app.indexOf('const vipPassOptions'), app.indexOf('function VipFeatureText'));
+const journeyEvents = app.slice(app.indexOf('const journeyEvents'), app.indexOf('type Segment'));
+const featureCards = app.slice(app.indexOf('const featureCards'), app.indexOf('function FeatureCard'));
 
 const checks = [
   ['React VIP options exclude Prophetic Retreat', !vipOptions.includes("label: 'Prophetic Retreat'")],
   ['React VIP options exclude Shiloh Ultimate', !vipOptions.includes("label: 'VIP Ultimate Passes'")],
+  ['Journey carousel excludes Prophetic Retreat promotion', !journeyEvents.includes("tab: 'Prophetic Retreat'")],
+  ['Homepage features exclude Prophetic Retreat promotion', !featureCards.includes("title: 'Prophetic Retreat'")],
   ['Built passes page excludes Prophetic Retreat tab', !builtPasses.includes('data-pages="retreat"')],
   ['Built passes page excludes Shiloh Ultimate tab', !builtPasses.includes('data-pages="ultimate"')],
   ['Built passes page defaults to Shiloh VIP', builtPasses.includes("const state = { pages: 'shiloh', transport: 'free' }")],
